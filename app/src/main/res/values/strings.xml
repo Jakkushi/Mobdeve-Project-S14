@@ -11,6 +11,7 @@
     <string name="tag_placeholder">Tags:</string>
 
     <string name="sketch_clear">Clear</string>
+    <string name="sketch_save">Save</string>
 
     <string name="camera_fab_desc">Upload/Take Image Button</string>
 </resources>

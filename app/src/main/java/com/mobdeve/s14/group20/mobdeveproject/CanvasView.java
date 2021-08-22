@@ -1,15 +1,21 @@
 package com.mobdeve.s14.group20.mobdeveproject;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.os.Environment;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.annotation.Nullable;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 
 public class CanvasView extends View {
 
@@ -19,6 +25,8 @@ public class CanvasView extends View {
 
     public CanvasView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+
+        this.setDrawingCacheEnabled(true);
         setFocusable(true);
         setFocusableInTouchMode(true);
         setupPaint();
@@ -53,6 +61,26 @@ public class CanvasView extends View {
         postInvalidate();
     }
 
+    public void saveScreen(String filename) throws FileNotFoundException {
+
+        File mainPath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/Tous Les Jours/");
+        if (!mainPath.exists()) {
+            mainPath.mkdirs();
+        }
+        File sketchPath = new File(mainPath + "/Sketches");
+        if (!sketchPath.exists()) {
+            sketchPath.mkdirs();
+        }
+
+        Bitmap b = viewToBitmap(this);
+
+
+
+        File outputFile = new File(sketchPath, filename);
+
+        b.compress(Bitmap.CompressFormat.PNG, 95, new FileOutputStream(outputFile));
+    }
+
     private void setupPaint() {
         paint = new Paint();
         paint.setColor(paintColor);
@@ -63,5 +91,10 @@ public class CanvasView extends View {
         paint.setStrokeCap(Paint.Cap.ROUND);
     }
 
-
+    private Bitmap viewToBitmap (View view) {
+        Bitmap bitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        view.draw(canvas);
+        return bitmap;
+    }
 }
