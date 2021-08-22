@@ -51,28 +51,31 @@
         app:layout_constraintStart_toStartOf="@+id/sketch_gl_start"
         app:layout_constraintTop_toBottomOf="@+id/sketch_tv_title" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/indiv_fab_cam"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="15dp"
-        android:layout_marginBottom="40dp"
-        android:backgroundTint="#D33F3F"
-        android:clickable="true"
-        android:contentDescription="@string/camera_fab_desc"
-        android:focusable="true"
-        app:borderWidth="0dp"
+    <com.mobdeve.s14.group20.mobdeveproject.CanvasView
+        android:id="@+id/sketch_canvas_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="50dp"
+        android:background="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/sketch_gl_end"
-        app:srcCompat="@drawable/camera" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/indiv_rv_templates"
-        android:layout_width="0dp"
-        android:layout_height="557dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintEnd_toStartOf="@+id/sketch_gl_end"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/sketch_gl_start"
-        app:layout_constraintTop_toBottomOf="@+id/sketch_tv_tags" />
+        app:layout_constraintTop_toBottomOf="@+id/sketch_tv_tags"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/sketch_clear_screen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sketch_clear"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/sketch_gl_end"
+        app:layout_constraintStart_toStartOf="@+id/sketch_gl_start" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

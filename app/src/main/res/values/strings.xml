@@ -1,9 +1,16 @@
 <resources>
-    <string name="app_name">Tous les Journal</string>
+    <string name="app_name">Mobdeve Project</string>
     <string name="templates_page_title">Notes Templates</string>
     <string name="blank_header">Blank Template</string>
     <string name="to_do_header">To-Do List</string>
     <string name="interest_header">Interest Tracker</string>
     <string name="sketch_pad_header">Sketch Pad</string>
     <string name="lesson_header">Lesson Notes</string>
+
+    <string name="title_placeholder">[Title]</string>
+    <string name="tag_placeholder">Tags:</string>
+
+    <string name="sketch_clear">Clear</string>
+
+    <string name="camera_fab_desc">Upload/Take Image Button</string>
 </resources>

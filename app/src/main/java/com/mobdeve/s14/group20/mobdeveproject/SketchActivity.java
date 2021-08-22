@@ -2,12 +2,10 @@ package com.mobdeve.s14.group20.mobdeveproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.graphics.Canvas;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 
-public class MainActivity extends AppCompatActivity {
+public class SketchActivity extends AppCompatActivity {
 
     private Button clearButton;
     private CanvasView canvas;
