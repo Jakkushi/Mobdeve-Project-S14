@@ -63,22 +63,26 @@ public class CanvasView extends View {
     }
 
     public void saveScreen(CharSequence filename) throws FileNotFoundException {
+        Integer increment = 0; //Generates a counter for duplicate names
+        File mainPath = new File(
+                Environment.getExternalStoragePublicDirectory(
+                        Environment.DIRECTORY_PICTURES) + "/Tous Les Jours/"); // Main folder
 
-        Integer increment = 0;
-
-        File mainPath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/Tous Les Jours/");
+        //Check if the main folder already exists
         if (!mainPath.exists()) {
             mainPath.mkdirs();
         }
-        File sketchPath = new File(mainPath + "/Sketches");
+
+        File sketchPath = new File(mainPath + "/Sketches"); // Create subfolder
+
+        //Check if the subfolder already exists
         if (!sketchPath.exists()) {
             sketchPath.mkdirs();
         }
 
-        Bitmap b = viewToBitmap(this);
+        Bitmap b = viewToBitmap(this); //convert the view to a bitmap to save
 
-
-
+        //generate the filename of the bitmap to save
         File outputFile = new File(sketchPath, filename+"_"+increment.toString()+".png");
         Log.i("FILENAME", filename.toString());
         while (outputFile.exists()) {
@@ -87,6 +91,7 @@ public class CanvasView extends View {
             //Log.i("FILENAME", filename.toString());
         }
 
+        //save the bitmap as a file
         b.compress(Bitmap.CompressFormat.PNG, 95, new FileOutputStream(outputFile));
     }
 
