@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
             if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 CharSequence text;
                 try {
-                    canvas.saveScreen(titleView.getText()+".png");
+                    canvas.saveScreen(titleView.getText());
                     text = "Sketch saved successfully!";
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
@@ -56,10 +56,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private ActivityResultLauncher<String> requestPermissionLauncher =
-            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
-                if (!isGranted) {
-                    Toast toast = Toast.makeText(getApplicationContext(), "Unable to save image without permissions.", Toast.LENGTH_LONG);
-                    toast.show();
+        registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+            if (isGranted) {
+                CharSequence text;
+                try {
+                    canvas.saveScreen(titleView.getText());
+                    text = "Sketch saved successfully!";
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                    text = "Unable to save sketch";
                 }
-            });
+                Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
+                toast.show();
+            } else {
+                Toast toast = Toast.makeText(getApplicationContext(), "Unable to save image without permissions.", Toast.LENGTH_LONG);
+                toast.show();
+            }
+        });
 }

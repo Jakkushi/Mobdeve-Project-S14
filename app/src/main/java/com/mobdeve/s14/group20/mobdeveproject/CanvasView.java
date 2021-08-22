@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.os.Environment;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -61,7 +62,9 @@ public class CanvasView extends View {
         postInvalidate();
     }
 
-    public void saveScreen(String filename) throws FileNotFoundException {
+    public void saveScreen(CharSequence filename) throws FileNotFoundException {
+
+        Integer increment = 0;
 
         File mainPath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/Tous Les Jours/");
         if (!mainPath.exists()) {
@@ -76,7 +79,13 @@ public class CanvasView extends View {
 
 
 
-        File outputFile = new File(sketchPath, filename);
+        File outputFile = new File(sketchPath, filename+"_"+increment.toString()+".png");
+        Log.i("FILENAME", filename.toString());
+        while (outputFile.exists()) {
+            increment++;
+            outputFile = new File(sketchPath, filename+"_"+increment.toString()+".png");
+            //Log.i("FILENAME", filename.toString());
+        }
 
         b.compress(Bitmap.CompressFormat.PNG, 95, new FileOutputStream(outputFile));
     }
