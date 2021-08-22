@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll_interest_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_interest_constraint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFE2A1"
+        android:paddingBottom="10dp">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_interest_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="20dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_picture_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="148dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_top_picture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="20dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_bottom_picture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="148dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_interest_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="20sp" />
+
+        <ImageView
+            android:id="@+id/iv_interest_picture"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintBottom_toTopOf="@+id/gl_bottom_picture"
+            app:layout_constraintEnd_toStartOf="@+id/gl_picture_end"
+            app:layout_constraintStart_toStartOf="@id/gl_interest_start"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <LinearLayout
+            android:id="@+id/ll_interest_main_info"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@id/gl_bottom_picture"
+            app:layout_constraintLeft_toRightOf="@id/gl_picture_end"
+            app:layout_constraintRight_toLeftOf="@id/gl_interest_end"
+            app:layout_constraintTop_toBottomOf="@id/gl_top_picture">
+
+            <TextView
+                android:id="@+id/tv_interest_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/roboto_slab"
+                android:gravity="center"
+                android:paddingLeft="5sp"
+                android:paddingRight="5sp"
+                android:text="For a Pessimist, You're Pretty Optimistic"
+                android:textAlignment="center"
+                android:textColor="#000000"
+                android:textSize="24sp"
+                app:autoSizeMaxTextSize="100sp"
+                app:autoSizeMinTextSize="12sp"
+                app:autoSizeTextType="uniform" />
+
+            <RatingBar
+                android:id="@+id/rb_interest_rating"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:numStars="5"
+                android:progressTint="#E46868"
+                android:rating="0"
+                android:scaleX="0.8"
+                android:scaleY="0.8"
+                android:secondaryProgressTint="#00C13333" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_interest_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/roboto_slab"
+            android:text="TextView"
+            android:textColor="#000000"
+            android:justificationMode="inter_word"
+            app:layout_constraintEnd_toStartOf="@+id/gl_interest_end"
+            app:layout_constraintStart_toStartOf="@+id/gl_interest_start"
+            app:layout_constraintTop_toBottomOf="@id/iv_interest_picture" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>
