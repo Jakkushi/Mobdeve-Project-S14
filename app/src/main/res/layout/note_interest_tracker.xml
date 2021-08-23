@@ -53,6 +53,8 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="20dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
             app:layout_constraintBottom_toTopOf="@+id/gl_bottom_picture"
             app:layout_constraintEnd_toStartOf="@+id/gl_picture_end"
             app:layout_constraintStart_toStartOf="@id/gl_interest_start"
@@ -84,7 +86,10 @@
                 android:textSize="24sp"
                 app:autoSizeMaxTextSize="100sp"
                 app:autoSizeMinTextSize="12sp"
-                app:autoSizeTextType="uniform" />
+                app:autoSizeTextType="uniform"
+                tools:autoSizeMaxTextSize="24sp"
+                tools:autoSizeMinTextSize="18sp"
+                tools:autoSizeTextType="uniform" />
 
             <RatingBar
                 android:id="@+id/rb_interest_rating"
@@ -99,18 +104,19 @@
                 android:secondaryProgressTint="#00C13333" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/tv_interest_text"
+        <EditText
+            android:id="@+id/editTextTextMultiLine4"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:fontFamily="@font/roboto_slab"
-            android:text="TextView"
-            android:textColor="#000000"
-            android:justificationMode="inter_word"
+            android:backgroundTint="#00FFFFFF"
+            android:ems="10"
+            android:gravity="start|top"
+            android:hint="Text Here:"
+            android:inputType="textMultiLine"
+            android:textSize="14sp"
             app:layout_constraintEnd_toStartOf="@+id/gl_interest_end"
             app:layout_constraintStart_toStartOf="@+id/gl_interest_start"
-            app:layout_constraintTop_toBottomOf="@id/iv_interest_picture" />
+            app:layout_constraintTop_toTopOf="@+id/gl_bottom_picture" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

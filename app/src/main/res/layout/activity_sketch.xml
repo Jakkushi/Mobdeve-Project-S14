@@ -32,6 +32,9 @@
         android:text="@string/title_placeholder"
         android:textColor="#FFFFFF"
         android:textSize="24sp"
+        app:autoSizeMaxTextSize="24sp"
+        app:autoSizeMinTextSize="16sp"
+        app:autoSizeTextType="uniform"
         app:layout_constraintEnd_toStartOf="@+id/sketch_gl_end"
         app:layout_constraintStart_toStartOf="@+id/sketch_gl_start"
         app:layout_constraintTop_toTopOf="parent" />
