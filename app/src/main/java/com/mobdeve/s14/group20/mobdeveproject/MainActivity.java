@@ -4,6 +4,8 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.content.Context;
@@ -14,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,10 +28,18 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView titleView;
 
+    private RecyclerView rvNotes;
+    private RecyclerView.LayoutManager notesManager;
+    private NotesAdapter notesAdapater;
+
+    private ArrayList<Note> notes;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.note_todo);
+        setContentView(R.layout.activity_main);
+
+        this.initRecyclerView();
 
 //        context = getApplicationContext();
 //        clearButton = findViewById(R.id.sketch_clear_screen);
@@ -53,6 +64,20 @@ public class MainActivity extends AppCompatActivity {
 //                requestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 //            }
 //        });
+    }
+
+    private void initRecyclerView(){
+        this.rvNotes = findViewById(R.id.main_rv_notes);
+
+        this.notesManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        System.out.println("INSIDE MAIN" + this);
+        this.rvNotes.setLayoutManager(this.notesManager);
+
+        NotesDataHelper helper = new NotesDataHelper();
+        this.notes = helper.initializeNotes();
+
+        this.notesAdapater = new NotesAdapter(this.notes);
+        this.rvNotes.setAdapter(this.notesAdapater);
     }
 
     private ActivityResultLauncher<String> requestPermissionLauncher =
