@@ -28,31 +28,31 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sketch);
+        setContentView(R.layout.note_todo);
 
-        context = getApplicationContext();
-        clearButton = findViewById(R.id.sketch_clear_screen);
-        saveButton = findViewById(R.id.sketch_save_button);
-        canvas = findViewById(R.id.sketch_canvas_view);
-        titleView = findViewById(R.id.sketch_tv_title);
-
-        clearButton.setOnClickListener(v -> canvas.clearScreen());
-        saveButton.setOnClickListener(v -> {
-            if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                CharSequence text;
-                try {
-                    canvas.saveScreen(titleView.getText());
-                    text = "Sketch saved successfully!";
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                    text = "Unable to save sketch";
-                }
-                Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
-                toast.show();
-            } else {
-                requestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            }
-        });
+//        context = getApplicationContext();
+//        clearButton = findViewById(R.id.sketch_clear_screen);
+//        saveButton = findViewById(R.id.sketch_save_button);
+//        canvas = findViewById(R.id.sketch_canvas_view);
+//        titleView = findViewById(R.id.sketch_tv_title);
+//
+//        clearButton.setOnClickListener(v -> canvas.clearScreen());
+//        saveButton.setOnClickListener(v -> {
+//            if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+//                CharSequence text;
+//                try {
+//                    canvas.saveScreen(titleView.getText());
+//                    text = "Sketch saved successfully!";
+//                } catch (FileNotFoundException e) {
+//                    e.printStackTrace();
+//                    text = "Unable to save sketch";
+//                }
+//                Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
+//                toast.show();
+//            } else {
+//                requestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+//            }
+//        });
     }
 
     private ActivityResultLauncher<String> requestPermissionLauncher =

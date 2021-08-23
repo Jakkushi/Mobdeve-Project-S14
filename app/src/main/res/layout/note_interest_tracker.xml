@@ -95,17 +95,17 @@
                 android:id="@+id/rb_interest_rating"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0"
+                android:layout_weight="0.5"
                 android:numStars="5"
                 android:progressTint="#E46868"
                 android:rating="0"
-                android:scaleX="0.8"
-                android:scaleY="0.8"
+                android:scaleX="0.75"
+                android:scaleY="0.75"
                 android:secondaryProgressTint="#00C13333" />
         </LinearLayout>
 
         <EditText
-            android:id="@+id/editTextTextMultiLine4"
+            android:id="@+id/etml_interest_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:backgroundTint="#00FFFFFF"
