@@ -1,22 +1,30 @@
 package com.mobdeve.s14.group20.mobdeveproject;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+
 import java.util.ArrayList;
+
+import static androidx.core.content.ContextCompat.startActivity;
 
 public class NotesViewHolder extends RecyclerView.ViewHolder{
 
     private TextView tvTitle, tvSubtitle, tvDateModified;
-    private ImageView ivLogo;
+    private ImageView ivLogo, ivBackground;
     private RecyclerView rvTags;
-
-    private ArrayList<String> tags;
+    private ConstraintLayout clTemplate;
+    public View itemView;
+    public Context context;
 
     public NotesViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -26,6 +34,10 @@ public class NotesViewHolder extends RecyclerView.ViewHolder{
         this.tvDateModified = itemView.findViewById(R.id.tv_note_template_date);
         this.ivLogo = itemView.findViewById(R.id.iv_note_template_logo);
         this.rvTags = itemView.findViewById(R.id.rv_note_template_tags);
+        this.ivBackground = itemView.findViewById(R.id.ib_note_template_background);
+
+        this.context = itemView.getContext();
+        this.itemView = itemView;
 
         System.out.println("INSIDE VH" + itemView.getContext());
     }
@@ -38,6 +50,10 @@ public class NotesViewHolder extends RecyclerView.ViewHolder{
 
     public void setIvLogo(int ivLogo){ this.ivLogo.setImageResource(ivLogo); }
 
+    public void setViewOnClickListener(View.OnClickListener onClickListener){
+        this.ivBackground.setOnClickListener(onClickListener);
+    }
+
     public TextView getTvTitle(){ return this.tvTitle; }
 
     public TextView getTvSubtitle(){ return this.tvSubtitle; }
@@ -45,6 +61,8 @@ public class NotesViewHolder extends RecyclerView.ViewHolder{
     public TextView getTvDateModified(){ return this.tvDateModified; }
 
     public ImageView getIvLogo(){ return this.ivLogo; }
+
+    public View getItemView(){ return this.itemView; }
 
     public RecyclerView getRvTags(){ return this.rvTags; }
 }

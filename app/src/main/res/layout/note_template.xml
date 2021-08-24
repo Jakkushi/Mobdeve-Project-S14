@@ -4,12 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ll_note_template"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_note_template"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true">
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/gl_note_template_start"
