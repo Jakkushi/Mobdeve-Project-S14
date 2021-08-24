@@ -8,18 +8,23 @@ public class Note {
 
     private String title, subtitle, noteType, dateModified;
     private ArrayList<String> tags;
-    private ArrayList<ToDoItem> todo;
+    private ArrayList<Item> items;
 
-    public Note(String title, String subtitle, String noteType, String dateModified, ArrayList<String> tags, ArrayList<ToDoItem> todo) {
+    public Note(String title, String subtitle, String noteType, String dateModified, ArrayList<String> tags, ArrayList<Item> items) {
         this.title = title;
         this.subtitle = subtitle;
         this.noteType = noteType;
         this.dateModified = dateModified;
         this.tags = tags;
+        this.items = items;
+    }
 
-        if(noteType.equals("ToDo")){
-            this.todo = todo;
-        }
+    public Note(String title, String subtitle, String noteType, String dateModified, ArrayList<String> tags) {
+        this.title = title;
+        this.subtitle = subtitle;
+        this.noteType = noteType;
+        this.dateModified = dateModified;
+        this.tags = tags;
     }
 
     public String getTitle(){ return this.title; }
@@ -30,7 +35,7 @@ public class Note {
 
     public String getDateModified(){ return this.dateModified; }
 
-    public ArrayList<ToDoItem> getToDo(){ return this.todo; }
+    public ArrayList<Item> getItems(){ return this.items; }
 
     public ArrayList<String> getTags(){ return this.tags; }
 

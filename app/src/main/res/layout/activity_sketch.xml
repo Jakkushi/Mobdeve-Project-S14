@@ -8,21 +8,21 @@
     tools:context=".IndivNoteActivity">
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/sketch_gl_start"
+        android:id="@+id/indiv_gl_start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_begin="10dp" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/sketch_gl_end"
+        android:id="@+id/indiv_gl_end"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_end="10dp" />
 
     <TextView
-        android:id="@+id/sketch_tv_title"
+        android:id="@+id/indiv_tv_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -35,8 +35,8 @@
         app:autoSizeMaxTextSize="24sp"
         app:autoSizeMinTextSize="16sp"
         app:autoSizeTextType="uniform"
-        app:layout_constraintEnd_toStartOf="@+id/sketch_gl_end"
-        app:layout_constraintStart_toStartOf="@+id/sketch_gl_start"
+        app:layout_constraintEnd_toStartOf="@+id/indiv_gl_end"
+        app:layout_constraintStart_toStartOf="@+id/indiv_gl_start"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -50,9 +50,9 @@
         android:text="@string/tag_placeholder"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
-        app:layout_constraintEnd_toStartOf="@+id/sketch_gl_end"
-        app:layout_constraintStart_toStartOf="@+id/sketch_gl_start"
-        app:layout_constraintTop_toBottomOf="@+id/sketch_tv_title" />
+        app:layout_constraintEnd_toStartOf="@+id/indiv_gl_end"
+        app:layout_constraintStart_toStartOf="@+id/indiv_gl_start"
+        app:layout_constraintTop_toBottomOf="@+id/indiv_tv_title" />
 
     <com.mobdeve.s14.group20.mobdeveproject.CanvasView
         android:id="@+id/sketch_canvas_view"
@@ -66,9 +66,9 @@
         android:layout_marginBottom="50dp"
         android:background="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/sketch_gl_end"
+        app:layout_constraintEnd_toStartOf="@+id/indiv_gl_end"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/sketch_gl_start"
+        app:layout_constraintStart_toStartOf="@+id/indiv_gl_start"
         app:layout_constraintTop_toBottomOf="@+id/sketch_tv_tags"
         app:layout_constraintVertical_bias="0.0" />
 
@@ -79,7 +79,7 @@
         android:layout_marginTop="1dp"
         android:text="@string/sketch_clear"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/sketch_gl_end"
+        app:layout_constraintEnd_toStartOf="@+id/indiv_gl_end"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/sketch_save_button"
         app:layout_constraintTop_toBottomOf="@+id/sketch_canvas_view" />

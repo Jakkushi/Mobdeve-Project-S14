@@ -21,8 +21,6 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesViewHolder> {
 
     private ArrayList<Note> notes;
     public Context cxt;
-    private SharedPreferences sp;
-    private SharedPreferences.Editor spEditor;
 
     public NotesAdapter(ArrayList<Note> notes) {
         this.notes = notes;
@@ -42,9 +40,6 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesViewHolder> {
         this.cxt = parent.getContext();
 
         Log.d("In notes adapter: ", String.valueOf(parent.getContext()));
-
-        this.sp = PreferenceManager.getDefaultSharedPreferences(parent.getContext());
-        this.spEditor = this.sp.edit();
 
         return viewHolder;
     }
@@ -66,31 +61,12 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesViewHolder> {
                 @Override
                 public void onClick(View v) {
 
-                    int i, j;
-
-                    Log.d("EDITOR", String.valueOf(spEditor));
-                    Log.d("NAME", Keys.TODO_TITLE.name());
-                    Log.d("TITLE", notes.get(position).getTitle());
-
-                    spEditor.putString(Keys.TODO_TITLE.name(), notes.get(position).getTitle());
-                    spEditor.putString(Keys.TODO_SUBTITLE.name(), notes.get(position).getSubtitle());
-                    spEditor.putString(Keys.TODO_NOTETYPE.name(), notes.get(position).getNoteType());
-
-                    for(i = 0; i < notes.get(position).getToDo().size(); i++){
-                        spEditor.putBoolean(Keys.TODO_ITEMS.name() + i + "checkbox", notes.get(position).getToDo().get(i).getIsDone());
-                        spEditor.putString(Keys.TODO_ITEMS.name() + i + "string", notes.get(position).getToDo().get(i).getText());
-                    }
-
-                    spEditor.putInt(Keys.TODO_ITEMS_LENGTH.name(), i);
-
-                    for(j = 0; i < notes.get(position).getTags().size(); i++){
-                        spEditor.putString(Keys.TODO_TAGS.name() + j, notes.get(position).getTags().get(j));
-                    }
-
-                    spEditor.putInt(Keys.TODO_TAGS_LENGTH.name(), j);
-                    spEditor.apply();
-
                     Intent intent = new Intent(v.getContext(), IndivNoteActivity.class);
+                    intent.putExtra(Keys.TITLE.name(), notes.get(position).getTitle());
+                    intent.putExtra(Keys.SUBTITLE.name(), notes.get(position).getSubtitle());
+                    intent.putExtra(Keys.NOTETYPE.name(), notes.get(position).getNoteType());
+                    intent.putExtra(Keys.ITEMS.name(), notes.get(position).getItems());
+                    intent.putExtra(Keys.TAGS.name(), notes.get(position).getTags());
                     v.getContext().startActivity(intent);
                 }
             });
@@ -101,8 +77,8 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesViewHolder> {
                 @Override
                 public void onClick(View v) {
 
-                    Intent i = new Intent(v.getContext(), IndivNoteActivity.class);
-                    v.getContext().startActivity(i);
+                    Intent intent = new Intent(v.getContext(), SketchActivity.class);
+                    v.getContext().startActivity(intent);
                 }
             });
         }
@@ -112,8 +88,13 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesViewHolder> {
                 @Override
                 public void onClick(View v) {
 
-                    Intent i = new Intent(v.getContext(), IndivNoteActivity.class);
-                    v.getContext().startActivity(i);
+                    Intent intent = new Intent(v.getContext(), IndivNoteActivity.class);
+                    intent.putExtra(Keys.TITLE.name(), notes.get(position).getTitle());
+                    intent.putExtra(Keys.SUBTITLE.name(), notes.get(position).getSubtitle());
+                    intent.putExtra(Keys.NOTETYPE.name(), notes.get(position).getNoteType());
+                    intent.putExtra(Keys.ITEMS.name(), notes.get(position).getItems());
+                    intent.putExtra(Keys.TAGS.name(), notes.get(position).getTags());
+                    v.getContext().startActivity(intent);
                 }
             });
         }
@@ -123,8 +104,13 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesViewHolder> {
                 @Override
                 public void onClick(View v) {
 
-                    Intent i = new Intent(v.getContext(), IndivNoteActivity.class);
-                    v.getContext().startActivity(i);
+                    Intent intent = new Intent(v.getContext(), IndivNoteActivity.class);
+                    intent.putExtra(Keys.TITLE.name(), notes.get(position).getTitle());
+                    intent.putExtra(Keys.SUBTITLE.name(), notes.get(position).getSubtitle());
+                    intent.putExtra(Keys.NOTETYPE.name(), notes.get(position).getNoteType());
+                    intent.putExtra(Keys.ITEMS.name(), notes.get(position).getItems());
+                    intent.putExtra(Keys.TAGS.name(), notes.get(position).getTags());
+                    v.getContext().startActivity(intent);
                 }
             });
         }

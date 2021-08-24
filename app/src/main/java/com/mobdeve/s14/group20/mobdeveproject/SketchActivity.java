@@ -34,7 +34,7 @@ public class SketchActivity extends AppCompatActivity {
         clearButton = findViewById(R.id.sketch_clear_screen);
         saveButton = findViewById(R.id.sketch_save_button);
         canvas = findViewById(R.id.sketch_canvas_view);
-        titleView = findViewById(R.id.sketch_tv_title);
+        titleView = findViewById(R.id.indiv_tv_title);
 
         clearButton.setOnClickListener(v -> canvas.clearScreen());
         saveButton.setOnClickListener(v -> {

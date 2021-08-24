@@ -22,24 +22,23 @@ public class IndivNoteActivity extends AppCompatActivity {
 
     private String title, subtitle, noteType;
     private ArrayList<String> tags = new ArrayList<>();
-    private ArrayList<Boolean> isDoneList = new ArrayList<>();
-    private ArrayList<String> textList = new ArrayList<>();
+    private ArrayList<Item> items = new ArrayList<>();
 
-    private SharedPreferences sp;
-    private SharedPreferences.Editor spEditor;
-
-    private ArrayList<Note> notes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_indiv_note);
 
-        this.sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        this.spEditor = this.sp.edit();
-
         this.loadData();
+        this.bindEssentials();
         this.initRecyclerView();
+    }
+
+    private void bindEssentials(){
+
+        this.tvTitle = findViewById(R.id.indiv_tv_title);
+        this.tvTitle.setText(title);
     }
 
     private void initRecyclerView(){
@@ -48,27 +47,25 @@ public class IndivNoteActivity extends AppCompatActivity {
         this.indivNotesManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         this.rvIndivNotes.setLayoutManager(this.indivNotesManager);
 
-        this.indivNotesAdapter = new IndivNotesAdapter(tags, isDoneList, textList);
+        Log.d("TAGSTOP", String.valueOf(this.tags));
+        Log.d("ITEMS", String.valueOf(this.items));
+
+        this.indivNotesAdapter = new IndivNotesAdapter(this.title, this.tags, this.items);
         this.rvIndivNotes.setAdapter(this.indivNotesAdapter);
     }
 
     private void loadData(){
 
-        Log.d("SP", String.valueOf(this.sp));
-        this.noteType = this.sp.getString(Keys.TODO_NOTETYPE.name(), "None");
+        this.title = getIntent().getStringExtra(Keys.TITLE.name());
+        this.subtitle = getIntent().getStringExtra(Keys.SUBTITLE.name());
+        this.noteType = getIntent().getStringExtra(Keys.NOTETYPE.name());
+        this.tags = getIntent().getStringArrayListExtra(Keys.TAGS.name());
+        this.items = (ArrayList<Item>) getIntent().getSerializableExtra(Keys.ITEMS.name());
 
-        if(noteType.equals("ToDo")){
-            this.title = this.sp.getString(Keys.TODO_TITLE.name(), "[Title]");
-            this.subtitle = this.sp.getString(Keys.TODO_SUBTITLE.name(), "[Subtitle]");
-
-            for(int i = 0; i < this.sp.getInt(Keys.TODO_ITEMS_LENGTH.name(), 0); i++){
-                isDoneList.add(this.sp.getBoolean(Keys.TODO_ITEMS.name() + i + "checkbox", false));
-                textList.add(this.sp.getString(Keys.TODO_ITEMS.name() + i + "string", "ERROR!"));
-            }
-
-            for(int i = 0; i < this.sp.getInt(Keys.TODO_TAGS_LENGTH.name(), 0); i++){
-                tags.add(this.sp.getString(Keys.TODO_TAGS.name() + i, "ERROR"));
-            }
-        }
+        Log.d("TITLE", this.title);
+        Log.d("SUBTITLE", this.subtitle);
+        Log.d("NOTETYPE", this.noteType);
+        Log.d("TAGS", String.valueOf(this.tags));
+        Log.d("TODOITEMS", String.valueOf(this.items));
     }
 }

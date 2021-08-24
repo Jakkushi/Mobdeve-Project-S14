@@ -21,9 +21,61 @@ public class NotesDataHelper {
                     add("#TAG");
                     add("#VEGGIES");
                 }},
-                new ArrayList<ToDoItem>(){{
-                    add(new ToDoItem(false, "Carrot", 0));
-                    add(new ToDoItem(true, "Ginger", 0));
+                new ArrayList<Item>(){{
+                    add(new ToDoItem(false, "Carrot"));
+                    add(new ToDoItem(true, "Ginger"));
+                    add(new ToDoItem(true, "Lettuce"));
+                }}
+        ));
+
+        data.add(new Note(
+                "Sketch #1",
+                "Knight",
+                "Sketchbook",
+                "11/02/21",
+                new ArrayList<String>() {{
+                    add("#BOOKS");
+                    add("#PAGES");
+                    add("#BOOKS");
+                    add("#PAGES");
+                    add("#BOOKS");
+                    add("#PAGES");
+                    add("#BOOKS");
+                    add("#PAGES");
+                }}
+        ));
+
+        data.add(new Note(
+                "TV Shows",
+                "NETFLIX",
+                "Interest",
+                "11/02/21",
+                new ArrayList<String>() {{
+                    add("#NETFLIX");
+                    add("#SHOWSILOVE");
+                }},
+                new ArrayList<Item>(){{
+                    add(new InterestItem(R.drawable.breaking_bad, 4, "A Series of Unfortunate Events", "What an amazing show."));
+                }}
+        ));
+
+        data.add(new Note(
+                "Important People",
+                "Don't Forget!",
+                "Detailed",
+                "01/03/19",
+                new ArrayList<String>() {{
+                    add("#DOCTOR");
+                    add("#WHO?");
+                }},
+                new ArrayList<Item>(){{
+                    add(new DetailedItem(
+                            R.drawable.breaking_bad,
+                            "Chemistry Teacher",
+                            "Looks kinda shady ngl",
+                            "Met him in Chemistry Class grade 10, he suddenly went bald one " +
+                                    "day"
+                    ));
                 }}
         ));
 
