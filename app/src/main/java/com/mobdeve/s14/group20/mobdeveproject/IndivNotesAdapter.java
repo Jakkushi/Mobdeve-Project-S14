@@ -27,7 +27,7 @@ public class IndivNotesAdapter extends RecyclerView.Adapter<IndivNotesAdapter.In
     @Override
     public IndivNotesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(viewType, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.note_todo, parent, false);
         IndivNotesViewHolder viewHolder = new IndivNotesViewHolder(itemView);
 
         return viewHolder;

@@ -41,6 +41,8 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesViewHolder> {
 
         this.cxt = parent.getContext();
 
+        Log.d("In notes adapter: ", String.valueOf(parent.getContext()));
+
         this.sp = PreferenceManager.getDefaultSharedPreferences(parent.getContext());
         this.spEditor = this.sp.edit();
 

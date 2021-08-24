@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
@@ -20,9 +21,9 @@ public class IndivNoteActivity extends AppCompatActivity {
     private IndivNotesAdapter indivNotesAdapter;
 
     private String title, subtitle, noteType;
-    private ArrayList<String> tags;
-    private ArrayList<Boolean> isDoneList;
-    private ArrayList<String> textList;
+    private ArrayList<String> tags = new ArrayList<>();
+    private ArrayList<Boolean> isDoneList = new ArrayList<>();
+    private ArrayList<String> textList = new ArrayList<>();
 
     private SharedPreferences sp;
     private SharedPreferences.Editor spEditor;
@@ -34,11 +35,11 @@ public class IndivNoteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_indiv_note);
 
-        this.loadData();
-        this.initRecyclerView();
-
         this.sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         this.spEditor = this.sp.edit();
+
+        this.loadData();
+        this.initRecyclerView();
     }
 
     private void initRecyclerView(){
@@ -53,7 +54,8 @@ public class IndivNoteActivity extends AppCompatActivity {
 
     private void loadData(){
 
-        this.noteType = sp.getString(Keys.TODO_NOTETYPE.name(), "None");
+        Log.d("SP", String.valueOf(this.sp));
+        this.noteType = this.sp.getString(Keys.TODO_NOTETYPE.name(), "None");
 
         if(noteType.equals("ToDo")){
             this.title = this.sp.getString(Keys.TODO_TITLE.name(), "[Title]");
