@@ -174,6 +174,7 @@ public class TemplateListActivity extends AppCompatActivity {
             items.add(newItem);
         }
 
+        //change template list activity to ExistingIndivNoteActivity
         Intent intent = new Intent(TemplateListActivity.this, IndivNoteActivity.class);
         intent.putExtra(Keys.TITLE.name(), this.title);
         intent.putExtra(Keys.SUBTITLE.name(), this.subtitle);

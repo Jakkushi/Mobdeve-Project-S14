@@ -202,6 +202,7 @@ public class MainActivity extends AppCompatActivity {
                 ArrayList<ArrayList<String>> interestItems = new ArrayList<>();
                 ArrayList<String> tags = new ArrayList<>();
                 ArrayList<ArrayList<String>> todoList = new ArrayList<>();
+                ArrayList<String> blankItems = new ArrayList<>();
 
                 try {
                     interestItems =  (ArrayList) (( (HashMap) snapshot.getValue()).get("interestItem"));
@@ -226,9 +227,17 @@ public class MainActivity extends AppCompatActivity {
                     Log.w("error", "No Todos in entry");
                 }
 
+                try {
+                    blankItems = (ArrayList) (((HashMap) snapshot.getValue()).get("blankItems"));
+                }
+                catch (Exception d){
+                    tags = null;
+                    Log.w("error", "No Blank items in entry");
+                }
+
                 dbNotes.add(new DatabaseNotesData( (String) (( (HashMap) snapshot.getValue()).get("title")),
                         (String) ((HashMap) snapshot.getValue()).get("subtitle"), (String) ((HashMap) snapshot.getValue()).get("noteType"),
-                        (String) ((HashMap) snapshot.getValue()).get("dateModified"), interestItems, tags, todoList));
+                        (String) ((HashMap) snapshot.getValue()).get("dateModified"), interestItems, tags, todoList, blankItems));
 
                 Intent intent = new Intent(MainActivity.this, DisplayNotesActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);

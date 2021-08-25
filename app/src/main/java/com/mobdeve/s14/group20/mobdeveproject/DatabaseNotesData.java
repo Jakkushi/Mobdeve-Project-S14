@@ -10,10 +10,11 @@ public class DatabaseNotesData implements Serializable {
     private ArrayList<String> tags;
     private ArrayList<ArrayList<String>> items;
     private ArrayList<ArrayList<String>> todoList;
+    private ArrayList<String> blankItems;
 
     public DatabaseNotesData(String title, String subtitle, String noteType, String dateModified,
                              ArrayList<ArrayList<String>> items, ArrayList<String> tags,
-                             ArrayList<ArrayList<String>> todoList) {
+                             ArrayList<ArrayList<String>> todoList, ArrayList<String> blankItems) {
         this.title = title;
         this.subtitle = subtitle;
         this.noteType = noteType;
@@ -21,6 +22,7 @@ public class DatabaseNotesData implements Serializable {
         this.tags = tags;
         this.items = items;
         this.todoList = todoList;
+        this.blankItems = blankItems;
     }
 
     public String getTitle(){ return this.title; }
@@ -37,6 +39,8 @@ public class DatabaseNotesData implements Serializable {
 
     public ArrayList<ArrayList<String>> getTodo(){ return this.todoList; }
 
+    public ArrayList<String> getBlankItems(){ return this.blankItems; }
+
     public void setTitle(String title){ this.title = title; }
 
     public void setSubtitle(String subtitle){ this.subtitle = subtitle; }
@@ -48,4 +52,6 @@ public class DatabaseNotesData implements Serializable {
     public void addItem(ArrayList<String> item){ items.add(item); }
 
     public void addTodo(ArrayList<String> todoItem){ todoList.add(todoItem); }
+
+    public void addBlankItem(String item){ blankItems.add(item); }
 }

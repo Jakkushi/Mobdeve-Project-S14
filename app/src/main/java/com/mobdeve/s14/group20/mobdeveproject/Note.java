@@ -9,6 +9,8 @@ public class Note {
     private String title, subtitle, noteType, dateModified;
     private ArrayList<String> tags;
     private ArrayList<Item> items;
+    private int numBlanks;
+    private ArrayList<String> blankItems;
 
     public Note(String title, String subtitle, String noteType, String dateModified, ArrayList<String> tags, ArrayList<Item> items) {
         this.title = title;
@@ -25,6 +27,16 @@ public class Note {
         this.noteType = noteType;
         this.dateModified = dateModified;
         this.tags = tags;
+    }
+
+    public Note(String title, String subtitle, String noteType, String dateModified, ArrayList<String> tags, int numBlanks, ArrayList<String> blankItems) {
+        this.title = title;
+        this.subtitle = subtitle;
+        this.noteType = noteType;
+        this.dateModified = dateModified;
+        this.tags = tags;
+        this.numBlanks = numBlanks;
+        this.blankItems = blankItems;
     }
 
     public String getTitle(){ return this.title; }

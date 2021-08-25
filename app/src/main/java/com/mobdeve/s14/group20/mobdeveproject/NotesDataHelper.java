@@ -98,6 +98,18 @@ public class NotesDataHelper {
                 ));
 
             }
+            else if(tempDbNote.getNoteType().equals("Blank")){
+
+                data.add(new Note(
+                        tempDbNote.getTitle(),
+                        tempDbNote.getSubtitle(),
+                        tempDbNote.getNoteType(),
+                        tempDbNote.getDateModified(),
+                        tempDbNote.getTags(),
+                        tempDbNote.getBlankItems().size(),
+                        tempDbNote.getBlankItems()
+                ));
+            }
             else{
 
                 data.add(new Note(
