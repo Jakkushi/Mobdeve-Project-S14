@@ -34,6 +34,7 @@
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
             android:cropToPadding="true"
+            android:maxHeight="250dp"
             android:scaleType="fitCenter"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="@id/gl_end"

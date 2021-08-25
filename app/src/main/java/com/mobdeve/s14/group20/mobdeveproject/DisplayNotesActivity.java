@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +33,7 @@ public class DisplayNotesActivity extends AppCompatActivity {
     private ProgressBar pbMain;
     private CanvasView canvas;
     private FloatingActionButton fabAddTemplate;
+    private SearchView svFilterNotes;
 
     private TextView titleView;
 
@@ -63,6 +65,9 @@ public class DisplayNotesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        this.svFilterNotes = findViewById(R.id.main_sv_search);
+        this.svFilterNotes.clearFocus();
 
         hideUI();
         this.initFAB();

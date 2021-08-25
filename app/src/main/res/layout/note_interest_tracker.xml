@@ -99,6 +99,7 @@
             android:scaleX="1"
             android:scaleY="1"
             android:secondaryProgressTint="#00C13333"
+            android:stepSize="0.5"
             app:layout_constraintBottom_toTopOf="@+id/gl_bottom_picture"
             app:layout_constraintEnd_toStartOf="@+id/gl_interest_end"
             app:layout_constraintStart_toStartOf="@+id/gl_picture_end"
@@ -114,6 +115,7 @@
             android:hint="Text Here:"
             android:inputType="textMultiLine"
             android:textSize="14sp"
+            android:justificationMode="inter_word"
             app:layout_constraintEnd_toStartOf="@+id/gl_interest_end"
             app:layout_constraintStart_toStartOf="@+id/gl_interest_start"
             app:layout_constraintTop_toTopOf="@+id/gl_bottom_picture" />

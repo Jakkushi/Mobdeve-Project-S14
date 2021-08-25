@@ -12,7 +12,7 @@ public class InterestItem extends Item implements Serializable {
     private float rating;
     private String title, text;
 
-    public InterestItem(String imgId, int rating, String title, String text, Context cxt){
+    public InterestItem(String imgId, float rating, String title, String text, Context cxt){
         super("Interest");
         String name = imgId;
         int id = cxt.getResources().getIdentifier(name, "drawable", cxt.getPackageName());

@@ -58,7 +58,7 @@ public class NotesDataHelper {
                     ArrayList<String> tempInterestItem = tempDbNote.getItems().get(j);
 
                     interestItems.add(new InterestItem(tempInterestItem.get(0),
-                            Integer.parseInt(String.valueOf(tempInterestItem.get(1))),
+                            Float.parseFloat(String.valueOf(tempInterestItem.get(1))),
                             tempInterestItem.get(2),
                             tempInterestItem.get(3),
                             cxt));

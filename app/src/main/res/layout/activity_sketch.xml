@@ -38,7 +38,7 @@
             android:id="@+id/etml_sketch_title"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:backgroundTint="@android:color/transparent"
+            android:backgroundTint="#FFFFFF"
             android:ems="10"
             android:fontFamily="@font/roboto_slab"
             android:gravity="center_horizontal"

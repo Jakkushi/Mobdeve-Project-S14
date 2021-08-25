@@ -120,7 +120,7 @@
             <ImageButton
                 android:id="@+id/ib_blank_template"
                 android:layout_width="160dp"
-                android:layout_height="160dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:adjustViewBounds="true"
                 android:background="?attr/selectableItemBackgroundBorderless"
@@ -136,7 +136,7 @@
             <ImageButton
                 android:id="@+id/ib_to_do_template"
                 android:layout_width="160dp"
-                android:layout_height="160dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:adjustViewBounds="true"
                 android:background="?attr/selectableItemBackgroundBorderless"
@@ -147,12 +147,12 @@
                 app:layout_constraintEnd_toStartOf="@+id/gl_center"
                 app:layout_constraintStart_toStartOf="@+id/gl_left"
                 app:layout_constraintTop_toBottomOf="@+id/ib_blank_template"
-                app:srcCompat="@drawable/templates_rounded" />
+                app:srcCompat="@drawable/todo_bg" />
 
             <ImageButton
                 android:id="@+id/ib_interest_template"
                 android:layout_width="160dp"
-                android:layout_height="160dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:adjustViewBounds="true"
                 android:background="?attr/selectableItemBackgroundBorderless"
@@ -163,12 +163,12 @@
                 app:layout_constraintEnd_toStartOf="@+id/gl_center"
                 app:layout_constraintStart_toStartOf="@+id/gl_left"
                 app:layout_constraintTop_toBottomOf="@+id/ib_to_do_template"
-                app:srcCompat="@drawable/templates_rounded" />
+                app:srcCompat="@drawable/interest_bg" />
 
             <ImageButton
                 android:id="@+id/ib_sketch_template"
                 android:layout_width="160dp"
-                android:layout_height="160dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:adjustViewBounds="true"
                 android:background="?attr/selectableItemBackgroundBorderless"
@@ -179,12 +179,12 @@
                 app:layout_constraintEnd_toStartOf="@+id/gl_right"
                 app:layout_constraintStart_toStartOf="@+id/gl_center"
                 app:layout_constraintTop_toBottomOf="@+id/ib_detailed_template"
-                app:srcCompat="@drawable/templates_rounded" />
+                app:srcCompat="@drawable/sketch_bg" />
 
             <ImageButton
                 android:id="@+id/ib_lesson_template"
                 android:layout_width="160dp"
-                android:layout_height="160dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:adjustViewBounds="true"
                 android:background="?attr/selectableItemBackgroundBorderless"
@@ -195,12 +195,12 @@
                 app:layout_constraintEnd_toStartOf="@+id/gl_right"
                 app:layout_constraintStart_toStartOf="@+id/gl_center"
                 app:layout_constraintTop_toBottomOf="@+id/et_template_tags"
-                app:srcCompat="@drawable/templates_rounded" />
+                app:srcCompat="@drawable/lesson_notes_bg" />
 
             <ImageButton
                 android:id="@+id/ib_detailed_template"
                 android:layout_width="160dp"
-                android:layout_height="160dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:adjustViewBounds="true"
                 android:background="?attr/selectableItemBackgroundBorderless"
@@ -211,7 +211,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/gl_right"
                 app:layout_constraintStart_toStartOf="@+id/gl_center"
                 app:layout_constraintTop_toBottomOf="@+id/ib_lesson_template"
-                app:srcCompat="@drawable/templates_rounded" />
+                app:srcCompat="@drawable/detailed_bg" />
 
             <TextView
                 android:id="@+id/tv_blank_template"
