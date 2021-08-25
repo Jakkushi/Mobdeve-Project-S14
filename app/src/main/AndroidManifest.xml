@@ -13,6 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MobdeveProject">
+        <activity android:name=".DisplayNotesActivity"/>
         <activity android:name=".LogInActivity" />
         <activity android:name=".SketchActivity" />
         <activity android:name=".IndivNoteActivity" />

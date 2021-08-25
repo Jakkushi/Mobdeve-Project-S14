@@ -5,5 +5,6 @@ public enum Keys {
     SUBTITLE,
     NOTETYPE,
     TAGS,
-    ITEMS
+    ITEMS,
+    DBNOTES
 }
