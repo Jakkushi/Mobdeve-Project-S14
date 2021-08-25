@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class IndivNotesAdapter extends RecyclerView.Adapter<IndivNotesAdapter.IndivNotesViewHolder> {
 
     private ArrayList<String> tags = new ArrayList<>();
-    private ArrayList<Item> items;
+    private ArrayList<Item> items = new ArrayList<>();
     private String title;
 
     public IndivNotesAdapter(String title, ArrayList<String> tags, ArrayList<Item> items){
@@ -77,7 +77,10 @@ public class IndivNotesAdapter extends RecyclerView.Adapter<IndivNotesAdapter.In
 
     @Override
     public int getItemCount() {
-        return this.items.size();
+
+        if(this.items == null)
+            return 0;
+        else return this.items.size();
     }
 
     public class IndivNotesViewHolder extends RecyclerView.ViewHolder {
