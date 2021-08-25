@@ -160,8 +160,6 @@ public class DisplayNotesActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
-        super.onBackPressed();
-        this.finishAffinity();
+        moveTaskToBack(true);
     }
 }
