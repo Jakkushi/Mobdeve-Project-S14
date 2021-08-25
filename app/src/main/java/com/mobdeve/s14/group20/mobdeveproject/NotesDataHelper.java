@@ -15,8 +15,7 @@ public class NotesDataHelper {
         Date currentDate = new Date();
 
         int numNotes = dbNotes.size();
-        System.out.println("DATA HELPER TEST");
-        System.out.println("numNotes: " + numNotes);
+
         DatabaseNotesData tempDbNote;
 
         for(int i= 0; i < numNotes; i++) {
@@ -34,8 +33,6 @@ public class NotesDataHelper {
 
                     if(isDoneString.equals("true"))
                         isDone = true;
-
-//                    System.out.println("act " + j + " : " + tempTodo.get(1));
 
                     todos.add(new ToDoItem(isDone, tempTodo.get(1)));
                 }
@@ -56,15 +53,9 @@ public class NotesDataHelper {
                 ArrayList<Item> interestItems = new ArrayList<>();
                 int numItems = tempDbNote.getItems().size();
 
-                System.out.println("Num Interest items: " + numItems);
 
                 for(int j = 0; j < numItems; j++) {
                     ArrayList<String> tempInterestItem = tempDbNote.getItems().get(j);
-
-                    System.out.println("photo " + j + " : " + tempInterestItem.get(0));
-                    System.out.println("rating " + j + " : " + Integer.parseInt(String.valueOf(tempInterestItem.get(1))));
-                    System.out.println("title " + j + " : " + tempInterestItem.get(2));
-                    System.out.println("comment " + j + " : " + tempInterestItem.get(3));
 
                     interestItems.add(new InterestItem(tempInterestItem.get(0),
                             Integer.parseInt(String.valueOf(tempInterestItem.get(1))),
@@ -87,15 +78,8 @@ public class NotesDataHelper {
                 ArrayList<Item> detailedItems = new ArrayList<>();
                 int numItems = tempDbNote.getItems().size();
 
-                System.out.println("Num Interest items: " + numItems);
-
                 for(int j = 0; j < numItems; j++) {
                     ArrayList<String> tempInterestItem = tempDbNote.getItems().get(j);
-
-                    System.out.println("photo " + j + " : " + tempInterestItem.get(0));
-                    System.out.println("description " + j + " : " + tempInterestItem.get(1));
-                    System.out.println("title " + j + " : " + tempInterestItem.get(2));
-                    System.out.println("comment " + j + " : " + tempInterestItem.get(3));
 
                     detailedItems.add(new DetailedItem(tempInterestItem.get(0),
                             tempInterestItem.get(1),

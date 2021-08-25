@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -28,6 +29,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -51,13 +53,6 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView titleView;
 
-    private RecyclerView rvNotes;
-    private RecyclerView.LayoutManager notesManager;
-    private NotesAdapter notesAdapater;
-
-    private ArrayList<Note> notes;
-    private ArrayList<Note> notes2;
-
     private FirebaseUser user;
     private FirebaseAuth mAuth;
     private DatabaseReference reference;
@@ -65,14 +60,15 @@ public class MainActivity extends AppCompatActivity {
     private String userId;
 
     public ArrayList<DatabaseNotesData> dbNotes = new ArrayList<>();
+    boolean withChild = false;
 
     private void hideUI() {
         View decorView = getWindow().getDecorView();
         decorView.setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                         | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+//                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+//                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
         );
@@ -86,11 +82,6 @@ public class MainActivity extends AppCompatActivity {
         hideUI();
         this.initFirebase();
         this.initComponents();
-
-//        Handler handler = new Handler();
-//        handler.postDelayed(task, 5000);
-
-
 
 //        context = getApplicationContext();
 //        clearButton = findViewById(R.id.sketch_clear_screen);
@@ -119,11 +110,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void initFirebase() {
         this.mAuth = FirebaseAuth.getInstance();
-//        this.user = this.mAuth.getCurrentUser();
-//        this.userId = this.user.getUid();
-//        this.database = FirebaseDatabase.getInstance();
-//        this.reference = this.database.getReference().child(Collections.users.name());
-//        this.getNotesData();
     }
 
     private void signIn(String email, String password){
@@ -137,11 +123,10 @@ public class MainActivity extends AppCompatActivity {
                             userId = user.getUid();
                             database = FirebaseDatabase.getInstance();
                             reference = database.getReference().child(Collections.users.name());
-//                            Log.d("firebase-acces:", String.valueOf(user));
-//                            Log.d("firebase-acces:", String.valueOf(userId));
+
+                            withChild = false;
                             getNotesData();
-                            pbLogin.setVisibility(View.GONE);
-                            Toast.makeText(MainActivity.this, "Welcome to Tous Les Journal!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, "Welcome! Retrieving your notes...", Toast.LENGTH_SHORT).show();
                         }
                         else {
                             pbLogin.setVisibility(View.GONE);
@@ -170,6 +155,13 @@ public class MainActivity extends AppCompatActivity {
         this.btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                try {
+                    InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                } catch (Exception e) {
+                    Log.d("Error", "Keyboard not open");
+                }
+
                 String email = etEmail.getText().toString().trim();
                 String password = etPassword.getText().toString().trim();
 
@@ -204,7 +196,8 @@ public class MainActivity extends AppCompatActivity {
         this.reference.child((this.userId)).child(Collections.notes.name()).orderByChild(Collections.dateModified.name()).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
-                pbLogin.setVisibility(View.VISIBLE);
+
+                withChild = true;
 
                 ArrayList<ArrayList<String>> interestItems = new ArrayList<>();
                 ArrayList<String> tags = new ArrayList<>();
@@ -228,7 +221,6 @@ public class MainActivity extends AppCompatActivity {
 
                 try {
                     todoList = (ArrayList) (( (HashMap) snapshot.getValue()).get("todo"));
-//                    Log.d("Firebase: ", String.valueOf(todoList.getClass()));
                 } catch (Exception f) {
                     todoList = null;
                     Log.w("error", "No Todos in entry");
@@ -238,10 +230,8 @@ public class MainActivity extends AppCompatActivity {
                         (String) ((HashMap) snapshot.getValue()).get("subtitle"), (String) ((HashMap) snapshot.getValue()).get("noteType"),
                         (String) ((HashMap) snapshot.getValue()).get("dateModified"), interestItems, tags, todoList));
 
-//                Log.d("DATA TEST:", String.valueOf(dbNotes.get(0)));
-                pbLogin.setVisibility(View.GONE);
-
                 Intent intent = new Intent(MainActivity.this, DisplayNotesActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra(Keys.DBNOTES.name(), dbNotes);
                 startActivity(intent);
                 finish();
@@ -259,6 +249,25 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onChildMoved(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+            }
+        });
+
+        this.reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                if(!withChild){
+                    pbLogin.setVisibility(View.GONE);
+                    Intent intent = new Intent(MainActivity.this, DisplayNotesActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra(Keys.DBNOTES.name(), dbNotes);
+                    startActivity(intent);
+                    finish();
+                }
 
             }
 
