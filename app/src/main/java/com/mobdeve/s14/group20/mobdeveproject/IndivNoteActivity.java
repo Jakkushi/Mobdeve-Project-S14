@@ -16,9 +16,10 @@ import java.util.ArrayList;
 public class IndivNoteActivity extends AppCompatActivity {
 
     private TextView tvTitle, tvSubtitle;
-    private RecyclerView rvIndivNotes;
-    private RecyclerView.LayoutManager indivNotesManager;
+    private RecyclerView rvIndivNotes, rvIndivTags;
+    private RecyclerView.LayoutManager indivNotesManager, indivTagsManager;
     private IndivNotesAdapter indivNotesAdapter;
+    private IndivTagsAdapter indivTagsAdapter;
 
     private String title, subtitle, noteType;
     private ArrayList<String> tags = new ArrayList<>();
@@ -37,21 +38,25 @@ public class IndivNoteActivity extends AppCompatActivity {
 
     private void bindEssentials(){
 
-        this.tvTitle = findViewById(R.id.indiv_tv_title);
-        this.tvTitle.setText(title);
+        this.tvTitle = findViewById(R.id.et_indiv_title);
+        this.tvSubtitle = findViewById(R.id.et_indiv_subtitle);
+
+        this.tvTitle.setText(this.title);
+        this.tvSubtitle.setText(this.subtitle);
     }
 
     private void initRecyclerView(){
         this.rvIndivNotes = findViewById(R.id.indiv_rv_templates);
-
         this.indivNotesManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         this.rvIndivNotes.setLayoutManager(this.indivNotesManager);
-
-        Log.d("TAGSTOP", String.valueOf(this.tags));
-        Log.d("ITEMS", String.valueOf(this.items));
-
         this.indivNotesAdapter = new IndivNotesAdapter(this.title, this.tags, this.items);
         this.rvIndivNotes.setAdapter(this.indivNotesAdapter);
+
+        this.rvIndivTags = findViewById(R.id.rv_indiv_tags);
+        this.indivTagsManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        this.rvIndivTags.setLayoutManager(indivTagsManager);
+        this.indivTagsAdapter = new IndivTagsAdapter(this.tags);
+        this.rvIndivTags.setAdapter(this.indivTagsAdapter);
     }
 
     private void loadData(){

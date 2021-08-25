@@ -114,6 +114,22 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesViewHolder> {
                 }
             });
         }
+        else if(notes.get(position).getNoteType().equals("Blank")){
+            holder.setIvLogo(R.drawable.blank_page);
+            holder.setViewOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Intent intent = new Intent(v.getContext(), IndivNoteActivity.class);
+                    intent.putExtra(Keys.TITLE.name(), notes.get(position).getTitle());
+                    intent.putExtra(Keys.SUBTITLE.name(), notes.get(position).getSubtitle());
+                    intent.putExtra(Keys.NOTETYPE.name(), notes.get(position).getNoteType());
+                    intent.putExtra(Keys.ITEMS.name(), notes.get(position).getItems());
+                    intent.putExtra(Keys.TAGS.name(), notes.get(position).getTags());
+                    v.getContext().startActivity(intent);
+                }
+            });
+        }
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this.cxt, LinearLayoutManager.HORIZONTAL, false);
         holder.getRvTags().setLayoutManager(layoutManager);

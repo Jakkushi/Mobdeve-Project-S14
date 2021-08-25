@@ -49,6 +49,11 @@ public class IndivNotesAdapter extends RecyclerView.Adapter<IndivNotesAdapter.In
             IndivNotesViewHolder viewHolder = new IndivNotesViewHolder(itemView);
             return viewHolder;
         }
+        else if(this.items.get(0) instanceof BlankItem){
+            View itemView = inflater.inflate(R.layout.note_blank, parent, false);
+            IndivNotesViewHolder viewHolder = new IndivNotesViewHolder(itemView);
+            return viewHolder;
+        }
 
         return null;
     }
@@ -65,6 +70,9 @@ public class IndivNotesAdapter extends RecyclerView.Adapter<IndivNotesAdapter.In
         else if(items.get(position) instanceof DetailedItem){
             holder.bindDetailed((DetailedItem) items.get(position));
         }
+        else if(items.get(position) instanceof BlankItem){
+            holder.bindBlank((BlankItem) items.get(position));
+        }
     }
 
     @Override
@@ -75,7 +83,7 @@ public class IndivNotesAdapter extends RecyclerView.Adapter<IndivNotesAdapter.In
     public class IndivNotesViewHolder extends RecyclerView.ViewHolder {
 
         private CheckBox cbItem;
-        private TextView interestTitle;
+        private TextView interestTitle, blankText;
         private EditText interestText, detailedTitle, detailedSubtitle, detailedText;
         private RatingBar interestRating;
         private ImageView interestPicture, detailedPicture;
@@ -92,6 +100,7 @@ public class IndivNotesAdapter extends RecyclerView.Adapter<IndivNotesAdapter.In
             detailedSubtitle = itemView.findViewById(R.id.etml_detailed_subtitle);
             detailedText = itemView.findViewById(R.id.etml_detailed_text);
             detailedPicture = itemView.findViewById(R.id.iv_detailed_image);
+            blankText = itemView.findViewById(R.id.etml_blank_text);
         }
 
         public void bindToDo(ToDoItem item) {
@@ -114,6 +123,11 @@ public class IndivNotesAdapter extends RecyclerView.Adapter<IndivNotesAdapter.In
             this.detailedTitle.setText(item.getTitle());
             this.detailedSubtitle.setText(item.getSubtitle());
             this.detailedText.setText(item.getText());
+        }
+
+        public void bindBlank(BlankItem item){
+
+           this.blankText.setText(item.getText());
         }
     }
 }

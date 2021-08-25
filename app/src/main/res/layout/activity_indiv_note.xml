@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cl_indiv_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#232D42"
@@ -21,23 +22,46 @@
         android:orientation="vertical"
         app:layout_constraintGuide_end="10dp" />
 
-    <TextView
-        android:id="@+id/indiv_tv_title"
+    <LinearLayout
+        android:id="@+id/ll_indiv_info_container"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/rounded_rectangle_topbar"
-        android:fontFamily="@font/roboto_slab"
-        android:padding="10sp"
-        android:text="@string/title_placeholder"
-        android:textColor="#FFFFFF"
-        android:textSize="24sp"
-        app:autoSizeMaxTextSize="24sp"
-        app:autoSizeMinTextSize="16sp"
-        app:autoSizeTextType="uniform"
-        app:layout_constraintEnd_toStartOf="@+id/indiv_gl_end"
-        app:layout_constraintStart_toStartOf="@+id/indiv_gl_start"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:orientation="vertical"
+        android:padding="10dp"
+        app:layout_constraintEnd_toEndOf="@id/indiv_gl_end"
+        app:layout_constraintStart_toEndOf="@id/indiv_gl_start"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <EditText
+            android:id="@+id/et_indiv_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="#00FFFFFF"
+            android:ems="10"
+            android:fontFamily="@font/roboto_slab"
+            android:gravity="center_horizontal"
+            android:hint="Title"
+            android:inputType="textMultiLine"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#A4FFFFFF"
+            android:textSize="28sp" />
+
+        <EditText
+            android:id="@+id/et_indiv_subtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#00FFFFFF"
+            android:ems="10"
+            android:fontFamily="@font/roboto_slab"
+            android:gravity="start|top"
+            android:hint="Subtitle"
+            android:inputType="textMultiLine"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#A4FFFFFF" />
+    </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/indiv_fab_cam"
@@ -58,14 +82,19 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_indiv_tags"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:background="@drawable/rounded_rectangle_topbar"
+        android:backgroundTint="#32848d"
+        android:paddingStart="10dp"
+        android:paddingTop="5dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="5dp"
         app:layout_constraintBottom_toTopOf="@+id/indiv_rv_templates"
         app:layout_constraintEnd_toEndOf="@id/indiv_gl_end"
         app:layout_constraintStart_toStartOf="@id/indiv_gl_start"
-        app:layout_constraintTop_toBottomOf="@+id/indiv_tv_title" />
+        app:layout_constraintTop_toBottomOf="@id/ll_indiv_info_container" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/indiv_rv_templates"
@@ -75,6 +104,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/indiv_gl_end"
         app:layout_constraintStart_toStartOf="@+id/indiv_gl_start"
-        app:layout_constraintTop_toBottomOf="@+id/indiv_tv_title" />
+        app:layout_constraintTop_toBottomOf="@id/ll_indiv_info_container" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
