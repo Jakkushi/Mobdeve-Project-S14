@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -6,208 +7,297 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#232D42"
-    tools:context=".TemplateList">
+    android:isScrollContainer="false"
+    tools:context=".TemplateListActivity">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/gl_bookmark_top"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.015" />
 
-    <ImageView
-        android:id="@+id/iv_bookmark"
-        android:layout_width="339dp"
-        android:layout_height="75dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/gl_bookmark_top"
-        app:srcCompat="@drawable/bookmark" />
-
-    <TextView
-        android:id="@+id/tv_templates_page_header"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#00FFFFFF"
-        android:backgroundTint="#00FFFFFF"
-        android:fontFamily="@font/roboto_slab"
-        android:text="@string/templates_page_title"
-        android:textColor="#FFFFFF"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_bookmark"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/gl_left"
-        app:layout_constraintTop_toTopOf="@+id/iv_bookmark" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/gl_left"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.05" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_templates_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="20dp">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/gl_center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gl_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.05" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/gl_right"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.95" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gl_center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
 
-    <ImageButton
-        android:id="@+id/ib_blank_template"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
-        android:layout_marginTop="20dp"
-        android:adjustViewBounds="true"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:clickable="true"
-        android:cropToPadding="true"
-        android:focusable="true"
-        android:scaleType="fitXY"
-        app:layout_constraintEnd_toStartOf="@+id/gl_center"
-        app:layout_constraintStart_toStartOf="@+id/gl_left"
-        app:layout_constraintTop_toBottomOf="@+id/iv_bookmark"
-        app:srcCompat="@drawable/templates_rounded" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gl_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.95" />
 
-    <ImageButton
-        android:id="@+id/ib_to_do_template"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
-        android:layout_marginTop="20dp"
-        android:adjustViewBounds="true"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:clickable="true"
-        android:cropToPadding="true"
-        android:focusable="true"
-        android:scaleType="fitXY"
-        app:layout_constraintEnd_toStartOf="@+id/gl_right"
-        app:layout_constraintStart_toStartOf="@+id/gl_center"
-        app:layout_constraintTop_toBottomOf="@+id/iv_bookmark"
-        app:srcCompat="@drawable/templates_rounded" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gl_bookmark_top"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.015" />
 
-    <ImageButton
-        android:id="@+id/ib_interest_template"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
-        android:layout_marginTop="25dp"
-        android:adjustViewBounds="true"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:clickable="true"
-        android:cropToPadding="true"
-        android:focusable="true"
-        android:scaleType="fitXY"
-        app:layout_constraintEnd_toStartOf="@+id/gl_center"
-        app:layout_constraintStart_toStartOf="@+id/gl_left"
-        app:layout_constraintTop_toBottomOf="@+id/ib_blank_template"
-        app:srcCompat="@drawable/templates_rounded" />
+            <ImageView
+                android:id="@+id/iv_bookmark"
+                android:layout_width="339dp"
+                android:layout_height="75dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/gl_bookmark_top"
+                app:srcCompat="@drawable/bookmark" />
 
-    <ImageButton
-        android:id="@+id/ib_sketch_template"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
-        android:layout_marginTop="25dp"
-        android:adjustViewBounds="true"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:clickable="true"
-        android:cropToPadding="true"
-        android:focusable="true"
-        android:scaleType="fitXY"
-        app:layout_constraintEnd_toStartOf="@+id/gl_right"
-        app:layout_constraintStart_toStartOf="@+id/gl_center"
-        app:layout_constraintTop_toBottomOf="@+id/ib_to_do_template"
-        app:srcCompat="@drawable/templates_rounded" />
+            <EditText
+                android:id="@+id/et_template_list_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Title"
+                android:inputType="textPersonName"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#75FFFFFF"
+                app:layout_constraintEnd_toStartOf="@+id/gl_right"
+                app:layout_constraintStart_toStartOf="@+id/gl_left"
+                app:layout_constraintTop_toBottomOf="@+id/iv_bookmark" />
 
-    <ImageButton
-        android:id="@+id/ib_lesson_template"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
-        android:layout_marginTop="25dp"
-        android:adjustViewBounds="true"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:clickable="true"
-        android:cropToPadding="true"
-        android:focusable="true"
-        android:scaleType="fitXY"
-        app:layout_constraintEnd_toStartOf="@+id/gl_center"
-        app:layout_constraintStart_toStartOf="@+id/gl_left"
-        app:layout_constraintTop_toBottomOf="@+id/ib_interest_template"
-        app:srcCompat="@drawable/templates_rounded" />
+            <EditText
+                android:id="@+id/et_template_subtitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Subtitle"
+                android:inputType="textPersonName"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#75FFFFFF"
+                app:layout_constraintEnd_toStartOf="@+id/gl_right"
+                app:layout_constraintStart_toStartOf="@+id/gl_left"
+                app:layout_constraintTop_toBottomOf="@+id/et_template_list_title" />
 
-    <TextView
-        android:id="@+id/tv_blank_template"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#00FFFFFF"
-        android:backgroundTint="#00FFFFFF"
-        android:fontFamily="@font/roboto_slab"
-        android:text="@string/blank_header"
-        android:textColor="#000000"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/ib_blank_template"
-        app:layout_constraintEnd_toEndOf="@+id/ib_blank_template"
-        app:layout_constraintStart_toStartOf="@+id/ib_blank_template" />
+            <EditText
+                android:id="@+id/et_template_tags"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Tags (ex: #groceries #waltermart)"
+                android:inputType="textPersonName"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#75FFFFFF"
+                app:layout_constraintEnd_toStartOf="@+id/gl_right"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/gl_left"
+                app:layout_constraintTop_toBottomOf="@+id/et_template_subtitle" />
 
-    <TextView
-        android:id="@+id/tv_to_do_list"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#00FFFFFF"
-        android:backgroundTint="#00FFFFFF"
-        android:fontFamily="@font/roboto_slab"
-        android:text="@string/to_do_header"
-        android:textColor="#000000"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/ib_to_do_template"
-        app:layout_constraintEnd_toEndOf="@+id/ib_to_do_template"
-        app:layout_constraintStart_toStartOf="@+id/ib_to_do_template" />
+            <TextView
+                android:id="@+id/tv_templates_page_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:background="#00FFFFFF"
+                android:backgroundTint="#00FFFFFF"
+                android:fontFamily="@font/roboto_slab"
+                android:text="@string/templates_page_title"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="@id/gl_left"
+                app:layout_constraintTop_toTopOf="@+id/gl_bookmark_top" />
 
-    <TextView
-        android:id="@+id/tv_interest_tracker"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#00FFFFFF"
-        android:backgroundTint="#00FFFFFF"
-        android:fontFamily="@font/roboto_slab"
-        android:text="@string/interest_header"
-        android:textColor="#000000"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/ib_interest_template"
-        app:layout_constraintEnd_toEndOf="@+id/ib_interest_template"
-        app:layout_constraintStart_toStartOf="@+id/ib_interest_template" />
+            <ImageButton
+                android:id="@+id/ib_blank_template"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:layout_marginTop="20dp"
+                android:adjustViewBounds="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:cropToPadding="true"
+                android:focusable="true"
+                android:scaleType="fitXY"
+                app:layout_constraintEnd_toStartOf="@+id/gl_center"
+                app:layout_constraintStart_toStartOf="@+id/gl_left"
+                app:layout_constraintTop_toBottomOf="@+id/et_template_tags"
+                app:srcCompat="@drawable/templates_rounded" />
 
-    <TextView
-        android:id="@+id/tv_sketch_pad"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#00FFFFFF"
-        android:backgroundTint="#00FFFFFF"
-        android:fontFamily="@font/roboto_slab"
-        android:text="@string/sketch_pad_header"
-        android:textColor="#000000"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/ib_sketch_template"
-        app:layout_constraintEnd_toEndOf="@+id/ib_sketch_template"
-        app:layout_constraintStart_toStartOf="@+id/ib_sketch_template" />
+            <ImageButton
+                android:id="@+id/ib_to_do_template"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:layout_marginTop="20dp"
+                android:adjustViewBounds="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:cropToPadding="true"
+                android:focusable="true"
+                android:scaleType="fitXY"
+                app:layout_constraintEnd_toStartOf="@+id/gl_center"
+                app:layout_constraintStart_toStartOf="@+id/gl_left"
+                app:layout_constraintTop_toBottomOf="@+id/ib_blank_template"
+                app:srcCompat="@drawable/templates_rounded" />
 
-    <TextView
-        android:id="@+id/tv_lesson_notes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#00FFFFFF"
-        android:backgroundTint="#00FFFFFF"
-        android:fontFamily="@font/roboto_slab"
-        android:text="@string/lesson_header"
-        android:textColor="#000000"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/ib_lesson_template"
-        app:layout_constraintEnd_toEndOf="@+id/ib_lesson_template"
-        app:layout_constraintStart_toStartOf="@+id/ib_lesson_template" />
+            <ImageButton
+                android:id="@+id/ib_interest_template"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:layout_marginTop="20dp"
+                android:adjustViewBounds="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:cropToPadding="true"
+                android:focusable="true"
+                android:scaleType="fitXY"
+                app:layout_constraintEnd_toStartOf="@+id/gl_center"
+                app:layout_constraintStart_toStartOf="@+id/gl_left"
+                app:layout_constraintTop_toBottomOf="@+id/ib_to_do_template"
+                app:srcCompat="@drawable/templates_rounded" />
+
+            <ImageButton
+                android:id="@+id/ib_sketch_template"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:layout_marginTop="20dp"
+                android:adjustViewBounds="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:cropToPadding="true"
+                android:focusable="true"
+                android:scaleType="fitXY"
+                app:layout_constraintEnd_toStartOf="@+id/gl_right"
+                app:layout_constraintStart_toStartOf="@+id/gl_center"
+                app:layout_constraintTop_toBottomOf="@+id/ib_detailed_template"
+                app:srcCompat="@drawable/templates_rounded" />
+
+            <ImageButton
+                android:id="@+id/ib_lesson_template"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:layout_marginTop="20dp"
+                android:adjustViewBounds="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:cropToPadding="true"
+                android:focusable="true"
+                android:scaleType="fitXY"
+                app:layout_constraintEnd_toStartOf="@+id/gl_right"
+                app:layout_constraintStart_toStartOf="@+id/gl_center"
+                app:layout_constraintTop_toBottomOf="@+id/et_template_tags"
+                app:srcCompat="@drawable/templates_rounded" />
+
+            <ImageButton
+                android:id="@+id/ib_detailed_template"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:layout_marginTop="20dp"
+                android:adjustViewBounds="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:cropToPadding="true"
+                android:focusable="true"
+                android:scaleType="fitXY"
+                app:layout_constraintEnd_toStartOf="@+id/gl_right"
+                app:layout_constraintStart_toStartOf="@+id/gl_center"
+                app:layout_constraintTop_toBottomOf="@+id/ib_lesson_template"
+                app:srcCompat="@drawable/templates_rounded" />
+
+            <TextView
+                android:id="@+id/tv_blank_template"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#00FFFFFF"
+                android:backgroundTint="#00FFFFFF"
+                android:fontFamily="@font/roboto_slab"
+                android:text="@string/blank_header"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/ib_blank_template"
+                app:layout_constraintEnd_toEndOf="@+id/ib_blank_template"
+                app:layout_constraintStart_toStartOf="@+id/ib_blank_template" />
+
+            <TextView
+                android:id="@+id/tv_to_do_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#00FFFFFF"
+                android:backgroundTint="#00FFFFFF"
+                android:fontFamily="@font/roboto_slab"
+                android:text="@string/to_do_header"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/ib_to_do_template"
+                app:layout_constraintEnd_toEndOf="@+id/ib_to_do_template"
+                app:layout_constraintStart_toStartOf="@+id/ib_to_do_template" />
+
+            <TextView
+                android:id="@+id/tv_interest_tracker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#00FFFFFF"
+                android:backgroundTint="#00FFFFFF"
+                android:fontFamily="@font/roboto_slab"
+                android:text="@string/interest_header"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/ib_interest_template"
+                app:layout_constraintEnd_toEndOf="@+id/ib_interest_template"
+                app:layout_constraintStart_toStartOf="@+id/ib_interest_template" />
+
+            <TextView
+                android:id="@+id/tv_sketch_pad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#00FFFFFF"
+                android:backgroundTint="#00FFFFFF"
+                android:fontFamily="@font/roboto_slab"
+                android:text="@string/sketch_pad_header"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/ib_sketch_template"
+                app:layout_constraintEnd_toEndOf="@+id/ib_sketch_template"
+                app:layout_constraintStart_toStartOf="@+id/ib_sketch_template" />
+
+            <TextView
+                android:id="@+id/tv_lesson_notes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#00FFFFFF"
+                android:backgroundTint="#00FFFFFF"
+                android:fontFamily="@font/roboto_slab"
+                android:text="@string/lesson_header"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/ib_lesson_template"
+                app:layout_constraintEnd_toEndOf="@+id/ib_lesson_template"
+                app:layout_constraintStart_toStartOf="@+id/ib_lesson_template" />
+
+            <TextView
+                android:id="@+id/tv_detailed_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#00FFFFFF"
+                android:backgroundTint="#00FFFFFF"
+                android:fontFamily="@font/roboto_slab"
+                android:text="@string/detailed_list"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/ib_detailed_template"
+                app:layout_constraintEnd_toEndOf="@+id/ib_detailed_template"
+                app:layout_constraintStart_toStartOf="@+id/ib_detailed_template" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

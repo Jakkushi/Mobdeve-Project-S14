@@ -1,6 +1,7 @@
 package com.mobdeve.s14.group20.mobdeveproject;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -29,6 +31,7 @@ public class DisplayNotesActivity extends AppCompatActivity {
     private Button saveButton;
     private ProgressBar pbMain;
     private CanvasView canvas;
+    private FloatingActionButton fabAddTemplate;
 
     private TextView titleView;
 
@@ -62,6 +65,7 @@ public class DisplayNotesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         hideUI();
+        this.initFAB();
         this.initFirebase();
         this.initRecyclerView();
 
@@ -90,6 +94,19 @@ public class DisplayNotesActivity extends AppCompatActivity {
 //        });
     }
 
+    private void initFAB(){
+
+        fabAddTemplate = findViewById(R.id.main_fab_add_template);
+        fabAddTemplate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(DisplayNotesActivity.this, TemplateListActivity.class);
+                v.getContext().startActivity(intent);
+            }
+        });
+    }
+
     private void initFirebase() {
         this.mAuth = FirebaseAuth.getInstance();
         this.database = FirebaseDatabase.getInstance();
@@ -104,6 +121,10 @@ public class DisplayNotesActivity extends AppCompatActivity {
 
         int dblength = dbNotes.size();
         System.out.println("IN DNA: " + dblength);
+
+//        for(int i = 0; i < dblength; i++)
+//            System.out.println(dbNotes.get(i).getTitle());
+
 
         this.notesManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         System.out.println("INSIDE MAIN" + this);
@@ -139,6 +160,8 @@ public class DisplayNotesActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        moveTaskToBack(true);
+
+        super.onBackPressed();
+        this.finishAffinity();
     }
 }

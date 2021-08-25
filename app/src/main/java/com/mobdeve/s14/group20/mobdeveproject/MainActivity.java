@@ -21,6 +21,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.abt.FirebaseABTesting;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -29,7 +31,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -49,9 +50,17 @@ public class MainActivity extends AppCompatActivity {
     private Button btnLogin;
     private TextView tvRegister;
 
+
     private CanvasView canvas;
 
     private TextView titleView;
+
+    private RecyclerView rvNotes;
+    private RecyclerView.LayoutManager notesManager;
+    private NotesAdapter notesAdapater;
+
+    private ArrayList<Note> notes;
+    private ArrayList<Note> notes2;
 
     private FirebaseUser user;
     private FirebaseAuth mAuth;
@@ -60,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
     private String userId;
 
     public ArrayList<DatabaseNotesData> dbNotes = new ArrayList<>();
-    boolean withChild = false;
 
     private void hideUI() {
         View decorView = getWindow().getDecorView();
@@ -82,6 +90,11 @@ public class MainActivity extends AppCompatActivity {
         hideUI();
         this.initFirebase();
         this.initComponents();
+
+//        Handler handler = new Handler();
+//        handler.postDelayed(task, 5000);
+
+
 
 //        context = getApplicationContext();
 //        clearButton = findViewById(R.id.sketch_clear_screen);
@@ -110,30 +123,36 @@ public class MainActivity extends AppCompatActivity {
 
     private void initFirebase() {
         this.mAuth = FirebaseAuth.getInstance();
+//        this.user = this.mAuth.getCurrentUser();
+//        this.userId = this.user.getUid();
+//        this.database = FirebaseDatabase.getInstance();
+//        this.reference = this.database.getReference().child(Collections.users.name());
+//        this.getNotesData();
     }
 
     private void signIn(String email, String password){
         this.pbLogin.setVisibility(View.VISIBLE);
         this.mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()) {
-                            user = mAuth.getCurrentUser();
-                            userId = user.getUid();
-                            database = FirebaseDatabase.getInstance();
-                            reference = database.getReference().child(Collections.users.name());
-
-                            withChild = false;
-                            getNotesData();
-                            Toast.makeText(MainActivity.this, "Welcome! Retrieving your notes...", Toast.LENGTH_SHORT).show();
-                        }
-                        else {
-                            pbLogin.setVisibility(View.GONE);
-                            Toast.makeText(MainActivity.this, "User Login Failed", Toast.LENGTH_SHORT).show();
-                        }
+            .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if(task.isSuccessful()) {
+                        user = mAuth.getCurrentUser();
+                        userId = user.getUid();
+                        database = FirebaseDatabase.getInstance();
+                        reference = database.getReference().child(Collections.users.name());
+//                            Log.d("firebase-acces:", String.valueOf(user));
+//                            Log.d("firebase-acces:", String.valueOf(userId));
+                        getNotesData();
+                        pbLogin.setVisibility(View.GONE);
+                        Toast.makeText(MainActivity.this, "Welcome to Tous Les Journal!", Toast.LENGTH_SHORT).show();
                     }
-                });
+                    else {
+                        pbLogin.setVisibility(View.GONE);
+                        Toast.makeText(MainActivity.this, "User Login Failed", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
     }
 
     private void initComponents(){
@@ -161,7 +180,6 @@ public class MainActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     Log.d("Error", "Keyboard not open");
                 }
-
                 String email = etEmail.getText().toString().trim();
                 String password = etPassword.getText().toString().trim();
 
@@ -196,8 +214,7 @@ public class MainActivity extends AppCompatActivity {
         this.reference.child((this.userId)).child(Collections.notes.name()).orderByChild(Collections.dateModified.name()).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
-
-                withChild = true;
+                pbLogin.setVisibility(View.VISIBLE);
 
                 ArrayList<ArrayList<String>> interestItems = new ArrayList<>();
                 ArrayList<String> tags = new ArrayList<>();
@@ -221,6 +238,7 @@ public class MainActivity extends AppCompatActivity {
 
                 try {
                     todoList = (ArrayList) (( (HashMap) snapshot.getValue()).get("todo"));
+//                    Log.d("Firebase: ", String.valueOf(todoList.getClass()));
                 } catch (Exception f) {
                     todoList = null;
                     Log.w("error", "No Todos in entry");
@@ -230,8 +248,10 @@ public class MainActivity extends AppCompatActivity {
                         (String) ((HashMap) snapshot.getValue()).get("subtitle"), (String) ((HashMap) snapshot.getValue()).get("noteType"),
                         (String) ((HashMap) snapshot.getValue()).get("dateModified"), interestItems, tags, todoList));
 
+//                Log.d("DATA TEST:", String.valueOf(dbNotes.get(0)));
+                pbLogin.setVisibility(View.GONE);
+
                 Intent intent = new Intent(MainActivity.this, DisplayNotesActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra(Keys.DBNOTES.name(), dbNotes);
                 startActivity(intent);
                 finish();
@@ -254,29 +274,14 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull @NotNull DatabaseError error) {
-            }
-        });
-
-        this.reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                if(!withChild){
-                    pbLogin.setVisibility(View.GONE);
-                    Intent intent = new Intent(MainActivity.this, DisplayNotesActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra(Keys.DBNOTES.name(), dbNotes);
-                    startActivity(intent);
-                    finish();
-                }
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {
 
             }
         });
 
+        Intent intent = new Intent(MainActivity.this, DisplayNotesActivity.class);
+        intent.putExtra(Keys.DBNOTES.name(), dbNotes);
+        startActivity(intent);
+        finish();
     }
 
     private ActivityResultLauncher<String> requestPermissionLauncher =

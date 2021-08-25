@@ -6,6 +6,8 @@
     <string name="interest_header">Interest Tracker</string>
     <string name="sketch_pad_header">Sketch Pad</string>
     <string name="lesson_header">Lesson Notes</string>
+    <string name="detailed_list">Detailed List</string>
+
 
     <string name="title_placeholder">[Title]</string>
     <string name="tag_placeholder">Tags:</string>

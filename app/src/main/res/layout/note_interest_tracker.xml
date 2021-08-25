@@ -61,52 +61,48 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:srcCompat="@tools:sample/avatars" />
 
-        <LinearLayout
-            android:id="@+id/ll_interest_main_info"
+        <TextView
+            android:id="@+id/tv_interest_title"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:fontFamily="@font/roboto_slab"
             android:gravity="center"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toTopOf="@id/gl_bottom_picture"
-            app:layout_constraintLeft_toRightOf="@id/gl_picture_end"
-            app:layout_constraintRight_toLeftOf="@id/gl_interest_end"
-            app:layout_constraintTop_toBottomOf="@id/gl_top_picture">
+            android:paddingLeft="5sp"
+            android:paddingRight="5sp"
+            android:text="For a Pessimist, You're Pretty Optimistic"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="24sp"
+            app:autoSizeMaxTextSize="100sp"
+            app:autoSizeMinTextSize="12sp"
+            app:autoSizeTextType="uniform"
+            app:layout_constraintBottom_toTopOf="@id/rb_interest_rating"
+            app:layout_constraintEnd_toStartOf="@+id/gl_interest_end"
+            app:layout_constraintStart_toStartOf="@+id/gl_picture_end"
+            app:layout_constraintTop_toTopOf="@+id/gl_top_picture"
+            tools:autoSizeMaxTextSize="24sp"
+            tools:autoSizeMinTextSize="18sp"
+            tools:autoSizeTextType="uniform" />
 
-            <TextView
-                android:id="@+id/tv_interest_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@font/roboto_slab"
-                android:gravity="center"
-                android:paddingLeft="5sp"
-                android:paddingRight="5sp"
-                android:text="For a Pessimist, You're Pretty Optimistic"
-                android:textAlignment="center"
-                android:textColor="#000000"
-                android:textSize="24sp"
-                app:autoSizeMaxTextSize="100sp"
-                app:autoSizeMinTextSize="12sp"
-                app:autoSizeTextType="uniform"
-                tools:autoSizeMaxTextSize="24sp"
-                tools:autoSizeMinTextSize="18sp"
-                tools:autoSizeTextType="uniform" />
-
-            <RatingBar
-                android:id="@+id/rb_interest_rating"
-                style="@android:style/Widget.Material.RatingBar.Indicator"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:numStars="5"
-                android:paddingStart="0dp"
-                android:paddingEnd="0dp"
-                android:progressTint="#E46868"
-                android:rating="0"
-                android:scaleX="1"
-                android:scaleY="1"
-                android:secondaryProgressTint="#00C13333" />
-        </LinearLayout>
+        <RatingBar
+            android:id="@+id/rb_interest_rating"
+            style="@android:style/Widget.Material.RatingBar.Indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:isIndicator="false"
+            android:numStars="5"
+            android:paddingStart="0dp"
+            android:paddingEnd="0dp"
+            android:progressTint="#E46868"
+            android:rating="0"
+            android:scaleX="1"
+            android:scaleY="1"
+            android:secondaryProgressTint="#00C13333"
+            app:layout_constraintBottom_toTopOf="@+id/gl_bottom_picture"
+            app:layout_constraintEnd_toStartOf="@+id/gl_interest_end"
+            app:layout_constraintStart_toStartOf="@+id/gl_picture_end"
+            app:layout_constraintTop_toBottomOf="@+id/tv_interest_title" />
 
         <EditText
             android:id="@+id/etml_interest_text"

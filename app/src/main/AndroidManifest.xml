@@ -17,7 +17,7 @@
         <activity android:name=".LogInActivity" />
         <activity android:name=".SketchActivity" />
         <activity android:name=".IndivNoteActivity" />
-        <activity android:name=".TemplateList" />
+        <activity android:name=".TemplateListActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

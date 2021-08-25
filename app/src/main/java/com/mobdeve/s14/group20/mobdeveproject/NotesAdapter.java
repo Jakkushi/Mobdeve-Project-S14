@@ -78,6 +78,10 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesViewHolder> {
                 public void onClick(View v) {
 
                     Intent intent = new Intent(v.getContext(), SketchActivity.class);
+                    intent.putExtra(Keys.TITLE.name(), notes.get(position).getTitle());
+                    intent.putExtra(Keys.SUBTITLE.name(), notes.get(position).getSubtitle());
+                    intent.putExtra(Keys.NOTETYPE.name(), notes.get(position).getNoteType());
+                    intent.putExtra(Keys.TAGS.name(), notes.get(position).getTags());
                     v.getContext().startActivity(intent);
                 }
             });
