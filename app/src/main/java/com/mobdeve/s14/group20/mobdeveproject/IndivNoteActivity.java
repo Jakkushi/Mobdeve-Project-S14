@@ -1,15 +1,18 @@
 package com.mobdeve.s14.group20.mobdeveproject;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -72,5 +75,41 @@ public class IndivNoteActivity extends AppCompatActivity {
         Log.d("NOTETYPE", this.noteType);
         Log.d("TAGS", String.valueOf(this.tags));
         Log.d("TODOITEMS", String.valueOf(this.items));
+    }
+
+//    private long lastBackPressTime = 0;
+//    private Toast toast;
+//
+//    @Override
+//    public void onBackPressed() {
+//        if (this.lastBackPressTime < System.currentTimeMillis() - 4000) {
+//            toast = Toast.makeText(this, "Press back again to close this note. Changes will be saved upon exit.", Toast.LENGTH_LONG);
+//            toast.show();
+//            this.lastBackPressTime = System.currentTimeMillis();
+//        } else {
+//            if (toast != null) {
+//                toast.cancel();
+//            }
+//            super.onBackPressed();
+//        }
+//    }
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setMessage("Are you sure you want to exit?\nThis will save the contents of the note.")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        IndivNoteActivity.super.onBackPressed();
+                    }
+                })
+                .setNegativeButton("No", null)
+                .show();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 }

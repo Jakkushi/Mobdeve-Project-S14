@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -53,8 +54,14 @@ public class TemplateListActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 System.out.println("CLICKED BLANK");
-                getData();
-                addTemplate("Blank");
+                if(TextUtils.isEmpty(etTags.getText()))
+                {
+                    etTags.setError(" Please enter at least 1 tag");
+                    etTags.requestFocus();
+                }else {
+                    getData();
+                    addTemplate("Blank");
+                }
             }
         });
 
@@ -62,8 +69,14 @@ public class TemplateListActivity extends AppCompatActivity {
         this.ibToDo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getData();
-                addTemplate("ToDo");
+                if(TextUtils.isEmpty(etTags.getText()))
+                {
+                    etTags.setError(" Please enter at least 1 tag");
+                    etTags.requestFocus();
+                }else {
+                    getData();
+                    addTemplate("ToDo");
+                }
             }
         });
 
@@ -71,8 +84,14 @@ public class TemplateListActivity extends AppCompatActivity {
         this.ibLesson.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getData();
-                addTemplate("Lesson");
+                if(TextUtils.isEmpty(etTags.getText()))
+                {
+                    etTags.setError(" Please enter at least 1 tag");
+                    etTags.requestFocus();
+                }else {
+                    getData();
+                    addTemplate("Lesson");
+                }
             }
         });
 
@@ -80,8 +99,14 @@ public class TemplateListActivity extends AppCompatActivity {
         this.ibDetailed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getData();
-                addTemplate("Detailed");
+                if(TextUtils.isEmpty(etTags.getText()))
+                {
+                    etTags.setError(" Please enter at least 1 tag");
+                    etTags.requestFocus();
+                }else {
+                    getData();
+                    addTemplate("Detailed");
+                }
             }
         });
 
@@ -89,8 +114,14 @@ public class TemplateListActivity extends AppCompatActivity {
         this.ibSketch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getData();
-                addTemplate("Sketchbook");
+                if(TextUtils.isEmpty(etTags.getText()))
+                {
+                    etTags.setError(" Please enter at least 1 tag");
+                    etTags.requestFocus();
+                }else {
+                    getData();
+                    addTemplate("Sketchbook");
+                }
             }
         });
 
@@ -98,8 +129,14 @@ public class TemplateListActivity extends AppCompatActivity {
         this.ibInterest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getData();
-                addTemplate("Interest");
+                if(TextUtils.isEmpty(etTags.getText()))
+                {
+                    etTags.setError(" Please enter at least 1 tag");
+                    etTags.requestFocus();
+                }else {
+                    getData();
+                    addTemplate("Interest");
+                }
             }
         });
 
@@ -144,5 +181,6 @@ public class TemplateListActivity extends AppCompatActivity {
         intent.putExtra(Keys.TAGS.name(), this.tags);
         intent.putExtra(Keys.ITEMS.name(), items);
         startActivity(intent);
+        finish();
     }
 }

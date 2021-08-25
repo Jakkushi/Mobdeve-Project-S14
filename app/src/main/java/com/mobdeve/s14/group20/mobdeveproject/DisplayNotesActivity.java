@@ -67,6 +67,8 @@ public class DisplayNotesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         this.svFilterNotes = findViewById(R.id.main_sv_search);
+        this.svFilterNotes.setFocusable(false);
+        this.svFilterNotes.setIconified(false);
         this.svFilterNotes.clearFocus();
 
         hideUI();
