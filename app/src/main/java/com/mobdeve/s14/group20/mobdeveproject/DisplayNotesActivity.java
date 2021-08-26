@@ -133,7 +133,7 @@ public class DisplayNotesActivity extends AppCompatActivity {
 //            System.out.println(dbNotes.get(i).getTitle());
 
 
-        this.notesManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        this.notesManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true);
         System.out.println("INSIDE MAIN" + this);
         this.rvNotes.setLayoutManager(this.notesManager);
 

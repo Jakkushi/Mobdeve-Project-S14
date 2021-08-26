@@ -61,7 +61,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesViewHolder> {
                 @Override
                 public void onClick(View v) {
 
-                    Intent intent = new Intent(v.getContext(), IndivNoteActivity.class);
+                    Intent intent = new Intent(v.getContext(), ExistingIndivNoteActivity.class);
                     intent.putExtra(Keys.TITLE.name(), notes.get(position).getTitle());
                     intent.putExtra(Keys.SUBTITLE.name(), notes.get(position).getSubtitle());
                     intent.putExtra(Keys.NOTETYPE.name(), notes.get(position).getNoteType());
@@ -92,7 +92,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesViewHolder> {
                 @Override
                 public void onClick(View v) {
 
-                    Intent intent = new Intent(v.getContext(), IndivNoteActivity.class);
+                    Intent intent = new Intent(v.getContext(), ExistingIndivNoteActivity.class);
                     intent.putExtra(Keys.TITLE.name(), notes.get(position).getTitle());
                     intent.putExtra(Keys.SUBTITLE.name(), notes.get(position).getSubtitle());
                     intent.putExtra(Keys.NOTETYPE.name(), notes.get(position).getNoteType());
@@ -108,7 +108,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesViewHolder> {
                 @Override
                 public void onClick(View v) {
 
-                    Intent intent = new Intent(v.getContext(), IndivNoteActivity.class);
+                    Intent intent = new Intent(v.getContext(), ExistingIndivNoteActivity.class);
                     intent.putExtra(Keys.TITLE.name(), notes.get(position).getTitle());
                     intent.putExtra(Keys.SUBTITLE.name(), notes.get(position).getSubtitle());
                     intent.putExtra(Keys.NOTETYPE.name(), notes.get(position).getNoteType());
@@ -124,7 +124,23 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesViewHolder> {
                 @Override
                 public void onClick(View v) {
 
-                    Intent intent = new Intent(v.getContext(), IndivNoteActivity.class);
+                    Intent intent = new Intent(v.getContext(), ExistingIndivNoteActivity.class);
+                    intent.putExtra(Keys.TITLE.name(), notes.get(position).getTitle());
+                    intent.putExtra(Keys.SUBTITLE.name(), notes.get(position).getSubtitle());
+                    intent.putExtra(Keys.NOTETYPE.name(), notes.get(position).getNoteType());
+                    intent.putExtra(Keys.ITEMS.name(), notes.get(position).getItems());
+                    intent.putExtra(Keys.TAGS.name(), notes.get(position).getTags());
+                    v.getContext().startActivity(intent);
+                }
+            });
+        }
+        else if(notes.get(position).getNoteType().equals("Lesson")){
+            holder.setIvLogo(R.drawable.lesson_notes);
+            holder.setViewOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Intent intent = new Intent(v.getContext(), ExistingIndivNoteActivity.class);
                     intent.putExtra(Keys.TITLE.name(), notes.get(position).getTitle());
                     intent.putExtra(Keys.SUBTITLE.name(), notes.get(position).getSubtitle());
                     intent.putExtra(Keys.NOTETYPE.name(), notes.get(position).getNoteType());

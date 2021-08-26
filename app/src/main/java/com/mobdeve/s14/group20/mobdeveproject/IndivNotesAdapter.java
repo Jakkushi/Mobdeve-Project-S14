@@ -6,9 +6,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -54,6 +56,11 @@ public class IndivNotesAdapter extends RecyclerView.Adapter<IndivNotesAdapter.In
             IndivNotesViewHolder viewHolder = new IndivNotesViewHolder(itemView);
             return viewHolder;
         }
+        else if(this.items.get(0) instanceof LessonNotesItem){
+            View itemView = inflater.inflate(R.layout.note_lesson_notes, parent, false);
+            IndivNotesViewHolder viewHolder = new IndivNotesViewHolder(itemView);
+            return viewHolder;
+        }
 
         return null;
     }
@@ -73,6 +80,9 @@ public class IndivNotesAdapter extends RecyclerView.Adapter<IndivNotesAdapter.In
         else if(items.get(position) instanceof BlankItem){
             holder.bindBlank((BlankItem) items.get(position));
         }
+        else if(items.get(position) instanceof LessonNotesItem){
+            holder.bindLesson((LessonNotesItem) items.get(position));
+        }
     }
 
     @Override
@@ -89,7 +99,8 @@ public class IndivNotesAdapter extends RecyclerView.Adapter<IndivNotesAdapter.In
         private TextView interestTitle, blankText;
         private EditText interestText, detailedTitle, detailedSubtitle, detailedText;
         private RatingBar interestRating;
-        private ImageView interestPicture, detailedPicture;
+        private ImageButton interestPicture, detailedPicture;
+        private EditText lessonTitle, lessonSubtitle, lessonText;
 
         public IndivNotesViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -98,12 +109,15 @@ public class IndivNotesAdapter extends RecyclerView.Adapter<IndivNotesAdapter.In
             interestTitle = itemView.findViewById(R.id.tv_interest_title);
             interestText = itemView.findViewById(R.id.etml_interest_text);
             interestRating = itemView.findViewById(R.id.rb_interest_rating);
-            interestPicture = itemView.findViewById(R.id.iv_interest_picture);
+            interestPicture = itemView.findViewById(R.id.ib_interest_image);
             detailedTitle = itemView.findViewById(R.id.etml_detailed_title);
             detailedSubtitle = itemView.findViewById(R.id.etml_detailed_subtitle);
             detailedText = itemView.findViewById(R.id.etml_detailed_text);
-            detailedPicture = itemView.findViewById(R.id.iv_detailed_image);
+            detailedPicture = itemView.findViewById(R.id.ib_detailed_image);
             blankText = itemView.findViewById(R.id.etml_blank_text);
+            lessonTitle = itemView.findViewById(R.id.et_lesson_title);
+            lessonSubtitle = itemView.findViewById(R.id.et_lesson_subtitle);
+            lessonText = itemView.findViewById(R.id.et_lesson_text);
         }
 
         public void bindToDo(ToDoItem item) {
@@ -118,6 +132,13 @@ public class IndivNotesAdapter extends RecyclerView.Adapter<IndivNotesAdapter.In
             this.interestText.setText(item.getText());
             this.interestRating.setRating(item.getRating());
             this.interestPicture.setImageResource(item.getImgId());
+            this.interestPicture.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(v.getContext(), "Wow Interest!!!", Toast.LENGTH_SHORT).show();
+
+                }
+            });
         }
 
         public void bindDetailed(DetailedItem item){
@@ -126,11 +147,24 @@ public class IndivNotesAdapter extends RecyclerView.Adapter<IndivNotesAdapter.In
             this.detailedTitle.setText(item.getTitle());
             this.detailedSubtitle.setText(item.getSubtitle());
             this.detailedText.setText(item.getText());
+            this.detailedPicture.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(v.getContext(), "Clicked Detailed!!!", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
 
         public void bindBlank(BlankItem item){
 
            this.blankText.setText(item.getText());
+        }
+
+        public void bindLesson(LessonNotesItem item){
+
+            this.lessonTitle.setText(item.getTitle());
+            this.lessonSubtitle.setText(item.getSubtitle());
+            this.lessonText.setText(item.getText());
         }
     }
 }

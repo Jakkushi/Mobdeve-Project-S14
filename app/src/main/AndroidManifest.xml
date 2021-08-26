@@ -14,6 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MobdeveProject">
         <activity android:name=".DisplayNotesActivity"/>
+        <activity android:name=".ExistingIndivNoteActivity"/>
         <activity android:name=".LogInActivity" />
         <activity android:name=".SketchActivity" />
         <activity android:name=".IndivNoteActivity" />
