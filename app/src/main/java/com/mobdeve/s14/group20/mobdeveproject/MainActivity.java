@@ -235,9 +235,11 @@ public class MainActivity extends AppCompatActivity {
                     Log.w("error", "No Blank items in entry");
                 }
 
+                Log.d("Snapshot Key: ", snapshot.getKey());
+
                 dbNotes.add(new DatabaseNotesData( (String) (( (HashMap) snapshot.getValue()).get("title")),
                         (String) ((HashMap) snapshot.getValue()).get("subtitle"), (String) ((HashMap) snapshot.getValue()).get("noteType"),
-                        (String) ((HashMap) snapshot.getValue()).get("dateModified"), interestItems, tags, todoList, blankItems));
+                        (String) ((HashMap) snapshot.getValue()).get("dateModified"), interestItems, tags, todoList, blankItems, snapshot.getKey()));
 
                 Intent intent = new Intent(MainActivity.this, DisplayNotesActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);

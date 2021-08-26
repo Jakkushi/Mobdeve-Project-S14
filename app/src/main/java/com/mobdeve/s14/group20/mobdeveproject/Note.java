@@ -11,25 +11,28 @@ public class Note {
     private ArrayList<Item> items;
     private int numBlanks;
     private ArrayList<String> blankItems;
+    private String noteId;
 
-    public Note(String title, String subtitle, String noteType, String dateModified, ArrayList<String> tags, ArrayList<Item> items) {
+    public Note(String title, String subtitle, String noteType, String dateModified, ArrayList<String> tags, ArrayList<Item> items, String noteId) {
         this.title = title;
         this.subtitle = subtitle;
         this.noteType = noteType;
         this.dateModified = dateModified;
         this.tags = tags;
         this.items = items;
+        this.noteId = noteId;
     }
 
-    public Note(String title, String subtitle, String noteType, String dateModified, ArrayList<String> tags) {
+    public Note(String title, String subtitle, String noteType, String dateModified, ArrayList<String> tags, String noteId) {
         this.title = title;
         this.subtitle = subtitle;
         this.noteType = noteType;
         this.dateModified = dateModified;
         this.tags = tags;
+        this.noteId = noteId;
     }
 
-    public Note(String title, String subtitle, String noteType, String dateModified, ArrayList<String> tags, int numBlanks, ArrayList<String> blankItems) {
+    public Note(String title, String subtitle, String noteType, String dateModified, ArrayList<String> tags, int numBlanks, ArrayList<String> blankItems, String noteId) {
         this.title = title;
         this.subtitle = subtitle;
         this.noteType = noteType;
@@ -37,6 +40,7 @@ public class Note {
         this.tags = tags;
         this.numBlanks = numBlanks;
         this.blankItems = blankItems;
+        this.noteId = noteId;
     }
 
     public String getTitle(){ return this.title; }
@@ -51,6 +55,8 @@ public class Note {
 
     public ArrayList<String> getTags(){ return this.tags; }
 
+    public String getNoteId(){ return this.noteId; }
+
     public void setTitle(String title){ this.title = title; }
 
     public void setSubtitle(String subtitle){ this.subtitle = subtitle; }
@@ -58,4 +64,6 @@ public class Note {
     public void setDateModified(String dateModified){ this.dateModified = dateModified; }
 
     public void addTag(String tag){ tags.add(tag); }
+
+    public void setNoteId(String id){ this.noteId = id; }
 }

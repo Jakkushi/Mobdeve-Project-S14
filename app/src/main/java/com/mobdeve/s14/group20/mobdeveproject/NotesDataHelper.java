@@ -44,7 +44,8 @@ public class NotesDataHelper {
                         tempDbNote.getNoteType(),
                         tempDbNote.getDateModified(),
                         tempDbNote.getTags(),
-                        todos
+                        todos,
+                        tempDbNote.getNoteId()
                 ));
 
             }
@@ -70,7 +71,8 @@ public class NotesDataHelper {
                         tempDbNote.getNoteType(),
                         tempDbNote.getDateModified(),
                         tempDbNote.getTags(),
-                        interestItems
+                        interestItems,
+                        tempDbNote.getNoteId()
                 ));
             }
             else if(tempDbNote.getNoteType().equals("Detailed")){
@@ -94,7 +96,8 @@ public class NotesDataHelper {
                         tempDbNote.getNoteType(),
                         tempDbNote.getDateModified(),
                         tempDbNote.getTags(),
-                        detailedItems
+                        detailedItems,
+                        tempDbNote.getNoteId()
                 ));
 
             }
@@ -107,7 +110,8 @@ public class NotesDataHelper {
                         tempDbNote.getDateModified(),
                         tempDbNote.getTags(),
                         tempDbNote.getBlankItems().size(),
-                        tempDbNote.getBlankItems()
+                        tempDbNote.getBlankItems(),
+                        tempDbNote.getNoteId()
                 ));
             }
             else{
@@ -117,7 +121,8 @@ public class NotesDataHelper {
                         tempDbNote.getSubtitle(),
                         tempDbNote.getNoteType(),
                         tempDbNote.getDateModified(),
-                        tempDbNote.getTags()
+                        tempDbNote.getTags(),
+                        tempDbNote.getNoteId()
                 ));
             }
         }

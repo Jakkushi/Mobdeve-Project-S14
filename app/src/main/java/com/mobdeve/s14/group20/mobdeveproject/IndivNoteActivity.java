@@ -143,13 +143,6 @@ public class IndivNoteActivity extends AppCompatActivity {
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                        String str[] = (String[])(((HashMap) snapshot.getValue()).keySet().toArray(new String[0]));
-//                        ArrayList<String> test = new ArrayList<>(Arrays.asList(str)); //don't forget to cast
-//
-//                        int numTest = test.size();
-//                        for(int i = 0; i < numTest; i++){
-//                            System.out.println("item " + i + " : " + test.get(i));
-//                        }
 
                         //check for note id???
                         String newNoteId = reference.push().getKey();
@@ -172,12 +165,6 @@ public class IndivNoteActivity extends AppCompatActivity {
                         noteData.put("noteType", noteType);
                         noteData.put("dateModified", dateString);
                         noteData.put("tags", tags);
-
-                        System.out.println("title: " + title);
-                        System.out.println("subtitle: " + subtitle);
-                        System.out.println("noteType: " + noteType);
-                        System.out.println("dateModified: " + dateString);
-                        System.out.println("tags: " + tags);
 
                         ArrayList<ArrayList<String>> tempItems = new ArrayList<>();
 

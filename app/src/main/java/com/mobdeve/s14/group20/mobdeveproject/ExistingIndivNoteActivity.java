@@ -3,6 +3,8 @@ package com.mobdeve.s14.group20.mobdeveproject;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -32,8 +34,10 @@ public class ExistingIndivNoteActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager indivNotesManager, indivTagsManager;
     private IndivNotesAdapter indivNotesAdapter;
     private IndivTagsAdapter indivTagsAdapter;
+    private TextView tvNoteId;
+    private ProgressBar pb_indiv_note;
 
-    private String title, subtitle, noteType;
+    private String title, subtitle, noteType, noteId;
     private ArrayList<String> tags = new ArrayList<>();
     private ArrayList<Item> items = new ArrayList<>();
 
@@ -60,9 +64,13 @@ public class ExistingIndivNoteActivity extends AppCompatActivity {
 
         this.tvTitle = findViewById(R.id.et_indiv_title);
         this.tvSubtitle = findViewById(R.id.et_indiv_subtitle);
+        this.tvNoteId = findViewById(R.id.tv_note_id);
+        this.pb_indiv_note = findViewById(R.id.pb_indiv_note);
 
         this.tvTitle.setText(this.title);
         this.tvSubtitle.setText(this.subtitle);
+        this.tvNoteId.setText(noteId);
+
     }
 
     private void initRecyclerView(){
@@ -86,12 +94,14 @@ public class ExistingIndivNoteActivity extends AppCompatActivity {
         this.noteType = getIntent().getStringExtra(Keys.NOTETYPE.name());
         this.tags = getIntent().getStringArrayListExtra(Keys.TAGS.name());
         this.items = (ArrayList<Item>) getIntent().getSerializableExtra(Keys.ITEMS.name());
+        this.noteId = getIntent().getStringExtra(Keys.ID.name());
 
         Log.d("TITLE", this.title);
         Log.d("SUBTITLE", this.subtitle);
         Log.d("NOTETYPE", this.noteType);
         Log.d("TAGS", String.valueOf(this.tags));
         Log.d("TODOITEMS", String.valueOf(this.items));
+//        Log.d("NOTEID", String.valueOf(this.noteId));
     }
 
 //    private long lastBackPressTime = 0;
@@ -126,9 +136,11 @@ public class ExistingIndivNoteActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-//        this.saveNote();
+    protected void onPause() {
+        super.onPause();
+        this.pb_indiv_note.setVisibility(View.VISIBLE);
+        this.saveNote();
+        this.pb_indiv_note.setVisibility(View.GONE);
     }
 
     private void saveNote() {
@@ -148,14 +160,17 @@ public class ExistingIndivNoteActivity extends AppCompatActivity {
 //                        }
 
                         //check for note id???
-                        String newNoteId = reference.push().getKey();
-                        System.out.println("New note id: " + newNoteId);
+                        String noteId = String.valueOf(tvNoteId.getText());
+                        System.out.println("Current note id: " + noteId);
 
                         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
                         Date date = new Date();
                         String dateString = formatter.format(date);
 
                         HashMap<String, Object> noteData = new HashMap<>();
+
+                        title = String.valueOf(tvTitle.getText());
+                        subtitle = String.valueOf(tvSubtitle.getText());
 
                         if(title.equals(""))
                             title = "Title";
@@ -174,6 +189,7 @@ public class ExistingIndivNoteActivity extends AppCompatActivity {
                         System.out.println("noteType: " + noteType);
                         System.out.println("dateModified: " + dateString);
                         System.out.println("tags: " + tags);
+                        System.out.println("note id: " + noteId);
 
                         ArrayList<ArrayList<String>> tempItems = new ArrayList<>();
 
@@ -187,7 +203,9 @@ public class ExistingIndivNoteActivity extends AppCompatActivity {
 
                         noteData.put("blankItems", tempItems);
 
-                        reference.child((userId)).child(Collections.notes.name()).child(newNoteId).setValue(noteData);
+                        reference.child((userId)).child(Collections.notes.name()).child(noteId).child("title").setValue(title);
+                        reference.child((userId)).child(Collections.notes.name()).child(noteId).child("subtitle").setValue(subtitle);
+//                        reference.child((userId)).child(Collections.notes.name()).child(noteId).setValue(noteData);
 
                     }
 

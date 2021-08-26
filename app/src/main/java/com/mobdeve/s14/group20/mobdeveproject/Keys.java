@@ -6,5 +6,6 @@ public enum Keys {
     NOTETYPE,
     TAGS,
     ITEMS,
-    DBNOTES
+    DBNOTES,
+    ID
 }
