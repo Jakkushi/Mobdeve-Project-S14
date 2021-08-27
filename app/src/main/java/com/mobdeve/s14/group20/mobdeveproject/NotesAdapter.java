@@ -140,7 +140,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesViewHolder> {
                     intent.putExtra(Keys.TITLE.name(), notes.get(position).getTitle());
                     intent.putExtra(Keys.SUBTITLE.name(), notes.get(position).getSubtitle());
                     intent.putExtra(Keys.NOTETYPE.name(), notes.get(position).getNoteType());
-                    intent.putExtra(Keys.ITEMS.name(), notes.get(position).getItems());
+                    intent.putExtra(Keys.ITEMS.name(), notes.get(position).getBlankItems());
                     intent.putExtra(Keys.TAGS.name(), notes.get(position).getTags());
                     intent.putExtra(Keys.ID.name(), notes.get(position).getNoteId());
                     v.getContext().startActivity(intent);

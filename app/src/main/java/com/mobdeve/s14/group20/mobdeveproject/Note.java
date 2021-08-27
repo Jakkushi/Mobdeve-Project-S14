@@ -10,7 +10,7 @@ public class Note {
     private ArrayList<String> tags;
     private ArrayList<Item> items;
     private int numBlanks;
-    private ArrayList<String> blankItems;
+    private ArrayList<Item> blankItems;
     private String noteId;
 
     public Note(String title, String subtitle, String noteType, String dateModified, ArrayList<String> tags, ArrayList<Item> items, String noteId) {
@@ -32,7 +32,7 @@ public class Note {
         this.noteId = noteId;
     }
 
-    public Note(String title, String subtitle, String noteType, String dateModified, ArrayList<String> tags, int numBlanks, ArrayList<String> blankItems, String noteId) {
+    public Note(String title, String subtitle, String noteType, String dateModified, ArrayList<String> tags, int numBlanks, ArrayList<Item> blankItems, String noteId) {
         this.title = title;
         this.subtitle = subtitle;
         this.noteType = noteType;
@@ -66,4 +66,12 @@ public class Note {
     public void addTag(String tag){ tags.add(tag); }
 
     public void setNoteId(String id){ this.noteId = id; }
+
+    public ArrayList<Item> getBlankItems() {
+        return this.blankItems;
+    }
+
+    public void setBlankItems(ArrayList<Item> blankItems) {
+        this.blankItems = blankItems;
+    }
 }

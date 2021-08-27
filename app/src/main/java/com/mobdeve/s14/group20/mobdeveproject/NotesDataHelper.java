@@ -1,6 +1,7 @@
 package com.mobdeve.s14.group20.mobdeveproject;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -103,14 +104,26 @@ public class NotesDataHelper {
             }
             else if(tempDbNote.getNoteType().equals("Blank")){
 
+                ArrayList<Item> blankItems = new ArrayList<>();
+                int numItems = tempDbNote.getBlankItems().size();
+
+
+                for(int j = 0; j < numItems; j++) {
+                    ArrayList<String> tempBlankItems = tempDbNote.getBlankItems().get(j);
+
+                    Log.d("IN THE LOOP: ", String.valueOf(tempDbNote.getItems().get(j).get(0)));
+
+                    blankItems.add(new BlankItem(tempBlankItems.get(j)));
+                }
+
                 data.add(new Note(
                         tempDbNote.getTitle(),
                         tempDbNote.getSubtitle(),
                         tempDbNote.getNoteType(),
                         tempDbNote.getDateModified(),
                         tempDbNote.getTags(),
-                        tempDbNote.getBlankItems().size(),
-                        tempDbNote.getBlankItems(),
+                        numItems,
+                        blankItems,
                         tempDbNote.getNoteId()
                 ));
             }

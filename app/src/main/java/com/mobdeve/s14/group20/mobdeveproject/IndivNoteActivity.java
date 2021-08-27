@@ -130,6 +130,14 @@ public class IndivNoteActivity extends AppCompatActivity {
     }
 
     private void saveNote() {
+
+        TextView tempText;
+
+        for(int i = 0; i < indivNotesManager.getChildCount(); i++){
+            tempText = indivNotesManager.getChildAt(0).findViewById(R.id.etml_blank_text);
+            Log.d("CHILD: ", String.valueOf(tempText.getText()));
+        }
+
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String userId = user.getUid();
 

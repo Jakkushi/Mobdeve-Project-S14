@@ -204,7 +204,7 @@ public class DisplayNotesActivity extends AppCompatActivity {
                 ArrayList<ArrayList<String>> interestItems = new ArrayList<>();
                 ArrayList<String> tags = new ArrayList<>();
                 ArrayList<ArrayList<String>> todoList = new ArrayList<>();
-                ArrayList<String> blankItems = new ArrayList<>();
+                ArrayList<ArrayList<String>> blankItems = new ArrayList<>();
 
                 try {
                     interestItems =  (ArrayList) (( (HashMap) snapshot.getValue()).get("interestItem"));
