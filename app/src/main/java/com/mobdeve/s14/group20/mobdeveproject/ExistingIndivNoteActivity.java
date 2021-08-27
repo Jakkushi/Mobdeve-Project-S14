@@ -1,12 +1,24 @@
 package com.mobdeve.s14.group20.mobdeveproject;
 
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,13 +33,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 
-public class ExistingIndivNoteActivity extends AppCompatActivity {
+public class ExistingIndivNoteActivity extends AppCompatActivity implements IndivNotesAdapter.callCamera{
 
     private TextView tvTitle, tvSubtitle;
     private RecyclerView rvIndivNotes, rvIndivTags;
@@ -36,8 +50,9 @@ public class ExistingIndivNoteActivity extends AppCompatActivity {
     private IndivTagsAdapter indivTagsAdapter;
     private TextView tvNoteId;
     private ProgressBar pb_indiv_note;
+    private ImageButton note_ib_holder;
 
-    private String title, subtitle, noteType, noteId;
+    private String title, subtitle, noteType, noteId, picturePath;
     private ArrayList<String> tags = new ArrayList<>();
     private ArrayList<Item> items = new ArrayList<>();
 
@@ -60,7 +75,6 @@ public class ExistingIndivNoteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_indiv_note);
-
         this.hideUI();
         this.loadData();
         this.bindEssentials();
@@ -90,7 +104,7 @@ public class ExistingIndivNoteActivity extends AppCompatActivity {
         this.rvIndivNotes = findViewById(R.id.indiv_rv_templates);
         this.indivNotesManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         this.rvIndivNotes.setLayoutManager(this.indivNotesManager);
-        this.indivNotesAdapter = new IndivNotesAdapter(this.title, this.tags, this.items);
+        this.indivNotesAdapter = new IndivNotesAdapter(this.title, this.tags, this.items, this);
         this.rvIndivNotes.setAdapter(this.indivNotesAdapter);
 
         this.rvIndivTags = findViewById(R.id.rv_indiv_tags);
@@ -211,5 +225,32 @@ public class ExistingIndivNoteActivity extends AppCompatActivity {
 
                     }
                 });
+    }
+
+
+    private void TakePicture() {
+        Intent cameraPictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        try {
+            startActivityForResult(cameraPictureIntent, 1);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(getApplicationContext(), "No camera detected!", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            note_ib_holder.setImageBitmap((Bitmap) extras.get("data"));
+        }
+    }
+
+
+
+    @Override
+    public void callCamera(ImageButton imageButton) {
+        note_ib_holder = imageButton;
+        TakePicture();
     }
 }

@@ -1,5 +1,11 @@
 package com.mobdeve.s14.group20.mobdeveproject;
 
+import android.content.ActivityNotFoundException;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,12 +27,15 @@ public class IndivNotesAdapter extends RecyclerView.Adapter<IndivNotesAdapter.In
     private ArrayList<String> tags = new ArrayList<>();
     private ArrayList<Item> items = new ArrayList<>();
     private String title;
+    private callCamera mListener;
 
-    public IndivNotesAdapter(String title, ArrayList<String> tags, ArrayList<Item> items){
+    public IndivNotesAdapter(String title, ArrayList<String> tags, ArrayList<Item> items, callCamera mListener) {
 
         this.title = title;
         this.tags = tags;
         this.items = items;
+        this.mListener = mListener;
+
     }
 
     @NonNull
@@ -67,7 +75,6 @@ public class IndivNotesAdapter extends RecyclerView.Adapter<IndivNotesAdapter.In
 
     @Override
     public void onBindViewHolder(@NonNull IndivNotesAdapter.IndivNotesViewHolder holder, int position) {
-
         if(items.get(position) instanceof ToDoItem){
             holder.bindToDo((ToDoItem) items.get(position));
         }
@@ -127,7 +134,6 @@ public class IndivNotesAdapter extends RecyclerView.Adapter<IndivNotesAdapter.In
         }
 
         public void bindInterest(InterestItem item){
-
             this.interestTitle.setText(item.getTitle());
             this.interestText.setText(item.getText());
             this.interestRating.setRating(item.getRating());
@@ -135,8 +141,6 @@ public class IndivNotesAdapter extends RecyclerView.Adapter<IndivNotesAdapter.In
             this.interestPicture.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(v.getContext(), "Wow Interest!!!", Toast.LENGTH_SHORT).show();
-
                 }
             });
         }
@@ -149,8 +153,8 @@ public class IndivNotesAdapter extends RecyclerView.Adapter<IndivNotesAdapter.In
             this.detailedText.setText(item.getText());
             this.detailedPicture.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
-                    Toast.makeText(v.getContext(), "Clicked Detailed!!!", Toast.LENGTH_SHORT).show();
+                public void onClick(View v){
+                    mListener.callCamera(detailedPicture);
                 }
             });
         }
@@ -166,5 +170,9 @@ public class IndivNotesAdapter extends RecyclerView.Adapter<IndivNotesAdapter.In
             this.lessonSubtitle.setText(item.getSubtitle());
             this.lessonText.setText(item.getText());
         }
+    }
+
+    public interface callCamera {
+        void callCamera(ImageButton imageButton);
     }
 }

@@ -1,16 +1,26 @@
 package com.mobdeve.s14.group20.mobdeveproject;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -26,13 +36,14 @@ import java.util.HashMap;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class IndivNoteActivity extends AppCompatActivity {
+public class IndivNoteActivity extends AppCompatActivity implements IndivNotesAdapter.callCamera {
 
     private TextView tvTitle, tvSubtitle;
     private RecyclerView rvIndivNotes, rvIndivTags;
     private RecyclerView.LayoutManager indivNotesManager, indivTagsManager;
     private IndivNotesAdapter indivNotesAdapter;
     private IndivTagsAdapter indivTagsAdapter;
+    private ImageButton note_ib_holder;
 
     private String title, subtitle, noteType;
     private ArrayList<String> tags = new ArrayList<>();
@@ -83,7 +94,7 @@ public class IndivNoteActivity extends AppCompatActivity {
         this.rvIndivNotes = findViewById(R.id.indiv_rv_templates);
         this.indivNotesManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         this.rvIndivNotes.setLayoutManager(this.indivNotesManager);
-        this.indivNotesAdapter = new IndivNotesAdapter(this.title, this.tags, this.items);
+        this.indivNotesAdapter = new IndivNotesAdapter(this.title, this.tags, this.items, this);
         this.rvIndivNotes.setAdapter(this.indivNotesAdapter);
 
         this.rvIndivTags = findViewById(R.id.rv_indiv_tags);
@@ -191,5 +202,29 @@ public class IndivNoteActivity extends AppCompatActivity {
 
                     }
                 });
+    }
+
+    private void TakePicture() {
+        Intent cameraPictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        try {
+            startActivityForResult(cameraPictureIntent, 1);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(getApplicationContext(), "No camera detected!", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            note_ib_holder.setImageBitmap((Bitmap) extras.get("data"));
+        }
+    }
+
+    @Override
+    public void callCamera(ImageButton imageButton) {
+        note_ib_holder = imageButton;
+        TakePicture();
     }
 }
