@@ -131,13 +131,6 @@ public class IndivNoteActivity extends AppCompatActivity {
 
     private void saveNote() {
 
-        TextView tempText;
-
-        for(int i = 0; i < indivNotesManager.getChildCount(); i++){
-            tempText = indivNotesManager.getChildAt(0).findViewById(R.id.etml_blank_text);
-            Log.d("CHILD: ", String.valueOf(tempText.getText()));
-        }
-
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String userId = user.getUid();
 
@@ -150,7 +143,7 @@ public class IndivNoteActivity extends AppCompatActivity {
                         String newNoteId = reference.push().getKey();
                         System.out.println("New note id: " + newNoteId);
 
-                        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                         Date date = new Date();
                         String dateString = formatter.format(date);
 
@@ -171,8 +164,14 @@ public class IndivNoteActivity extends AppCompatActivity {
                         ArrayList<ArrayList<String>> tempItems = new ArrayList<>();
 
                         if(noteType.equals("Blank")){
-                            tempItems.add(new ArrayList<String>(Arrays.asList("Hello test note")));
-                            tempItems.add(new ArrayList<String>(Arrays.asList("Hi new blank item")));
+                            TextView tempText;
+                            for(int i = 0; i < indivNotesManager.getChildCount(); i++){
+                                tempText = indivNotesManager.getChildAt(i).findViewById(R.id.etml_blank_text);
+                                Log.d("CHILD: ", i + ": " + String.valueOf(tempText.getText()));
+                                tempItems.add(new ArrayList<String>(Arrays.asList(String.valueOf(tempText.getText()))));
+                            }
+//                            tempItems.add(new ArrayList<String>(Arrays.asList("Hello test note")));
+//                            tempItems.add(new ArrayList<String>(Arrays.asList("Hi new blank item")));
 
                             Log.d("item strings: ", String.valueOf(tempItems));
 

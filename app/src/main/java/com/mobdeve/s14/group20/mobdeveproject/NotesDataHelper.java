@@ -111,9 +111,9 @@ public class NotesDataHelper {
                 for(int j = 0; j < numItems; j++) {
                     ArrayList<String> tempBlankItems = tempDbNote.getBlankItems().get(j);
 
-                    Log.d("IN THE LOOP: ", String.valueOf(tempDbNote.getItems().get(j).get(0)));
+                    Log.d("IN THE LOOP: ", String.valueOf(tempBlankItems.get(0)));
 
-                    blankItems.add(new BlankItem(tempBlankItems.get(j)));
+                    blankItems.add(new BlankItem(tempBlankItems.get(0)));
                 }
 
                 data.add(new Note(
@@ -127,7 +127,7 @@ public class NotesDataHelper {
                         tempDbNote.getNoteId()
                 ));
             }
-            else{
+            else if (tempDbNote.getNoteType().equals("Sketchbook")){
 
                 data.add(new Note(
                         tempDbNote.getTitle(),

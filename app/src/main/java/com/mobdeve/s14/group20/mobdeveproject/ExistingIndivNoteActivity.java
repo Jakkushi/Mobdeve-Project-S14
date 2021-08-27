@@ -152,7 +152,7 @@ public class ExistingIndivNoteActivity extends AppCompatActivity {
                         String noteId = String.valueOf(tvNoteId.getText());
                         System.out.println("Current note id: " + noteId);
 
-                        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                         Date date = new Date();
                         String dateString = formatter.format(date);
 
@@ -183,10 +183,18 @@ public class ExistingIndivNoteActivity extends AppCompatActivity {
                         ArrayList<ArrayList<String>> tempItems = new ArrayList<>();
 
                         if(noteType.equals("Blank")){
-                            tempItems.add(new ArrayList<String>(Arrays.asList("Hello test note")));
-                            tempItems.add(new ArrayList<String>(Arrays.asList("Hi new blank item")));
+                            TextView tempText;
+                            for(int i = 0; i < indivNotesManager.getChildCount(); i++){
+                                tempText = indivNotesManager.getChildAt(i).findViewById(R.id.etml_blank_text);
+                                Log.d("CHILD: ", i + ": " + String.valueOf(tempText.getText()));
+                                tempItems.add(new ArrayList<String>(Arrays.asList(String.valueOf(tempText.getText()))));
+                            }
+//                            tempItems.add(new ArrayList<String>(Arrays.asList("Hello test note")));
+//                            tempItems.add(new ArrayList<String>(Arrays.asList("Hi new blank item")));
 
                             Log.d("item strings: ", String.valueOf(tempItems));
+
+                            reference.child((userId)).child(Collection.notes.name()).child(noteId).child("blankItems").setValue(tempItems);
 
                         }
 

@@ -193,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void getNotesData(){
 
-        this.reference.child((this.userId)).child(Collection.notes.name()).orderByChild(Collection.dateModified.name()).addChildEventListener(new ChildEventListener() {
+        this.reference.child((this.userId)).child(Collection.notes.name()).orderByChild(Collection.dateModified.name()).startAt("2019-01-01").endAt("2021-12-31").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
 
@@ -229,9 +229,12 @@ public class MainActivity extends AppCompatActivity {
 
                 try {
                     blankItems = (ArrayList) (((HashMap) snapshot.getValue()).get("blankItems"));
+                    Log.w("blank items", String.valueOf(blankItems.get(0).get(0).getClass()));
+                    //first .get(0) returns Arraylist<String>
+                    //second .get(0) returns String
                 }
                 catch (Exception d){
-                    tags = null;
+                    blankItems = null;
                     Log.w("error", "No Blank items in entry");
                 }
 
@@ -243,7 +246,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(MainActivity.this, DisplayNotesActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                Collections.reverse(dbNotes);
+//                Collections.reverse(dbNotes);
                 intent.putExtra(Keys.DBNOTES.name(), dbNotes);
                 startActivity(intent);
                 finish();

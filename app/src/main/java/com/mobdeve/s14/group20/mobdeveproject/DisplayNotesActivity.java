@@ -144,12 +144,9 @@ public class DisplayNotesActivity extends AppCompatActivity {
         this.pbMain = findViewById(R.id.pb_main);
 
         this.dbNotes = (ArrayList<DatabaseNotesData>) getIntent().getSerializableExtra(Keys.DBNOTES.name());
-
+        Collections.reverse(this.dbNotes);
         int dblength = dbNotes.size();
         System.out.println("IN DNA: " + dblength);
-
-//        for(int i = 0; i < dblength; i++)
-//            System.out.println(dbNotes.get(i).getTitle());
 
 
         this.notesManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -197,7 +194,7 @@ public class DisplayNotesActivity extends AppCompatActivity {
 
         dbNotes = new ArrayList<DatabaseNotesData>();
 
-        this.reference.orderByChild(Collection.dateModified.name()).addChildEventListener(new ChildEventListener() {
+        this.reference.orderByChild(Collection.dateModified.name()).startAt("2019-01-01").endAt("2021-12-31").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
 
@@ -246,7 +243,7 @@ public class DisplayNotesActivity extends AppCompatActivity {
                 pbNotes.setVisibility(View.VISIBLE);
                 Intent intent = new Intent(DisplayNotesActivity.this, DisplayNotesActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                Collections.reverse(dbNotes);
+//                Collections.reverse(dbNotes);
                 intent.putExtra(Keys.DBNOTES.name(), dbNotes);
                 startActivity(intent);
                 finish();
