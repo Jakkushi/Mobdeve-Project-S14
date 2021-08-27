@@ -66,6 +66,8 @@ public class NotesViewHolder extends RecyclerView.ViewHolder{
 
     public ImageView getIvLogo(){ return this.ivLogo; }
 
+    public TextView getTvNoteId(){ return this.tvNoteId; }
+
     public View getItemView(){ return this.itemView; }
 
     public RecyclerView getRvTags(){ return this.rvTags; }
@@ -74,15 +76,11 @@ public class NotesViewHolder extends RecyclerView.ViewHolder{
         return this.ibDelete;
     }
 
+    public void setTvNoteId(String noteId){
+        this.tvNoteId.setText(noteId);
+    }
+
     public void setIbDelete(ImageButton ibDelete) {
         this.ibDelete = ibDelete;
-    }
-
-    public TextView getTvNoteId() {
-        return this.tvNoteId;
-    }
-
-    public void setTvNoteId(TextView tvNoteId) {
-        this.tvNoteId = tvNoteId;
     }
 }

@@ -54,6 +54,8 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesViewHolder> {
         holder.setTvDateModified(notes.get(position).getDateModified());
         holder.setTvTitle(notes.get(position).getTitle());
         holder.setTvSubtitle(notes.get(position).getSubtitle());
+        holder.getTvNoteId().setText(notes.get(position).getNoteId());
+
         holder.getIbDelete().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
