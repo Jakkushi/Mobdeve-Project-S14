@@ -3,22 +3,19 @@ package com.mobdeve.s14.group20.mobdeveproject;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,8 +30,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -128,7 +123,6 @@ public class ExistingIndivNoteActivity extends AppCompatActivity implements Indi
         Log.d("NOTETYPE", this.noteType);
         Log.d("TAGS", String.valueOf(this.tags));
         Log.d("TODOITEMS", String.valueOf(this.items));
-//        Log.d("NOTEID", String.valueOf(this.noteId));
     }
 
 
@@ -197,10 +191,10 @@ public class ExistingIndivNoteActivity extends AppCompatActivity implements Indi
                         ArrayList<ArrayList<String>> tempItems = new ArrayList<>();
 
                         if(noteType.equals("Blank")){
-                            TextView tempText;
+                            EditText tempText;
                             for(int i = 0; i < indivNotesManager.getChildCount(); i++){
                                 tempText = indivNotesManager.getChildAt(i).findViewById(R.id.etml_blank_text);
-                                Log.d("CHILD: ", i + ": " + String.valueOf(tempText.getText()));
+//                                Log.d("CHILD: ", i + ": " + String.valueOf(tempText.getText()));
                                 tempItems.add(new ArrayList<String>(Arrays.asList(String.valueOf(tempText.getText()))));
                             }
 //                            tempItems.add(new ArrayList<String>(Arrays.asList("Hello test note")));
@@ -209,6 +203,61 @@ public class ExistingIndivNoteActivity extends AppCompatActivity implements Indi
                             Log.d("item strings: ", String.valueOf(tempItems));
 
                             reference.child((userId)).child(Collection.notes.name()).child(noteId).child("blankItems").setValue(tempItems);
+
+                        }
+                        else if(noteType.equals("ToDo")){
+                            CheckBox tempTodo;
+                            for(int i = 0; i < indivNotesManager.getChildCount(); i++){
+                                tempTodo = indivNotesManager.getChildAt(i).findViewById(R.id.cb_todo_checkbox);
+//                                Log.d("CHILD: ", i + ": " + String.valueOf(tempTodo.isChecked()));
+//                                Log.d("CHILD: ", i + ": " + String.valueOf(tempTodo.getText()));
+                                String str[] = {String.valueOf(tempTodo.isChecked()), (String) tempTodo.getText()};
+                                tempItems.add(new ArrayList<String>(Arrays.asList(str)));
+                            }
+
+                            Log.d("item strings: ", String.valueOf(tempItems));
+
+                            reference.child((userId)).child(Collection.notes.name()).child(noteId).child("todo").setValue(tempItems);
+
+                        }
+                        else if(noteType.equals("Interest")){
+                            RatingBar tempRatingBar;
+                            EditText tempText;
+                            TextView tempTitle;
+                            for(int i = 0; i < indivNotesManager.getChildCount(); i++){
+                                tempRatingBar = indivNotesManager.getChildAt(i).findViewById(R.id.rb_interest_rating);
+                                tempText = indivNotesManager.getChildAt(i).findViewById(R.id.etml_interest_text);
+                                tempTitle = indivNotesManager.getChildAt(i).findViewById(R.id.tv_interest_title);
+//                                Log.d("CHILD: ", i + ": " + String.valueOf(tempRatingBar.getRating()));
+//                                Log.d("CHILD: ", i + ": " + String.valueOf(tempText.getText()));
+//                                Log.d("CHILD: ", i + ": " + String.valueOf(tempTitle.getText()));
+                                String str[] = {"breaking_bad", String.valueOf(tempRatingBar.getRating()),
+                                        String.valueOf(tempTitle.getText()), String.valueOf(tempText.getText())};
+                                tempItems.add(new ArrayList<String>(Arrays.asList(str)));
+                            }
+
+                            Log.d("item strings: ", String.valueOf(tempItems));
+
+                            reference.child((userId)).child(Collection.notes.name()).child(noteId).child("interestItem").setValue(tempItems);
+
+                        }
+                        else if(noteType.equals("Detailed")){
+                            EditText tempTitle, tempSubtitle, tempText;
+                            for(int i = 0; i < indivNotesManager.getChildCount(); i++){
+                                tempTitle = indivNotesManager.getChildAt(i).findViewById(R.id.etml_detailed_title);
+                                tempSubtitle = indivNotesManager.getChildAt(i).findViewById(R.id.etml_detailed_subtitle);
+                                tempText = indivNotesManager.getChildAt(i).findViewById(R.id.etml_detailed_text);
+//                                Log.d("CHILD: ", i + ": " + String.valueOf(tempTitle.getText()));
+//                                Log.d("CHILD: ", i + ": " + String.valueOf(tempSubtitle.getText()));
+//                                Log.d("CHILD: ", i + ": " + String.valueOf(tempText.getText()));
+                                String str[] = {"walterwhite", String.valueOf(tempTitle.getText()),
+                                        String.valueOf(tempSubtitle.getText()), String.valueOf(tempText.getText())};
+                                tempItems.add(new ArrayList<String>(Arrays.asList(str)));
+                            }
+
+                            Log.d("item strings: ", String.valueOf(tempItems));
+
+                            reference.child((userId)).child(Collection.notes.name()).child(noteId).child("interestItem").setValue(tempItems);
 
                         }
 

@@ -187,7 +187,6 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesViewHolder> {
                                             intent.putExtra(Keys.DBNOTES.name(), dbNotes);
                                             cxt.startActivity(intent);
                                         }
-
                                     }
 
                                     @Override
@@ -195,8 +194,6 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesViewHolder> {
 
                                     }
                                 });
-
-
                             }
                         })
                         .setNegativeButton("No", null)
