@@ -202,6 +202,7 @@ public class ExistingIndivNoteActivity extends AppCompatActivity {
 
                         reference.child((userId)).child(Collection.notes.name()).child(noteId).child("title").setValue(title);
                         reference.child((userId)).child(Collection.notes.name()).child(noteId).child("subtitle").setValue(subtitle);
+                        reference.child((userId)).child(Collection.notes.name()).child(noteId).child("dateModified").setValue(dateString);
 
                     }
 

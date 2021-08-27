@@ -1,6 +1,7 @@
 package com.mobdeve.s14.group20.mobdeveproject;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -11,16 +12,35 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Set;
 
 public class NotesAdapter extends RecyclerView.Adapter<NotesViewHolder> {
 
     private ArrayList<Note> notes;
     public Context cxt;
+
+    private FirebaseAuth mAuth;
+    private DatabaseReference reference;
+    private FirebaseDatabase database;
+    private String userId;
+    private FirebaseUser user;
 
     public NotesAdapter(ArrayList<Note> notes) {
         this.notes = notes;
@@ -41,7 +61,17 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesViewHolder> {
 
         Log.d("In notes adapter: ", String.valueOf(parent.getContext()));
 
+        this.initFirebase();
+
         return viewHolder;
+    }
+
+    private void initFirebase() {
+        this.mAuth = FirebaseAuth.getInstance();
+        this.database = FirebaseDatabase.getInstance();
+        this.user = mAuth.getCurrentUser();
+        this.userId = user.getUid();
+        this.reference = this.database.getReference().child(Collection.users.name()).child((this.userId)).child(Collection.notes.name());
     }
 
     @Override
@@ -59,7 +89,94 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesViewHolder> {
         holder.getIbDelete().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), "Delete this note.", Toast.LENGTH_LONG).show();
+                new AlertDialog.Builder(getContext())
+                        .setMessage("Are you sure you want to delete this note?\nDeleted notes can no longer be retrieved after the action")
+                        .setCancelable(false)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                Log.d("DELETING THIS NOTE ID: ", String.valueOf(reference.child(notes.get(position).getNoteId())));
+                                reference.child(notes.get(position).getNoteId()).removeValue();
+
+                                ArrayList<DatabaseNotesData> dbNotes = new ArrayList<DatabaseNotesData>();
+
+                                reference.orderByChild(Collection.dateModified.name()).startAt("2019-01-01").endAt("2021-12-31").addChildEventListener(new ChildEventListener() {
+                                    @Override
+                                    public void onChildAdded(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
+
+                                        ArrayList<ArrayList<String>> interestItems = new ArrayList<>();
+                                        ArrayList<String> tags = new ArrayList<>();
+                                        ArrayList<ArrayList<String>> todoList = new ArrayList<>();
+                                        ArrayList<ArrayList<String>> blankItems = new ArrayList<>();
+
+                                        try {
+                                            interestItems =  (ArrayList) (( (HashMap) snapshot.getValue()).get("interestItem"));
+                                        }
+                                        catch (Exception e){
+                                            interestItems = null;
+                                            Log.w("error", "No Interest items in entry");
+                                        }
+
+                                        try {
+                                            tags = (ArrayList) (((HashMap) snapshot.getValue()).get("tags"));
+                                        }
+                                        catch (Exception d){
+                                            tags = null;
+                                            Log.w("error", "No Tags in entry");
+                                        }
+
+                                        try {
+                                            todoList = (ArrayList) (( (HashMap) snapshot.getValue()).get("todo"));
+                                        } catch (Exception f) {
+                                            todoList = null;
+                                            Log.w("error", "No Todos in entry");
+                                        }
+
+                                        try {
+                                            blankItems = (ArrayList) (((HashMap) snapshot.getValue()).get("blankItems"));
+                                        }
+                                        catch (Exception d){
+                                            tags = null;
+                                            Log.w("error", "No Blank items in entry");
+                                        }
+
+                                        Log.d("Snapshot Key: ", snapshot.getKey());
+
+                                        dbNotes.add(new DatabaseNotesData( (String) (( (HashMap) snapshot.getValue()).get("title")),
+                                                (String) ((HashMap) snapshot.getValue()).get("subtitle"), (String) ((HashMap) snapshot.getValue()).get("noteType"),
+                                                (String) ((HashMap) snapshot.getValue()).get("dateModified"), interestItems, tags, todoList, blankItems, snapshot.getKey()));
+
+                                        Intent intent = new Intent(cxt, DisplayNotesActivity.class);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        intent.putExtra(Keys.DBNOTES.name(), dbNotes);
+                                        cxt.startActivity(intent);
+                                    }
+
+                                    @Override
+                                    public void onChildChanged(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
+
+                                    }
+
+                                    @Override
+                                    public void onChildRemoved(@NonNull @NotNull DataSnapshot snapshot) {
+
+                                    }
+
+                                    @Override
+                                    public void onChildMoved(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                                    }
+
+                                });
+
+
+                            }
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
             }
         });
 
