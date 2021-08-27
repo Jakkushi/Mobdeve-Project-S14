@@ -141,7 +141,7 @@ public class IndivNotesAdapter extends RecyclerView.Adapter<IndivNotesAdapter.In
             this.interestPicture.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v){
-                    mListener.callCamera(detailedPicture);
+                    mListener.callCamera(interestPicture);
                 }
             });
         }
