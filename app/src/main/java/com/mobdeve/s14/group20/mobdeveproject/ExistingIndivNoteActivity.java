@@ -44,11 +44,24 @@ public class ExistingIndivNoteActivity extends AppCompatActivity {
     private FirebaseDatabase database;
     private DatabaseReference reference;
 
+    private void hideUI() {
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+//                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+//                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+        );
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_indiv_note);
 
+        this.hideUI();
         this.loadData();
         this.bindEssentials();
         this.initRecyclerView();
@@ -57,7 +70,7 @@ public class ExistingIndivNoteActivity extends AppCompatActivity {
 
     private void initFirebase() {
         this.database = FirebaseDatabase.getInstance();
-        this.reference = this.database.getReference().child(Collections.users.name());
+        this.reference = this.database.getReference().child(Collection.users.name());
     }
 
     private void bindEssentials(){
@@ -104,22 +117,6 @@ public class ExistingIndivNoteActivity extends AppCompatActivity {
 //        Log.d("NOTEID", String.valueOf(this.noteId));
     }
 
-//    private long lastBackPressTime = 0;
-//    private Toast toast;
-//
-//    @Override
-//    public void onBackPressed() {
-//        if (this.lastBackPressTime < System.currentTimeMillis() - 4000) {
-//            toast = Toast.makeText(this, "Press back again to close this note. Changes will be saved upon exit.", Toast.LENGTH_LONG);
-//            toast.show();
-//            this.lastBackPressTime = System.currentTimeMillis();
-//        } else {
-//            if (toast != null) {
-//                toast.cancel();
-//            }
-//            super.onBackPressed();
-//        }
-//    }
 
     @Override
     public void onBackPressed() {
@@ -147,19 +144,11 @@ public class ExistingIndivNoteActivity extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String userId = user.getUid();
 
-        this.reference.child((userId)).child(Collections.notes.name())
+        this.reference.child((userId)).child(Collection.notes.name())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                        String str[] = (String[])(((HashMap) snapshot.getValue()).keySet().toArray(new String[0]));
-//                        ArrayList<String> test = new ArrayList<>(Arrays.asList(str)); //don't forget to cast
-//
-//                        int numTest = test.size();
-//                        for(int i = 0; i < numTest; i++){
-//                            System.out.println("item " + i + " : " + test.get(i));
-//                        }
 
-                        //check for note id???
                         String noteId = String.valueOf(tvNoteId.getText());
                         System.out.println("Current note id: " + noteId);
 
@@ -203,9 +192,8 @@ public class ExistingIndivNoteActivity extends AppCompatActivity {
 
                         noteData.put("blankItems", tempItems);
 
-                        reference.child((userId)).child(Collections.notes.name()).child(noteId).child("title").setValue(title);
-                        reference.child((userId)).child(Collections.notes.name()).child(noteId).child("subtitle").setValue(subtitle);
-//                        reference.child((userId)).child(Collections.notes.name()).child(noteId).setValue(noteData);
+                        reference.child((userId)).child(Collection.notes.name()).child(noteId).child("title").setValue(title);
+                        reference.child((userId)).child(Collection.notes.name()).child(noteId).child("subtitle").setValue(subtitle);
 
                     }
 

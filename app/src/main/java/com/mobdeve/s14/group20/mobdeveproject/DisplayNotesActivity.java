@@ -35,6 +35,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Collections;
 
 public class DisplayNotesActivity extends AppCompatActivity {
 
@@ -135,7 +136,7 @@ public class DisplayNotesActivity extends AppCompatActivity {
         this.database = FirebaseDatabase.getInstance();
         this.user = mAuth.getCurrentUser();
         this.userId = user.getUid();
-        this.reference = this.database.getReference().child(Collections.users.name()).child((this.userId)).child(Collections.notes.name());
+        this.reference = this.database.getReference().child(Collection.users.name()).child((this.userId)).child(Collection.notes.name());
     }
 
     private void initRecyclerView(){
@@ -151,7 +152,7 @@ public class DisplayNotesActivity extends AppCompatActivity {
 //            System.out.println(dbNotes.get(i).getTitle());
 
 
-        this.notesManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true);
+        this.notesManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         System.out.println("INSIDE MAIN" + this);
         this.rvNotes.setLayoutManager(this.notesManager);
 
@@ -188,7 +189,6 @@ public class DisplayNotesActivity extends AppCompatActivity {
         moveTaskToBack(true);
     }
 
-    private boolean withChild = false;
     private Handler mHandler = new Handler();
 
     @Override
@@ -197,11 +197,9 @@ public class DisplayNotesActivity extends AppCompatActivity {
 
         dbNotes = new ArrayList<DatabaseNotesData>();
 
-        this.reference.orderByChild(Collections.dateModified.name()).addChildEventListener(new ChildEventListener() {
+        this.reference.orderByChild(Collection.dateModified.name()).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
-
-                withChild = true;
 
                 ArrayList<ArrayList<String>> interestItems = new ArrayList<>();
                 ArrayList<String> tags = new ArrayList<>();
@@ -248,6 +246,7 @@ public class DisplayNotesActivity extends AppCompatActivity {
                 pbNotes.setVisibility(View.VISIBLE);
                 Intent intent = new Intent(DisplayNotesActivity.this, DisplayNotesActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                Collections.reverse(dbNotes);
                 intent.putExtra(Keys.DBNOTES.name(), dbNotes);
                 startActivity(intent);
                 finish();

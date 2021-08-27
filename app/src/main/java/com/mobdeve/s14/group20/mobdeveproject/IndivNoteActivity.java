@@ -7,13 +7,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
-import android.widget.CheckBox;
+import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -44,11 +41,24 @@ public class IndivNoteActivity extends AppCompatActivity {
     private FirebaseDatabase database;
     private DatabaseReference reference;
 
+    private void hideUI() {
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+//                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+//                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+        );
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_indiv_note);
 
+        this.hideUI();
         this.loadData();
         this.bindEssentials();
         this.initRecyclerView();
@@ -57,7 +67,7 @@ public class IndivNoteActivity extends AppCompatActivity {
 
     private void initFirebase() {
         this.database = FirebaseDatabase.getInstance();
-        this.reference = this.database.getReference().child(Collections.users.name());
+        this.reference = this.database.getReference().child(Collection.users.name());
     }
 
     private void bindEssentials(){
@@ -98,22 +108,6 @@ public class IndivNoteActivity extends AppCompatActivity {
         Log.d("TODOITEMS", String.valueOf(this.items));
     }
 
-//    private long lastBackPressTime = 0;
-//    private Toast toast;
-//
-//    @Override
-//    public void onBackPressed() {
-//        if (this.lastBackPressTime < System.currentTimeMillis() - 4000) {
-//            toast = Toast.makeText(this, "Press back again to close this note. Changes will be saved upon exit.", Toast.LENGTH_LONG);
-//            toast.show();
-//            this.lastBackPressTime = System.currentTimeMillis();
-//        } else {
-//            if (toast != null) {
-//                toast.cancel();
-//            }
-//            super.onBackPressed();
-//        }
-//    }
 
     @Override
     public void onBackPressed() {
@@ -139,7 +133,7 @@ public class IndivNoteActivity extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String userId = user.getUid();
 
-        this.reference.child((userId)).child(Collections.notes.name())
+        this.reference.child((userId)).child(Collection.notes.name())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -178,7 +172,7 @@ public class IndivNoteActivity extends AppCompatActivity {
 
                         noteData.put("blankItems", tempItems);
 
-                        reference.child((userId)).child(Collections.notes.name()).child(newNoteId).setValue(noteData);
+                        reference.child((userId)).child(Collection.notes.name()).child(newNoteId).setValue(noteData);
 
                     }
 

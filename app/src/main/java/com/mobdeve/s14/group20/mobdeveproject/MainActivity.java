@@ -5,7 +5,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
@@ -35,6 +34,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
                             user = mAuth.getCurrentUser();
                             userId = user.getUid();
                             database = FirebaseDatabase.getInstance();
-                            reference = database.getReference().child(Collections.users.name());
+                            reference = database.getReference().child(Collection.users.name());
 
                             withChild = false;
                             getNotesData();
@@ -138,19 +138,19 @@ public class MainActivity extends AppCompatActivity {
 
     private void initComponents(){
         this.pbLogin = findViewById(R.id.pb_main);
-//        this.tvRegister = findViewById(R.id.tv_main_register);
+        this.tvRegister = findViewById(R.id.tv_main_register);
         this.etEmail = findViewById(R.id.et_login_email);
         this.etPassword = findViewById(R.id.et_login_password);
         this.btnLogin = findViewById(R.id.btn_login_submit);
 
-//        this.tvRegister.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent i = new Intent(MainActivity.this, RegisterActivity.class);
-//                startActivity(i);
-//                finish();
-//            }
-//        });
+        this.tvRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MainActivity.this, RegisterActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
 
         this.btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -193,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void getNotesData(){
 
-        this.reference.child((this.userId)).child(Collections.notes.name()).orderByChild(Collections.dateModified.name()).addChildEventListener(new ChildEventListener() {
+        this.reference.child((this.userId)).child(Collection.notes.name()).orderByChild(Collection.dateModified.name()).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
 
@@ -243,6 +243,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(MainActivity.this, DisplayNotesActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                Collections.reverse(dbNotes);
                 intent.putExtra(Keys.DBNOTES.name(), dbNotes);
                 startActivity(intent);
                 finish();
@@ -275,6 +276,7 @@ public class MainActivity extends AppCompatActivity {
                     pbLogin.setVisibility(View.GONE);
                     Intent intent = new Intent(MainActivity.this, DisplayNotesActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    Collections.reverse(dbNotes);
                     intent.putExtra(Keys.DBNOTES.name(), dbNotes);
                     startActivity(intent);
                     finish();
