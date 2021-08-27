@@ -24,10 +24,12 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -41,6 +43,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesViewHolder> {
     private FirebaseDatabase database;
     private String userId;
     private FirebaseUser user;
+    boolean withChild;
 
     public NotesAdapter(ArrayList<Note> notes) {
         this.notes = notes;
@@ -94,14 +97,17 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesViewHolder> {
                         .setCancelable(false)
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
+                                withChild = false;
                                 Log.d("DELETING THIS NOTE ID: ", String.valueOf(reference.child(notes.get(position).getNoteId())));
                                 reference.child(notes.get(position).getNoteId()).removeValue();
 
                                 ArrayList<DatabaseNotesData> dbNotes = new ArrayList<DatabaseNotesData>();
 
-                                reference.orderByChild(Collection.dateModified.name()).startAt("2019-01-01").endAt("2021-12-31").addChildEventListener(new ChildEventListener() {
+                                reference.orderByChild(Collection.dateModified.name()).addChildEventListener(new ChildEventListener() {
                                     @Override
                                     public void onChildAdded(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
+
+                                        withChild = true;
 
                                         ArrayList<ArrayList<String>> interestItems = new ArrayList<>();
                                         ArrayList<String> tags = new ArrayList<>();
@@ -170,6 +176,24 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesViewHolder> {
                                     public void onCancelled(@NonNull @NotNull DatabaseError error) {
                                     }
 
+                                });
+
+                                reference.addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                        if(!withChild){
+                                            Intent intent = new Intent(cxt, DisplayNotesActivity.class);
+                                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            intent.putExtra(Keys.DBNOTES.name(), dbNotes);
+                                            cxt.startActivity(intent);
+                                        }
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                                    }
                                 });
 
 

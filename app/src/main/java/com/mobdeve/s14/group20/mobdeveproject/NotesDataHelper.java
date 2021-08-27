@@ -25,18 +25,24 @@ public class NotesDataHelper {
             if(tempDbNote.getNoteType().equals("ToDo")) {
 
                 ArrayList<Item> todos = new ArrayList<>();
-                int numTodos = tempDbNote.getTodo().size();
 
-                for(int j = 0; j < numTodos; j++) {
-                    boolean isDone = false;
-                    ArrayList<String> tempTodo = tempDbNote.getTodo().get(j);
-                    String isDoneString = tempTodo.get(0);
+                try{
+                    int numTodos = tempDbNote.getTodo().size();
 
-                    if(isDoneString.equals("true"))
-                        isDone = true;
+                    for(int j = 0; j < numTodos; j++) {
+                        boolean isDone = false;
+                        ArrayList<String> tempTodo = tempDbNote.getTodo().get(j);
+                        String isDoneString = tempTodo.get(0);
 
-                    todos.add(new ToDoItem(isDone, tempTodo.get(1)));
+                        if(isDoneString.equals("true"))
+                            isDone = true;
+
+                        todos.add(new ToDoItem(isDone, tempTodo.get(1)));
+                    }
+                } catch (Exception e) {
+                    Log.d("todo error: ", "no to do items");
                 }
+
 
 
                 data.add(new Note(
@@ -53,18 +59,23 @@ public class NotesDataHelper {
             else if(tempDbNote.getNoteType().equals("Interest")) {
 
                 ArrayList<Item> interestItems = new ArrayList<>();
-                int numItems = tempDbNote.getItems().size();
 
+                try{
+                    int numItems = tempDbNote.getItems().size();
 
-                for(int j = 0; j < numItems; j++) {
-                    ArrayList<String> tempInterestItem = tempDbNote.getItems().get(j);
+                    for(int j = 0; j < numItems; j++) {
+                        ArrayList<String> tempInterestItem = tempDbNote.getItems().get(j);
 
-                    interestItems.add(new InterestItem(tempInterestItem.get(0),
-                            Float.parseFloat(String.valueOf(tempInterestItem.get(1))),
-                            tempInterestItem.get(2),
-                            tempInterestItem.get(3),
-                            cxt));
+                        interestItems.add(new InterestItem(tempInterestItem.get(0),
+                                Float.parseFloat(String.valueOf(tempInterestItem.get(1))),
+                                tempInterestItem.get(2),
+                                tempInterestItem.get(3),
+                                cxt));
+                    }
+                } catch (Exception e) {
+                    Log.d("interest items error: ", "no interest items");
                 }
+
 
                 data.add(new Note(
                         tempDbNote.getTitle(),
@@ -79,17 +90,23 @@ public class NotesDataHelper {
             else if(tempDbNote.getNoteType().equals("Detailed")){
 
                 ArrayList<Item> detailedItems = new ArrayList<>();
-                int numItems = tempDbNote.getItems().size();
 
-                for(int j = 0; j < numItems; j++) {
-                    ArrayList<String> tempInterestItem = tempDbNote.getItems().get(j);
+                try{
+                    int numItems = tempDbNote.getItems().size();
 
-                    detailedItems.add(new DetailedItem(tempInterestItem.get(0),
-                            tempInterestItem.get(1),
-                            tempInterestItem.get(2),
-                            tempInterestItem.get(3),
-                            cxt));
+                    for(int j = 0; j < numItems; j++) {
+                        ArrayList<String> tempInterestItem = tempDbNote.getItems().get(j);
+
+                        detailedItems.add(new DetailedItem(tempInterestItem.get(0),
+                                tempInterestItem.get(1),
+                                tempInterestItem.get(2),
+                                tempInterestItem.get(3),
+                                cxt));
+                    }
+                } catch (Exception e) {
+                    Log.d("detailed items error: ", "no detailed items");
                 }
+
 
                 data.add(new Note(
                         tempDbNote.getTitle(),
@@ -127,8 +144,7 @@ public class NotesDataHelper {
                         tempDbNote.getNoteId()
                 ));
             }
-            else if (tempDbNote.getNoteType().equals("Sketchbook")){
-
+            else{
                 data.add(new Note(
                         tempDbNote.getTitle(),
                         tempDbNote.getSubtitle(),
