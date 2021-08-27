@@ -20,10 +20,10 @@
 
         <activity android:name=".RegisterActivity"></activity>
         <activity android:name=".DisplayNotesActivity" />
-        <activity android:name=".ExistingIndivNoteActivity" />
+        <activity android:name=".ExistingIndivNoteActivity" android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".LogInActivity" />
         <activity android:name=".SketchActivity" />
-        <activity android:name=".IndivNoteActivity" />
+        <activity android:name=".IndivNoteActivity" android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".TemplateListActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
