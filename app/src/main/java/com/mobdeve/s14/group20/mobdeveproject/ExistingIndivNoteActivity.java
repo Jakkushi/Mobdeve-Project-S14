@@ -152,7 +152,7 @@ public class ExistingIndivNoteActivity extends AppCompatActivity {
                         String noteId = String.valueOf(tvNoteId.getText());
                         System.out.println("Current note id: " + noteId);
 
-                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                         Date date = new Date();
                         String dateString = formatter.format(date);
 

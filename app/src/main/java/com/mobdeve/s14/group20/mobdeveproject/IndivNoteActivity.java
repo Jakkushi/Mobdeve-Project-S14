@@ -143,11 +143,14 @@ public class IndivNoteActivity extends AppCompatActivity {
                         String newNoteId = reference.push().getKey();
                         System.out.println("New note id: " + newNoteId);
 
-                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                         Date date = new Date();
                         String dateString = formatter.format(date);
 
                         HashMap<String, Object> noteData = new HashMap<>();
+
+                        title = String.valueOf(tvTitle.getText());
+                        subtitle = String.valueOf(tvSubtitle.getText());
 
                         if(title.equals(""))
                             title = "Title";

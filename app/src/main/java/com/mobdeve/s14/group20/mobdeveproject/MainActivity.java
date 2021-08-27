@@ -193,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void getNotesData(){
 
-        this.reference.child((this.userId)).child(Collection.notes.name()).orderByChild(Collection.dateModified.name()).startAt("2019-01-01").endAt("2021-12-31").addChildEventListener(new ChildEventListener() {
+        this.reference.child((this.userId)).child(Collection.notes.name()).orderByChild(Collection.dateModified.name()).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
 
