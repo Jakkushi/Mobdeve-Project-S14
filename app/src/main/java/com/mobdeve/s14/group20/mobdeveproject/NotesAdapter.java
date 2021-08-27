@@ -54,6 +54,12 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesViewHolder> {
         holder.setTvDateModified(notes.get(position).getDateModified());
         holder.setTvTitle(notes.get(position).getTitle());
         holder.setTvSubtitle(notes.get(position).getSubtitle());
+        holder.getIbDelete().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(v.getContext(), "Delete this note.", Toast.LENGTH_LONG).show();
+            }
+        });
 
         if(notes.get(position).getNoteType().equals("ToDo")){
             holder.setIvLogo(R.drawable.todo_list);
