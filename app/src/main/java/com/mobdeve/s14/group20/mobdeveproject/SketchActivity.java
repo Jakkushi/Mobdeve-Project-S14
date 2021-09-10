@@ -56,7 +56,7 @@ public class SketchActivity extends AppCompatActivity {
     private CanvasView canvas;
     private ProgressBar pbProgress;
 
-    private String title, subtitle, noteType, noteId;
+    private String title, subtitle, noteType;
     private ArrayList<String> tags;
 
     private EditText etTitle, etSubtitle;
@@ -109,7 +109,6 @@ public class SketchActivity extends AppCompatActivity {
         this.subtitle = getIntent().getStringExtra(Keys.SUBTITLE.name());
         this.tags = getIntent().getStringArrayListExtra(Keys.TAGS.name());
         this.noteType = getIntent().getStringExtra(Keys.NOTETYPE.name());
-        this.noteId = getIntent().getStringExtra(Keys.ID.name());
     }
 
     private void initEssentials(){
@@ -121,7 +120,6 @@ public class SketchActivity extends AppCompatActivity {
 
         this.etTitle.setText(this.title);
         this.etSubtitle.setText(this.subtitle);
-        this.tvNoteId.setText(this.noteId);
 
         this.rvTags = findViewById(R.id.rv_sketch_tags);
         this.tagsManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
@@ -186,8 +184,8 @@ public class SketchActivity extends AppCompatActivity {
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                        String noteId = String.valueOf(tvNoteId.getText());
-                        System.out.println("Current note id: " + noteId);
+                        String newNoteId = reference.push().getKey();
+                        System.out.println("Current note id: " + newNoteId);
 
                         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                         Date date = new Date();
@@ -204,22 +202,18 @@ public class SketchActivity extends AppCompatActivity {
                         if(subtitle.equals(""))
                             subtitle = "Subtitle";
 
+                        String sketchURL = "https://firebasestorage.googleapis.com/v0/b/" +
+                                "tous-les-journal.appspot.com/o/uploads%2FXRASKQ0QnIdXZgT6Ts0vG3VBDwf1%2F1631282078609." +
+                                "jpg?alt=media&token=5264d23b-9753-4652-a6c4-1711ba5deab4";
+
                         noteData.put("title", title);
                         noteData.put("subtitle", subtitle);
                         noteData.put("noteType", noteType);
                         noteData.put("dateModified", dateString);
                         noteData.put("tags", tags);
+                        noteData.put("sketchLink", sketchURL);
 
-                        System.out.println("title: " + title);
-                        System.out.println("subtitle: " + subtitle);
-                        System.out.println("noteType: " + noteType);
-                        System.out.println("dateModified: " + dateString);
-                        System.out.println("tags: " + tags);
-                        System.out.println("note id: " + noteId);
-
-                        reference.child((userId)).child(Collection.notes.name()).child(noteId).child("title").setValue(title);
-                        reference.child((userId)).child(Collection.notes.name()).child(noteId).child("subtitle").setValue(subtitle);
-                        reference.child((userId)).child(Collection.notes.name()).child(noteId).child("dateModified").setValue(dateString);
+                        reference.child((userId)).child(Collection.notes.name()).child(newNoteId).setValue(noteData);
                     }
 
                     @Override

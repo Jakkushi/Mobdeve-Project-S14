@@ -207,6 +207,7 @@ public class MainActivity extends AppCompatActivity {
                 ArrayList<String> tags = new ArrayList<>();
                 ArrayList<ArrayList<String>> todoList = new ArrayList<>();
                 ArrayList<ArrayList<String>> blankItems = new ArrayList<>();
+                String sketchURL;
 
                 try {
                     interestItems =  (ArrayList) (( (HashMap) snapshot.getValue()).get("interestItem"));
@@ -249,6 +250,15 @@ public class MainActivity extends AppCompatActivity {
                 catch (Exception d){
                     lessonItems = null;
                     Log.w("error", "No Lesson items in entry");
+                }
+
+                try{
+//                    sketchURL = (String) (((HashMap) snapshot.getValue()).get("sketchLink"));
+
+                    Log.w("SKETCH DATATYPE", (((HashMap) snapshot.getValue()).get("sketchLink")).getClass().toString());
+                }
+                catch(Exception d){
+                    Log.w("error", "No sketch items in entry");
                 }
 
                 Log.d("Snapshot Key: ", snapshot.getKey());
