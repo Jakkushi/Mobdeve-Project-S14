@@ -172,26 +172,40 @@ public class TemplateListActivity extends AppCompatActivity {
         if(noteType.equals("Blank")){
             Item newItem = new BlankItem("");
             items.add(newItem);
+            this.launchIndivNoteActivity(noteType, items);
         }
         else if(noteType.equals("ToDo")){
             Item newItem = new ToDoItem(false, "");
             items.add(newItem);
+            this.launchIndivNoteActivity(noteType, items);
         }
         else if(noteType.equals("Lesson")){
             Item newItem = new LessonNotesItem("", "", "");
             items.add(newItem);
+            this.launchIndivNoteActivity(noteType, items);
         }
         else if(noteType.equals("Detailed")){
             Item newItem = new DetailedItem("default_image", "", "", "", TemplateListActivity.this);
             items.add(newItem);
+            this.launchIndivNoteActivity(noteType, items);
         }
         else if(noteType.equals("Sketchbook")){
+            Intent intent = new Intent(TemplateListActivity.this, SketchActivity.class);
+            intent.putExtra(Keys.TITLE.name(), this.title);
+            intent.putExtra(Keys.SUBTITLE.name(), this.subtitle);
+            intent.putExtra(Keys.NOTETYPE.name(), noteType);
+            intent.putExtra(Keys.TAGS.name(), this.tags);
+            startActivity(intent);
+            finish();
         }
         else if(noteType.equals("Interest")){
             Item newItem = new InterestItem("default_image",0, "", "", TemplateListActivity.this);
             items.add(newItem);
+            this.launchIndivNoteActivity(noteType, items);
         }
+    }
 
+    private void launchIndivNoteActivity(String noteType, ArrayList<Item> items){
         //change template list activity to ExistingIndivNoteActivity
         Intent intent = new Intent(TemplateListActivity.this, IndivNoteActivity.class);
         intent.putExtra(Keys.TITLE.name(), this.title);
