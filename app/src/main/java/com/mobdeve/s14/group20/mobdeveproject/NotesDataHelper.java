@@ -144,6 +144,34 @@ public class NotesDataHelper {
                         tempDbNote.getNoteId()
                 ));
             }
+            else if(tempDbNote.getNoteType().equals("Lesson")){
+                ArrayList<Item> lessonItems = new ArrayList<>();
+
+                try{
+                    int numItems = tempDbNote.getLessonItems().size();
+
+                    for(int j = 0; j < numItems; j++) {
+                        ArrayList<String> tempLessonItem = tempDbNote.getLessonItems().get(j);
+
+                        Log.d("lesson item", tempLessonItem.get(0) + tempLessonItem.get(1) + tempLessonItem.get(2));
+                        lessonItems.add(new LessonNotesItem(tempLessonItem.get(0),
+                                tempLessonItem.get(1),
+                                tempLessonItem.get(2)));
+                    }
+                } catch (Exception e) {
+                    Log.d("lesson items error: ", String.valueOf(e));
+                }
+
+                data.add(new Note(
+                        tempDbNote.getTitle(),
+                        tempDbNote.getSubtitle(),
+                        tempDbNote.getNoteType(),
+                        tempDbNote.getDateModified(),
+                        tempDbNote.getTags(),
+                        lessonItems,
+                        tempDbNote.getNoteId()
+                ));
+            }
             else{
                 data.add(new Note(
                         tempDbNote.getTitle(),
@@ -155,87 +183,6 @@ public class NotesDataHelper {
                 ));
             }
         }
-
-//        data.add(new Note(
-//                "Groceries 2",
-//                "Vegetables",
-//                "To Do",
-//                "11/02/21",
-//                new ArrayList<String>() {{
-//                    add("#TAG");
-//                    add("#VEGGIES");
-//                }},
-//                new ArrayList<Item>(){{
-//                    add(new ToDoItem(false, "Carrot"));
-//                    add(new ToDoItem(true, "Ginger"));
-//                    add(new ToDoItem(true, "Lettuce"));
-//                }}
-//        ));
-//
-//        data.add(new Note(
-//                "Sketch #1",
-//                "Knight",
-//                "Sketchbook",
-//                "11/02/21",
-//                new ArrayList<String>() {{
-//                    add("#BOOKS");
-//                    add("#PAGES");
-//                    add("#BOOKS");
-//                    add("#PAGES");
-//                    add("#BOOKS");
-//                    add("#PAGES");
-//                    add("#BOOKS");
-//                    add("#PAGES");
-//                }}
-//        ));
-//
-//        data.add(new Note(
-//                "TV Shows",
-//                "NETFLIX",
-//                "Interest",
-//                "11/02/21",
-//                new ArrayList<String>() {{
-//                    add("#NETFLIX");
-//                    add("#SHOWSILOVE");
-//                }},
-//                new ArrayList<Item>(){{
-//                    add(new InterestItem("breaking_bad", 4, "A Series of Unfortunate Events", "What an amazing show.", cxt));
-//                }}
-//        ));
-//
-//        data.add(new Note(
-//                "Important People",
-//                "Don't Forget!",
-//                "Detailed",
-//                "01/03/19",
-//                new ArrayList<String>() {{
-//                    add("#DOCTOR");
-//                    add("#WHO?");
-//                }},
-//                new ArrayList<Item>(){{
-//                    add(new DetailedItem(
-//                            "breaking_bad",
-//                            "Chemistry Teacher",
-//                            "Looks kinda shady ngl",
-//                            "Met him in Chemistry Class grade 10, he suddenly went bald one " +
-//                                    "day", cxt
-//                    ));
-//                }}
-//        ));
-//
-//        data.add(new Note(
-//                "TV Shows",
-//                "NETFLIX",
-//                "Interest",
-//                "11/02/21",
-//                new ArrayList<String>() {{
-//                    add("#NETFLIX");
-//                    add("#SHOWSILOVE");
-//                }},
-//                new ArrayList<Item>(){{
-//                    add(new InterestItem("breaking_bad", 4, "A Series of Unfortunate Events", "What an amazing show.", cxt));
-//                }}
-//        ));
 
         return data;
     }

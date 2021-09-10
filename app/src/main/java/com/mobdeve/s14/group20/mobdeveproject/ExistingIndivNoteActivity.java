@@ -301,6 +301,25 @@ public class ExistingIndivNoteActivity extends AppCompatActivity implements Indi
                             reference.child((userId)).child(Collection.notes.name()).child(noteId).child("interestItem").setValue(tempItems);
 
                         }
+                        else if(noteType.equals("Lesson")){
+                            EditText tempTitle, tempSubtitle, tempText;
+                            for(int i = 0; i < indivNotesManager.getChildCount(); i++){
+                                tempTitle = indivNotesManager.getChildAt(i).findViewById(R.id.et_lesson_title);
+                                tempSubtitle = indivNotesManager.getChildAt(i).findViewById(R.id.et_lesson_subtitle);
+                                tempText = indivNotesManager.getChildAt(i).findViewById(R.id.et_lesson_text);
+//                                Log.d("CHILD: ", i + ": " + String.valueOf(tempTitle.getText()));
+//                                Log.d("CHILD: ", i + ": " + String.valueOf(tempSubtitle.getText()));
+//                                Log.d("CHILD: ", i + ": " + String.valueOf(tempText.getText()));
+                                String str[] = {String.valueOf(tempTitle.getText()),
+                                        String.valueOf(tempSubtitle.getText()), String.valueOf(tempText.getText())};
+                                tempItems.add(new ArrayList<String>(Arrays.asList(str)));
+                            }
+
+                            Log.d("item strings: ", String.valueOf(tempItems));
+
+                            reference.child((userId)).child(Collection.notes.name()).child(noteId).child("lessonNotesItem").setValue(tempItems);
+
+                        }
 
                         noteData.put("blankItems", tempItems);
 

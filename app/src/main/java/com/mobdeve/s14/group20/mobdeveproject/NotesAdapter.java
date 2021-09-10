@@ -110,6 +110,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesViewHolder> {
                                         withChild = true;
 
                                         ArrayList<ArrayList<String>> interestItems = new ArrayList<>();
+                                        ArrayList<ArrayList<String>> lessonItems = new ArrayList<>();
                                         ArrayList<String> tags = new ArrayList<>();
                                         ArrayList<ArrayList<String>> todoList = new ArrayList<>();
                                         ArrayList<ArrayList<String>> blankItems = new ArrayList<>();
@@ -145,11 +146,19 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesViewHolder> {
                                             Log.w("error", "No Blank items in entry");
                                         }
 
+                                        try {
+                                            lessonItems = (ArrayList) (((HashMap) snapshot.getValue()).get("lessonNotesItem"));
+                                        }
+                                        catch (Exception d){
+                                            tags = null;
+                                            Log.w("error", "No Lesson items in entry");
+                                        }
+
                                         Log.d("Snapshot Key: ", snapshot.getKey());
 
                                         dbNotes.add(new DatabaseNotesData( (String) (( (HashMap) snapshot.getValue()).get("title")),
                                                 (String) ((HashMap) snapshot.getValue()).get("subtitle"), (String) ((HashMap) snapshot.getValue()).get("noteType"),
-                                                (String) ((HashMap) snapshot.getValue()).get("dateModified"), interestItems, tags, todoList, blankItems, snapshot.getKey()));
+                                                (String) ((HashMap) snapshot.getValue()).get("dateModified"), interestItems, tags, todoList, blankItems, lessonItems, snapshot.getKey()));
 
                                         Intent intent = new Intent(cxt, DisplayNotesActivity.class);
                                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);

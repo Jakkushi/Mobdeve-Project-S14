@@ -199,6 +199,7 @@ public class DisplayNotesActivity extends AppCompatActivity {
             public void onChildAdded(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
 
                 ArrayList<ArrayList<String>> interestItems = new ArrayList<>();
+                ArrayList<ArrayList<String>> lessonItems = new ArrayList<>();
                 ArrayList<String> tags = new ArrayList<>();
                 ArrayList<ArrayList<String>> todoList = new ArrayList<>();
                 ArrayList<ArrayList<String>> blankItems = new ArrayList<>();
@@ -234,11 +235,19 @@ public class DisplayNotesActivity extends AppCompatActivity {
                     Log.w("error", "No Blank items in entry");
                 }
 
+                try {
+                    lessonItems = (ArrayList) (((HashMap) snapshot.getValue()).get("lessonNotesItem"));
+                }
+                catch (Exception d){
+                    tags = null;
+                    Log.w("error", "No Blank items in entry");
+                }
+
                 Log.d("Snapshot Key: ", snapshot.getKey());
 
                 dbNotes.add(new DatabaseNotesData( (String) (( (HashMap) snapshot.getValue()).get("title")),
                         (String) ((HashMap) snapshot.getValue()).get("subtitle"), (String) ((HashMap) snapshot.getValue()).get("noteType"),
-                        (String) ((HashMap) snapshot.getValue()).get("dateModified"), interestItems, tags, todoList, blankItems, snapshot.getKey()));
+                        (String) ((HashMap) snapshot.getValue()).get("dateModified"), interestItems, tags, todoList, blankItems, lessonItems, snapshot.getKey()));
 
                 pbNotes.setVisibility(View.VISIBLE);
                 Intent intent = new Intent(DisplayNotesActivity.this, DisplayNotesActivity.class);

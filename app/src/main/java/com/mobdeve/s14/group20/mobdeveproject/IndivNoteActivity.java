@@ -18,10 +18,14 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -44,6 +48,7 @@ public class IndivNoteActivity extends AppCompatActivity implements IndivNotesAd
     private IndivNotesAdapter indivNotesAdapter;
     private IndivTagsAdapter indivTagsAdapter;
     private ImageButton note_ib_holder;
+    private FloatingActionButton fabAddTemplate;
 
     private String title, subtitle, noteType;
     private ArrayList<String> tags = new ArrayList<>();
@@ -85,9 +90,46 @@ public class IndivNoteActivity extends AppCompatActivity implements IndivNotesAd
 
         this.tvTitle = findViewById(R.id.et_indiv_title);
         this.tvSubtitle = findViewById(R.id.et_indiv_subtitle);
+        this.fabAddTemplate = findViewById(R.id.indiv_fab_add);
+        bindFabOnClick();
 
         this.tvTitle.setText(this.title);
         this.tvSubtitle.setText(this.subtitle);
+    }
+
+    private void bindFabOnClick(){
+        this.fabAddTemplate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("Pressed!" + noteType + "/" + items.size());
+
+                if(noteType.equals("Blank")){
+                    Item newItem = new BlankItem("");
+                    items.add(newItem);
+                    indivNotesAdapter.notifyItemInserted(items.size() - 1);
+                }
+                else if(noteType.equals("ToDo")){
+                    Item newItem = new ToDoItem(false, "");
+                    items.add(newItem);
+                    indivNotesAdapter.notifyItemInserted(items.size() - 1);
+                }
+                else if(noteType.equals("Interest")){
+                    Item newItem = new InterestItem("default_image", 0, "", "", IndivNoteActivity.this);
+                    items.add(newItem);
+                    indivNotesAdapter.notifyItemInserted(items.size() - 1);
+                }
+                else if(noteType.equals("Detailed")){
+                    Item newItem = new DetailedItem("default_image", "", "", "", IndivNoteActivity.this);
+                    items.add(newItem);
+                    indivNotesAdapter.notifyItemInserted(items.size() - 1);
+                }
+                else if(noteType.equals("Lesson")){
+                    Item newItem = new LessonNotesItem("", "", "");
+                    items.add(newItem);
+                    indivNotesAdapter.notifyItemInserted(items.size() - 1);
+                }
+            }
+        });
     }
 
     private void initRecyclerView(){
@@ -188,10 +230,81 @@ public class IndivNoteActivity extends AppCompatActivity implements IndivNotesAd
 //                            tempItems.add(new ArrayList<String>(Arrays.asList("Hi new blank item")));
 
                             Log.d("item strings: ", String.valueOf(tempItems));
-
+                            noteData.put("blankItems", tempItems);
                         }
+                        else if(noteType.equals("Lesson")){
+                            EditText tempTitle, tempSubtitle, tempText;
+                            for(int i = 0; i < indivNotesManager.getChildCount(); i++){
+                                tempTitle = indivNotesManager.getChildAt(i).findViewById(R.id.et_lesson_title);
+                                tempSubtitle = indivNotesManager.getChildAt(i).findViewById(R.id.et_lesson_subtitle);
+                                tempText = indivNotesManager.getChildAt(i).findViewById(R.id.et_lesson_text);
+//                                Log.d("CHILD: ", i + ": " + String.valueOf(tempTitle.getText()));
+//                                Log.d("CHILD: ", i + ": " + String.valueOf(tempSubtitle.getText()));
+//                                Log.d("CHILD: ", i + ": " + String.valueOf(tempText.getText()));
+                                String str[] = {String.valueOf(tempTitle.getText()),
+                                        String.valueOf(tempSubtitle.getText()), String.valueOf(tempText.getText())};
 
-                        noteData.put("blankItems", tempItems);
+                                Log.d("Inside ARRAY", str[0] + str[1] + str[2]);
+                                tempItems.add(new ArrayList<String>(Arrays.asList(str)));
+                            }
+
+                            Log.d("item strings: ", String.valueOf(tempItems));
+                            noteData.put("lessonNotesItem", tempItems);
+                        }
+                        else if(noteType.equals("ToDo")){
+                            CheckBox tempCheck;
+                            EditText tempText;
+                            for(int i = 0; i < indivNotesManager.getChildCount(); i++){
+                                tempCheck = indivNotesManager.getChildAt(i).findViewById(R.id.cb_todo_checkbox);
+                                tempText = indivNotesManager.getChildAt(i).findViewById(R.id.et_todo_text);
+//                                Log.d("CHILD: ", i + ": " + String.valueOf(tempTitle.getText()));
+//                                Log.d("CHILD: ", i + ": " + String.valueOf(tempSubtitle.getText()));
+//                                Log.d("CHILD: ", i + ": " + String.valueOf(tempText.getText()));
+                                String str[] = {String.valueOf(tempCheck.isSelected()), String.valueOf(tempText.getText())};
+
+                                Log.d("Inside ARRAY", str[0] + str[1]);
+                                tempItems.add(new ArrayList<String>(Arrays.asList(str)));
+                            }
+
+                            Log.d("item strings: ", String.valueOf(tempItems));
+                            noteData.put("todo", tempItems);
+                        }
+                        else if(noteType.equals("Interest")){
+                            RatingBar tempRatingBar;
+                            EditText tempText;
+                            TextView tempTitle;
+                            for(int i = 0; i < indivNotesManager.getChildCount(); i++){
+                                tempRatingBar = indivNotesManager.getChildAt(i).findViewById(R.id.rb_interest_rating);
+                                tempText = indivNotesManager.getChildAt(i).findViewById(R.id.etml_interest_text);
+                                tempTitle = indivNotesManager.getChildAt(i).findViewById(R.id.etml_interest_title);
+//                                Log.d("CHILD: ", i + ": " + String.valueOf(tempRatingBar.getRating()));
+//                                Log.d("CHILD: ", i + ": " + String.valueOf(tempText.getText()));
+//                                Log.d("CHILD: ", i + ": " + String.valueOf(tempTitle.getText()));
+                                String str[] = {"default_image", String.valueOf(tempRatingBar.getRating()),
+                                        String.valueOf(tempTitle.getText()), String.valueOf(tempText.getText())};
+                                tempItems.add(new ArrayList<String>(Arrays.asList(str)));
+                            }
+
+                            Log.d("item strings: ", String.valueOf(tempItems));
+                            noteData.put("interestItem", tempItems);
+                        }
+                        else if(noteType.equals("Detailed")){
+                            EditText tempTitle, tempSubtitle, tempText;
+                            for(int i = 0; i < indivNotesManager.getChildCount(); i++){
+                                tempTitle = indivNotesManager.getChildAt(i).findViewById(R.id.etml_detailed_title);
+                                tempSubtitle = indivNotesManager.getChildAt(i).findViewById(R.id.etml_detailed_subtitle);
+                                tempText = indivNotesManager.getChildAt(i).findViewById(R.id.etml_detailed_text);
+//                                Log.d("CHILD: ", i + ": " + String.valueOf(tempTitle.getText()));
+//                                Log.d("CHILD: ", i + ": " + String.valueOf(tempSubtitle.getText()));
+//                                Log.d("CHILD: ", i + ": " + String.valueOf(tempText.getText()));
+                                String str[] = {"default_image", String.valueOf(tempTitle.getText()),
+                                        String.valueOf(tempSubtitle.getText()), String.valueOf(tempText.getText())};
+                                tempItems.add(new ArrayList<String>(Arrays.asList(str)));
+                            }
+
+                            Log.d("item strings: ", String.valueOf(tempItems));
+                            noteData.put("interestItem", tempItems);
+                        }
 
                         reference.child((userId)).child(Collection.notes.name()).child(newNoteId).setValue(noteData);
 
