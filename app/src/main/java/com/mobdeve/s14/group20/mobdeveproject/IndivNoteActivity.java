@@ -104,6 +104,8 @@ public class IndivNoteActivity extends AppCompatActivity implements IndivNotesAd
         this.tvSubtitle.setText(this.subtitle);
     }
 
+    private static final String default_url = "https://firebasestorage.googleapis.com/v0/b/tous-les-journal.appspot.com/o/default_image.png?alt=media&token=7db691ef-1bef-46fb-98b6-9c4c445b3747";
+
     private void bindFabOnClick(){
         this.fabAddTemplate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,12 +123,12 @@ public class IndivNoteActivity extends AppCompatActivity implements IndivNotesAd
                     indivNotesAdapter.notifyItemInserted(items.size() - 1);
                 }
                 else if(noteType.equals("Interest")){
-                    Item newItem = new InterestItem("default_image", 0, "", "", IndivNoteActivity.this);
+                    Item newItem = new InterestItem(default_url, 0, "", "", IndivNoteActivity.this);
                     items.add(newItem);
                     indivNotesAdapter.notifyItemInserted(items.size() - 1);
                 }
                 else if(noteType.equals("Detailed")){
-                    Item newItem = new DetailedItem("default_image", "", "", "", IndivNoteActivity.this);
+                    Item newItem = new DetailedItem(default_url, "", "", "", IndivNoteActivity.this);
                     items.add(newItem);
                     indivNotesAdapter.notifyItemInserted(items.size() - 1);
                 }
@@ -267,7 +269,7 @@ public class IndivNoteActivity extends AppCompatActivity implements IndivNotesAd
 //                                Log.d("CHILD: ", i + ": " + String.valueOf(tempTitle.getText()));
 //                                Log.d("CHILD: ", i + ": " + String.valueOf(tempSubtitle.getText()));
 //                                Log.d("CHILD: ", i + ": " + String.valueOf(tempText.getText()));
-                                String str[] = {String.valueOf(tempCheck.isSelected()), String.valueOf(tempText.getText())};
+                                String str[] = {String.valueOf(tempCheck.isChecked()), String.valueOf(tempText.getText())};
 
                                 Log.d("Inside ARRAY", str[0] + str[1]);
                                 tempItems.add(new ArrayList<String>(Arrays.asList(str)));
@@ -360,10 +362,8 @@ public class IndivNoteActivity extends AppCompatActivity implements IndivNotesAd
         }
     }
 
-
-
     @Override
-    public void callAction(ImageButton imageButton) {
+    public void callAction(ImageButton imageButton, TextView textView) {
         note_ib_holder = imageButton;
         String[] options = {"Take a picture from camera", "Select from gallery", "Cancel"};
 

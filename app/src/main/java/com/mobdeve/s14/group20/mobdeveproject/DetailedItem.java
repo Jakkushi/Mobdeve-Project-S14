@@ -7,27 +7,27 @@ import java.io.Serializable;
 
 public class DetailedItem extends Item implements Serializable {
 
-    private int imgId;
+    private String imgId;
     private String title, subtitle, text;
 
-    public DetailedItem(String imgId, String title, String subtitle, String text, Context cxt) {
+    public DetailedItem(String imgUrl, String title, String subtitle, String text, Context cxt) {
         super("Detailed");
 
-        String name = imgId;
-        int id = cxt.getResources().getIdentifier(name, "drawable", cxt.getPackageName());
+//        String name = imgId;
+//        int id = cxt.getResources().getIdentifier(name, "drawable", cxt.getPackageName());
 //        Drawable drawable = cxt.getResources().getDrawable(id);
 
-        this.imgId = id;
+        this.imgId = imgUrl;
         this.title = title;
         this.subtitle = subtitle;
         this.text = text;
     }
 
-    public int getImgId() {
+    public String getImgId() {
         return this.imgId;
     }
 
-    public void setImgId(int imgId) {
+    public void setImgId(String imgId) {
         this.imgId = imgId;
     }
 

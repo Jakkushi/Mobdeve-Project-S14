@@ -119,6 +119,16 @@
             app:layout_constraintTop_toTopOf="@+id/gl_top_picture"
             tools:srcCompat="@tools:sample/avatars" />
 
+        <TextView
+            android:id="@+id/tv_interest_url"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="#00FFFFFF"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="gone" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

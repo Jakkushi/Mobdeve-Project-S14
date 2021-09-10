@@ -1,6 +1,8 @@
 package com.mobdeve.s14.group20.mobdeveproject;
 
+import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
+import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -10,6 +12,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -24,8 +27,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.shape.InterpolateOnScrollPositionChangeHelper;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -33,6 +38,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -50,7 +60,7 @@ public class ExistingIndivNoteActivity extends AppCompatActivity implements Indi
     private IndivTagsAdapter indivTagsAdapter;
     private TextView tvNoteId;
     private ProgressBar pb_indiv_note;
-    private ImageButton note_ib_holder;
+    private ImageButton noteIbHolder;
     private FloatingActionButton fabAddTemplate;
 
     private String title, subtitle, noteType, noteId;
@@ -62,6 +72,11 @@ public class ExistingIndivNoteActivity extends AppCompatActivity implements Indi
 
     private static int REQUEST_CODE_CAMERA = 1;
     private static int REQUEST_CODE_IMAGE_SELECT = 2;
+
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private Uri selectedImageUri;
+
+    private TextView noteTvHolder;
 
     private void hideUI() {
         View decorView = getWindow().getDecorView();
@@ -105,6 +120,8 @@ public class ExistingIndivNoteActivity extends AppCompatActivity implements Indi
         this.tvNoteId.setText(noteId);
     }
 
+    private static final String default_url = "https://firebasestorage.googleapis.com/v0/b/tous-les-journal.appspot.com/o/default_image.png?alt=media&token=7db691ef-1bef-46fb-98b6-9c4c445b3747";
+
     private void bindFabOnClick(){
         this.fabAddTemplate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,12 +139,12 @@ public class ExistingIndivNoteActivity extends AppCompatActivity implements Indi
                     indivNotesAdapter.notifyItemInserted(items.size() - 1);
                 }
                 else if(noteType.equals("Interest")){
-                    Item newItem = new InterestItem("default_image", 0, "", "", ExistingIndivNoteActivity.this);
+                    Item newItem = new InterestItem(default_url, 0, "", "", ExistingIndivNoteActivity.this);
                     items.add(newItem);
                     indivNotesAdapter.notifyItemInserted(items.size() - 1);
                 }
                 else if(noteType.equals("Detailed")){
-                    Item newItem = new DetailedItem("default_image", "", "", "", ExistingIndivNoteActivity.this);
+                    Item newItem = new DetailedItem(default_url, "", "", "", ExistingIndivNoteActivity.this);
                     items.add(newItem);
                     indivNotesAdapter.notifyItemInserted(items.size() - 1);
                 }
@@ -270,15 +287,16 @@ public class ExistingIndivNoteActivity extends AppCompatActivity implements Indi
                         else if(noteType.equals("Interest")){
                             RatingBar tempRatingBar;
                             EditText tempText;
-                            TextView tempTitle;
+                            TextView tempTitle, tempUrl;
                             for(int i = 0; i < indivNotesManager.getChildCount(); i++){
                                 tempRatingBar = indivNotesManager.getChildAt(i).findViewById(R.id.rb_interest_rating);
                                 tempText = indivNotesManager.getChildAt(i).findViewById(R.id.etml_interest_text);
                                 tempTitle = indivNotesManager.getChildAt(i).findViewById(R.id.etml_interest_title);
+                                tempUrl = indivNotesManager.getChildAt(i).findViewById(R.id.tv_interest_url);
 //                                Log.d("CHILD: ", i + ": " + String.valueOf(tempRatingBar.getRating()));
 //                                Log.d("CHILD: ", i + ": " + String.valueOf(tempText.getText()));
 //                                Log.d("CHILD: ", i + ": " + String.valueOf(tempTitle.getText()));
-                                String str[] = {"default_image", String.valueOf(tempRatingBar.getRating()),
+                                String str[] = {String.valueOf(tempUrl.getText()), String.valueOf(tempRatingBar.getRating()),
                                         String.valueOf(tempTitle.getText()), String.valueOf(tempText.getText())};
                                 tempItems.add(new ArrayList<String>(Arrays.asList(str)));
                             }
@@ -290,14 +308,16 @@ public class ExistingIndivNoteActivity extends AppCompatActivity implements Indi
                         }
                         else if(noteType.equals("Detailed")){
                             EditText tempTitle, tempSubtitle, tempText;
+                            TextView tempUrl;
                             for(int i = 0; i < indivNotesManager.getChildCount(); i++){
                                 tempTitle = indivNotesManager.getChildAt(i).findViewById(R.id.etml_detailed_title);
                                 tempSubtitle = indivNotesManager.getChildAt(i).findViewById(R.id.etml_detailed_subtitle);
                                 tempText = indivNotesManager.getChildAt(i).findViewById(R.id.etml_detailed_text);
+                                tempUrl = indivNotesManager.getChildAt(i).findViewById(R.id.tv_detailed_url);
 //                                Log.d("CHILD: ", i + ": " + String.valueOf(tempTitle.getText()));
 //                                Log.d("CHILD: ", i + ": " + String.valueOf(tempSubtitle.getText()));
 //                                Log.d("CHILD: ", i + ": " + String.valueOf(tempText.getText()));
-                                String str[] = {"default_image", String.valueOf(tempTitle.getText()),
+                                String str[] = {String.valueOf(tempUrl.getText()), String.valueOf(tempTitle.getText()),
                                         String.valueOf(tempSubtitle.getText()), String.valueOf(tempText.getText())};
                                 tempItems.add(new ArrayList<String>(Arrays.asList(str)));
                             }
@@ -362,15 +382,17 @@ public class ExistingIndivNoteActivity extends AppCompatActivity implements Indi
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_CAMERA && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
-            note_ib_holder.setImageBitmap((Bitmap) extras.get("data"));
+            noteIbHolder.setImageBitmap((Bitmap) extras.get("data"));
         } else if (requestCode == REQUEST_CODE_IMAGE_SELECT && resultCode == RESULT_OK) {
             if (data != null) {
-                Uri selectedImageUri = data.getData();
+                selectedImageUri = data.getData();
                 if (selectedImageUri != null) {
                     try {
+                        uploadImage();
                         InputStream inputStream = getContentResolver().openInputStream(selectedImageUri);
                         Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                        note_ib_holder.setImageBitmap(bitmap);
+                        noteIbHolder.setImageBitmap(bitmap);
+
                     } catch (Exception e) {
                         Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
@@ -379,11 +401,48 @@ public class ExistingIndivNoteActivity extends AppCompatActivity implements Indi
         }
     }
 
+    private void uploadImage() {
+        final ProgressDialog pdUpload = new ProgressDialog(this);
+        pdUpload.setMessage("Uploading photo");
+        pdUpload.show();
 
+        if(selectedImageUri != null) {
+            StorageReference fileReference = FirebaseStorage.getInstance().getReference()
+                    .child("uploads").child(user.getUid().toString())
+                    .child(System.currentTimeMillis() + "." + getFileExtension(selectedImageUri));
+
+            fileReference.putFile(selectedImageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onComplete(@NonNull @NotNull Task<UploadTask.TaskSnapshot> task) {
+                    fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            String imgUrl = uri.toString();
+
+                            Log.d("Download url: ", imgUrl);
+                            pdUpload.dismiss();
+
+                            noteTvHolder.setText(imgUrl);
+                            Toast.makeText(ExistingIndivNoteActivity.this, "Image upload successful", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            });
+            Log.d("Download path: ", fileReference.getPath().toString());
+        }
+    }
+
+    private String getFileExtension(Uri imgUri) {
+        ContentResolver contentResolver = getContentResolver();
+        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+
+        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(imgUri));
+    }
 
     @Override
-    public void callAction(ImageButton imageButton) {
-        note_ib_holder = imageButton;
+    public void callAction(ImageButton imageButton, TextView textView) {
+        noteIbHolder = imageButton;
+        noteTvHolder = textView;
         String[] options = {"Take a picture from camera", "Select from gallery", "Cancel"};
 
         new AlertDialog.Builder(this)

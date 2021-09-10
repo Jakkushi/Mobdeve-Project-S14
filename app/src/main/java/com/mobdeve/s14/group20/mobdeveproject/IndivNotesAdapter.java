@@ -1,11 +1,6 @@
 package com.mobdeve.s14.group20.mobdeveproject;
 
-import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,10 +10,11 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
@@ -28,6 +24,7 @@ public class IndivNotesAdapter extends RecyclerView.Adapter<IndivNotesAdapter.In
     private ArrayList<Item> items = new ArrayList<>();
     private String title;
     private callAction mListener;
+    private Context context;
 
     public IndivNotesAdapter(String title, ArrayList<String> tags, ArrayList<Item> items, callAction mListener) {
 
@@ -42,6 +39,7 @@ public class IndivNotesAdapter extends RecyclerView.Adapter<IndivNotesAdapter.In
     public IndivNotesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        context = parent.getContext();
 
         if(this.items.get(0) instanceof ToDoItem){
             View itemView = inflater.inflate(R.layout.note_todo, parent, false);
@@ -102,7 +100,7 @@ public class IndivNotesAdapter extends RecyclerView.Adapter<IndivNotesAdapter.In
     public class IndivNotesViewHolder extends RecyclerView.ViewHolder {
 
         private CheckBox cbItem;
-        private TextView interestTitle, blankText;
+        private TextView interestTitle, blankText, detailedImageUrl, interestImageUrl;
         private EditText interestText, detailedTitle, detailedSubtitle, detailedText, toDoText;
         private RatingBar interestRating;
         private ImageButton interestPicture, detailedPicture;
@@ -125,6 +123,8 @@ public class IndivNotesAdapter extends RecyclerView.Adapter<IndivNotesAdapter.In
             lessonTitle = itemView.findViewById(R.id.et_lesson_title);
             lessonSubtitle = itemView.findViewById(R.id.et_lesson_subtitle);
             lessonText = itemView.findViewById(R.id.et_lesson_text);
+            detailedImageUrl = itemView.findViewById(R.id.tv_detailed_url);
+            interestImageUrl = itemView.findViewById(R.id.tv_interest_url);
         }
 
         public void bindToDo(ToDoItem item) {
@@ -137,25 +137,34 @@ public class IndivNotesAdapter extends RecyclerView.Adapter<IndivNotesAdapter.In
             this.interestTitle.setText(item.getTitle());
             this.interestText.setText(item.getText());
             this.interestRating.setRating(item.getRating());
-            this.interestPicture.setImageResource(item.getImgId());
+
+            String imgUrl = item.getImgId();
+
+            Log.d("URL IN ADAPTER INT: ", imgUrl);
+            Glide.with(context).load(imgUrl).into(this.detailedPicture);
+            this.interestImageUrl.setText(imgUrl);
             this.interestPicture.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v){
-                    mListener.callAction(interestPicture);
+                    mListener.callAction(interestPicture, interestImageUrl);
                 }
             });
         }
 
         public void bindDetailed(DetailedItem item){
 
-            this.detailedPicture.setImageResource(item.getImgId());
+            String imgUrl = item.getImgId();
+
+            Log.d("URL IN ADAPTER DET: ", imgUrl);
+            Glide.with(context).load(imgUrl).into(this.detailedPicture);
+            this.detailedImageUrl.setText(imgUrl);
             this.detailedTitle.setText(item.getTitle());
             this.detailedSubtitle.setText(item.getSubtitle());
             this.detailedText.setText(item.getText());
             this.detailedPicture.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v){
-                    mListener.callAction(detailedPicture);
+                    mListener.callAction(detailedPicture, detailedImageUrl);
                 }
             });
         }
@@ -174,6 +183,6 @@ public class IndivNotesAdapter extends RecyclerView.Adapter<IndivNotesAdapter.In
     }
 
     public interface callAction {
-        void callAction(ImageButton imageButton);
+        void callAction(ImageButton imageButton, TextView textView);
     }
 }

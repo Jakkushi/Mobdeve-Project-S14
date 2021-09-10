@@ -8,26 +8,26 @@ import java.lang.reflect.Field;
 
 public class InterestItem extends Item implements Serializable {
 
-    private int imgId;
+    private String imgId;
     private float rating;
     private String title, text;
 
-    public InterestItem(String imgId, float rating, String title, String text, Context cxt){
+    public InterestItem(String imgUrl, float rating, String title, String text, Context cxt){
         super("Interest");
-        String name = imgId;
-        int id = cxt.getResources().getIdentifier(name, "drawable", cxt.getPackageName());
+//        String name = imgId;
+//        int id = cxt.getResources().getIdentifier(name, "drawable", cxt.getPackageName());
 //        Drawable drawable = cxt.getResources().getDrawable(id);
-        this.imgId = id;
+        this.imgId = imgUrl;
         this.rating = rating;
         this.title = title;
         this.text = text;
     }
 
-    public int getImgId() {
+    public String getImgId() {
         return this.imgId;
     }
 
-    public void setImgId(int imgId) {
+    public void setImgId(String imgId) {
         this.imgId = imgId;
     }
 
