@@ -267,7 +267,7 @@ public class IndivNoteActivity extends AppCompatActivity implements IndivNotesAd
 //                                Log.d("CHILD: ", i + ": " + String.valueOf(tempTitle.getText()));
 //                                Log.d("CHILD: ", i + ": " + String.valueOf(tempSubtitle.getText()));
 //                                Log.d("CHILD: ", i + ": " + String.valueOf(tempText.getText()));
-                                String str[] = {String.valueOf(tempCheck.isSelected()), String.valueOf(tempText.getText())};
+                                String str[] = {String.valueOf(tempCheck.isChecked()), String.valueOf(tempText.getText())};
 
                                 Log.d("Inside ARRAY", str[0] + str[1]);
                                 tempItems.add(new ArrayList<String>(Arrays.asList(str)));
