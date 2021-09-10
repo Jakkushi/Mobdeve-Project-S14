@@ -4,26 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ll_todo_layout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
+    android:background="@drawable/rounded_rectangle_note"
+    android:backgroundTint="#FFFFFF"
+    android:paddingStart="5dp"
+    android:paddingEnd="10dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_todo_constraint"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/rounded_rectangle_note"
-        android:backgroundTint="#FFFFFF">
+    <CheckBox
+        android:id="@+id/cb_todo_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:textSize="14sp" />
 
-        <CheckBox
-            android:id="@+id/cb_todo_checkbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:text="CheckBox"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <EditText
+        android:id="@+id/et_todo_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:backgroundTint="#00FFFFFF"
+        android:ems="10"
+        android:hint="Item"
+        android:inputType="textPersonName" />
+
 </LinearLayout>

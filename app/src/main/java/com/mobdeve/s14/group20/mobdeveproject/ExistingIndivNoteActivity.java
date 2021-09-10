@@ -22,6 +22,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.shape.InterpolateOnScrollPositionChangeHelper;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -46,6 +48,7 @@ public class ExistingIndivNoteActivity extends AppCompatActivity implements Indi
     private TextView tvNoteId;
     private ProgressBar pb_indiv_note;
     private ImageButton note_ib_holder;
+    private FloatingActionButton fabAddTemplate;
 
     private String title, subtitle, noteType, noteId, picturePath;
     private ArrayList<String> tags = new ArrayList<>();
@@ -88,18 +91,54 @@ public class ExistingIndivNoteActivity extends AppCompatActivity implements Indi
         this.tvSubtitle = findViewById(R.id.et_indiv_subtitle);
         this.tvNoteId = findViewById(R.id.tv_note_id);
         this.pb_indiv_note = findViewById(R.id.pb_indiv_note);
+        this.fabAddTemplate = findViewById(R.id.indiv_fab_add);
+        this.bindFabOnClick();
 
         this.tvTitle.setText(this.title);
         this.tvSubtitle.setText(this.subtitle);
         this.tvNoteId.setText(noteId);
+    }
 
+    private void bindFabOnClick(){
+        this.fabAddTemplate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("Pressed!" + noteType + "/" + items.size());
+
+                if(noteType.equals("Blank")){
+                    Item newItem = new BlankItem("");
+                    items.add(newItem);
+                    indivNotesAdapter.notifyDataSetChanged();
+                }
+                else if(noteType.equals("ToDo")){
+                    Item newItem = new ToDoItem(false, "");
+                    items.add(newItem);
+                    indivNotesAdapter.notifyDataSetChanged();
+                }
+                else if(noteType.equals("Interest")){
+                    Item newItem = new InterestItem("default_image", 0, "", "", ExistingIndivNoteActivity.this);
+                    items.add(newItem);
+                    indivNotesAdapter.notifyDataSetChanged();
+                }
+                else if(noteType.equals("Detailed")){
+                    Item newItem = new DetailedItem("default_image", "", "", "", ExistingIndivNoteActivity.this);
+                    items.add(newItem);
+                    indivNotesAdapter.notifyDataSetChanged();
+                }
+                else if(noteType.equals("Lesson")){
+                    Item newItem = new LessonNotesItem("", "", "");
+                    items.add(newItem);
+                    indivNotesAdapter.notifyDataSetChanged();
+                }
+            }
+        });
     }
 
     private void initRecyclerView(){
         this.rvIndivNotes = findViewById(R.id.indiv_rv_templates);
         this.indivNotesManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         this.rvIndivNotes.setLayoutManager(this.indivNotesManager);
-        this.indivNotesAdapter = new IndivNotesAdapter(this.title, this.tags, this.items, this);
+        this.indivNotesAdapter = new IndivNotesAdapter(this.title, this.tags, items, this);
         this.rvIndivNotes.setAdapter(this.indivNotesAdapter);
 
         this.rvIndivTags = findViewById(R.id.rv_indiv_tags);
@@ -207,11 +246,13 @@ public class ExistingIndivNoteActivity extends AppCompatActivity implements Indi
                         }
                         else if(noteType.equals("ToDo")){
                             CheckBox tempTodo;
+                            TextView tempTodoText;
                             for(int i = 0; i < indivNotesManager.getChildCount(); i++){
                                 tempTodo = indivNotesManager.getChildAt(i).findViewById(R.id.cb_todo_checkbox);
+                                tempTodoText = indivNotesManager.getChildAt(i).findViewById(R.id.et_todo_text);
 //                                Log.d("CHILD: ", i + ": " + String.valueOf(tempTodo.isChecked()));
 //                                Log.d("CHILD: ", i + ": " + String.valueOf(tempTodo.getText()));
-                                String str[] = {String.valueOf(tempTodo.isChecked()), (String) tempTodo.getText()};
+                                String str[] = {String.valueOf(tempTodo.isChecked()), String.valueOf(tempTodoText.getText())};
                                 tempItems.add(new ArrayList<String>(Arrays.asList(str)));
                             }
 
@@ -227,11 +268,11 @@ public class ExistingIndivNoteActivity extends AppCompatActivity implements Indi
                             for(int i = 0; i < indivNotesManager.getChildCount(); i++){
                                 tempRatingBar = indivNotesManager.getChildAt(i).findViewById(R.id.rb_interest_rating);
                                 tempText = indivNotesManager.getChildAt(i).findViewById(R.id.etml_interest_text);
-                                tempTitle = indivNotesManager.getChildAt(i).findViewById(R.id.tv_interest_title);
+                                tempTitle = indivNotesManager.getChildAt(i).findViewById(R.id.etml_interest_title);
 //                                Log.d("CHILD: ", i + ": " + String.valueOf(tempRatingBar.getRating()));
 //                                Log.d("CHILD: ", i + ": " + String.valueOf(tempText.getText()));
 //                                Log.d("CHILD: ", i + ": " + String.valueOf(tempTitle.getText()));
-                                String str[] = {"breaking_bad", String.valueOf(tempRatingBar.getRating()),
+                                String str[] = {"default_image", String.valueOf(tempRatingBar.getRating()),
                                         String.valueOf(tempTitle.getText()), String.valueOf(tempText.getText())};
                                 tempItems.add(new ArrayList<String>(Arrays.asList(str)));
                             }
@@ -250,7 +291,7 @@ public class ExistingIndivNoteActivity extends AppCompatActivity implements Indi
 //                                Log.d("CHILD: ", i + ": " + String.valueOf(tempTitle.getText()));
 //                                Log.d("CHILD: ", i + ": " + String.valueOf(tempSubtitle.getText()));
 //                                Log.d("CHILD: ", i + ": " + String.valueOf(tempText.getText()));
-                                String str[] = {"walterwhite", String.valueOf(tempTitle.getText()),
+                                String str[] = {"default_image", String.valueOf(tempTitle.getText()),
                                         String.valueOf(tempSubtitle.getText()), String.valueOf(tempText.getText())};
                                 tempItems.add(new ArrayList<String>(Arrays.asList(str)));
                             }

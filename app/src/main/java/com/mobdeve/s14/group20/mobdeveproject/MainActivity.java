@@ -62,6 +62,9 @@ public class MainActivity extends AppCompatActivity {
     public ArrayList<DatabaseNotesData> dbNotes = new ArrayList<>();
     boolean withChild = false;
 
+    public MainActivity() {
+    }
+
     private void hideUI() {
         View decorView = getWindow().getDecorView();
         decorView.setSystemUiVisibility(

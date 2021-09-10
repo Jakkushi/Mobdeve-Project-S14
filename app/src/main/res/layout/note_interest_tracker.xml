@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ll_interest_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:paddingBottom="15dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_interest_constraint"
@@ -48,28 +49,25 @@
             android:orientation="vertical"
             app:layout_constraintGuide_end="20sp" />
 
-        <TextView
-            android:id="@+id/tv_interest_title"
+        <EditText
+            android:id="@+id/etml_interest_title"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:backgroundTint="#00FFFFFF"
+            android:ems="10"
             android:fontFamily="@font/roboto_slab"
             android:gravity="center"
-            android:paddingLeft="5sp"
-            android:paddingRight="5sp"
-            android:text="For a Pessimist, You're Pretty Optimistic"
-            android:textAlignment="center"
-            android:textColor="#000000"
-            android:textSize="24sp"
-            app:autoSizeMaxTextSize="100sp"
-            app:autoSizeMinTextSize="12sp"
-            app:autoSizeTextType="uniform"
-            app:layout_constraintBottom_toTopOf="@id/rb_interest_rating"
+            android:hint="Title"
+            android:inputType="textMultiLine"
+            android:isScrollContainer="true"
+            android:maxLength="50"
+            android:nestedScrollingEnabled="false"
+            android:scrollbars="none"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/gl_bottom_picture"
             app:layout_constraintEnd_toStartOf="@+id/gl_interest_end"
             app:layout_constraintStart_toStartOf="@+id/gl_picture_end"
-            app:layout_constraintTop_toTopOf="@+id/gl_top_picture"
-            tools:autoSizeMaxTextSize="24sp"
-            tools:autoSizeMinTextSize="18sp"
-            tools:autoSizeTextType="uniform" />
+            app:layout_constraintTop_toTopOf="@+id/gl_top_picture" />
 
         <RatingBar
             android:id="@+id/rb_interest_rating"
@@ -87,10 +85,10 @@
             android:scaleY="1"
             android:secondaryProgressTint="#00C13333"
             android:stepSize="0.5"
-            app:layout_constraintBottom_toTopOf="@+id/gl_bottom_picture"
+            app:layout_constraintBottom_toTopOf="@id/etml_interest_text"
             app:layout_constraintEnd_toStartOf="@+id/gl_interest_end"
-            app:layout_constraintStart_toStartOf="@+id/gl_picture_end"
-            app:layout_constraintTop_toBottomOf="@+id/tv_interest_title" />
+            app:layout_constraintStart_toStartOf="@+id/gl_interest_start"
+            app:layout_constraintTop_toBottomOf="@id/gl_bottom_picture" />
 
         <EditText
             android:id="@+id/etml_interest_text"
@@ -105,7 +103,7 @@
             android:textSize="14sp"
             app:layout_constraintEnd_toStartOf="@+id/gl_interest_end"
             app:layout_constraintStart_toStartOf="@+id/gl_interest_start"
-            app:layout_constraintTop_toTopOf="@+id/gl_bottom_picture" />
+            app:layout_constraintTop_toBottomOf="@+id/rb_interest_rating" />
 
         <ImageButton
             android:id="@+id/ib_interest_image"

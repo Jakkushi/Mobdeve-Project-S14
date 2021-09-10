@@ -35,7 +35,6 @@ public class IndivNotesAdapter extends RecyclerView.Adapter<IndivNotesAdapter.In
         this.tags = tags;
         this.items = items;
         this.mListener = mListener;
-
     }
 
     @NonNull
@@ -104,7 +103,7 @@ public class IndivNotesAdapter extends RecyclerView.Adapter<IndivNotesAdapter.In
 
         private CheckBox cbItem;
         private TextView interestTitle, blankText;
-        private EditText interestText, detailedTitle, detailedSubtitle, detailedText;
+        private EditText interestText, detailedTitle, detailedSubtitle, detailedText, toDoText;
         private RatingBar interestRating;
         private ImageButton interestPicture, detailedPicture;
         private EditText lessonTitle, lessonSubtitle, lessonText;
@@ -113,7 +112,8 @@ public class IndivNotesAdapter extends RecyclerView.Adapter<IndivNotesAdapter.In
             super(itemView);
 
             cbItem = itemView.findViewById(R.id.cb_todo_checkbox);
-            interestTitle = itemView.findViewById(R.id.tv_interest_title);
+            toDoText = itemView.findViewById(R.id.et_todo_text);
+            interestTitle = itemView.findViewById(R.id.etml_interest_title);
             interestText = itemView.findViewById(R.id.etml_interest_text);
             interestRating = itemView.findViewById(R.id.rb_interest_rating);
             interestPicture = itemView.findViewById(R.id.ib_interest_image);
@@ -130,7 +130,7 @@ public class IndivNotesAdapter extends RecyclerView.Adapter<IndivNotesAdapter.In
         public void bindToDo(ToDoItem item) {
 
             this.cbItem.setChecked(item.getIsDone());
-            this.cbItem.setText(item.getText());
+            this.toDoText.setText(item.getText());
         }
 
         public void bindInterest(InterestItem item){

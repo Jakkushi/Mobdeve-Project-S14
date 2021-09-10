@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ll_detailed_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:paddingBottom="15dp">
 
     <ScrollView
         android:id="@+id/sv_detailed_view"
@@ -38,8 +39,9 @@
                 android:layout_marginTop="10dp"
                 android:adjustViewBounds="true"
                 android:backgroundTint="#00FFFFFF"
+                android:cropToPadding="false"
                 android:maxHeight="250dp"
-                android:scaleType="center"
+                android:scaleType="fitCenter"
                 android:visibility="visible"
                 app:layout_constraintEnd_toStartOf="@+id/gl_end"
                 app:layout_constraintStart_toStartOf="@+id/gl_start"

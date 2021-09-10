@@ -20,43 +20,53 @@
             android:fontFamily="@font/roboto_slab"
             android:gravity="center_horizontal"
             android:hint="Title"
-            android:inputType="textPersonName"
+            android:inputType="textMultiLine|textPersonName"
             android:textSize="24sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/gl_lesson_end"
+            app:layout_constraintStart_toStartOf="@+id/gl_lesson_start"
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
             android:id="@+id/et_lesson_subtitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginEnd="15dp"
             android:backgroundTint="@android:color/transparent"
             android:ems="10"
             android:fontFamily="@font/roboto_slab"
             android:hint="Subtitle"
-            android:inputType="textPersonName"
+            android:inputType="textMultiLine|textPersonName"
             android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/gl_lesson_end"
+            app:layout_constraintStart_toStartOf="@+id/gl_lesson_start"
             app:layout_constraintTop_toBottomOf="@+id/et_lesson_title" />
 
         <EditText
             android:id="@+id/et_lesson_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginEnd="15dp"
             android:backgroundTint="@android:color/transparent"
             android:ems="10"
             android:fontFamily="@font/roboto_slab"
             android:hint="Text"
-            android:inputType="textPersonName"
+            android:inputType="textMultiLine|textPersonName"
             android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/gl_lesson_end"
+            app:layout_constraintStart_toStartOf="@+id/gl_lesson_start"
             app:layout_constraintTop_toBottomOf="@+id/et_lesson_subtitle" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_lesson_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="15dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_lesson_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="15dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

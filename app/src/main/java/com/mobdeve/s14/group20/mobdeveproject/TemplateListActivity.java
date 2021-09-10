@@ -173,6 +173,24 @@ public class TemplateListActivity extends AppCompatActivity {
             Item newItem = new BlankItem("");
             items.add(newItem);
         }
+        else if(noteType.equals("ToDo")){
+            Item newItem = new ToDoItem(false, "");
+            items.add(newItem);
+        }
+        else if(noteType.equals("Lesson")){
+            Item newItem = new LessonNotesItem("", "", "");
+            items.add(newItem);
+        }
+        else if(noteType.equals("Detailed")){
+            Item newItem = new DetailedItem("default_image", "", "", "", TemplateListActivity.this);
+            items.add(newItem);
+        }
+        else if(noteType.equals("Sketchbook")){
+        }
+        else if(noteType.equals("Interest")){
+            Item newItem = new InterestItem("default_image",0, "", "", TemplateListActivity.this);
+            items.add(newItem);
+        }
 
         //change template list activity to ExistingIndivNoteActivity
         Intent intent = new Intent(TemplateListActivity.this, IndivNoteActivity.class);

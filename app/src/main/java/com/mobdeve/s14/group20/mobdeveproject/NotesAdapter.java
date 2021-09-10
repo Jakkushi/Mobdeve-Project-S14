@@ -252,7 +252,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesViewHolder> {
             });
         }
         else if(notes.get(position).getNoteType().equals("Detailed")){
-            holder.setIvLogo(R.drawable.lesson_notes);
+            holder.setIvLogo(R.drawable.detailed);
             holder.setViewOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
