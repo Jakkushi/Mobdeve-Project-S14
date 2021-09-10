@@ -14,6 +14,9 @@ import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -30,13 +33,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class IndivNoteActivity extends AppCompatActivity implements IndivNotesAdapter.callCamera {
+public class IndivNoteActivity extends AppCompatActivity implements IndivNotesAdapter.callAction {
 
     private TextView tvTitle, tvSubtitle;
     private RecyclerView rvIndivNotes, rvIndivTags;
@@ -51,6 +55,9 @@ public class IndivNoteActivity extends AppCompatActivity implements IndivNotesAd
 
     private FirebaseDatabase database;
     private DatabaseReference reference;
+
+    private static int REQUEST_CODE_CAMERA = 1;
+    private static int REQUEST_CODE_IMAGE_SELECT = 2;
 
     private void hideUI() {
         View decorView = getWindow().getDecorView();
@@ -204,27 +211,60 @@ public class IndivNoteActivity extends AppCompatActivity implements IndivNotesAd
                 });
     }
 
-    private void TakePicture() {
+    private void takePicture() {
         Intent cameraPictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         try {
-            startActivityForResult(cameraPictureIntent, 1);
+            startActivityForResult(cameraPictureIntent, REQUEST_CODE_CAMERA);
         } catch (ActivityNotFoundException e) {
             Toast.makeText(getApplicationContext(), "No camera detected!", Toast.LENGTH_LONG).show();
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1 && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            note_ib_holder.setImageBitmap((Bitmap) extras.get("data"));
-        }
+    private void openGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, REQUEST_CODE_IMAGE_SELECT);
     }
 
     @Override
-    public void callCamera(ImageButton imageButton) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_CAMERA && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            note_ib_holder.setImageBitmap((Bitmap) extras.get("data"));
+        } else if (requestCode == REQUEST_CODE_IMAGE_SELECT && resultCode == RESULT_OK) {
+            if (data != null) {
+                Uri selectedImageUri = data.getData();
+                if (selectedImageUri != null) {
+                    try {
+                        InputStream inputStream = getContentResolver().openInputStream(selectedImageUri);
+                        Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                        note_ib_holder.setImageBitmap(bitmap);
+                    } catch (Exception e) {
+                        Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        }
+    }
+
+
+
+    @Override
+    public void callAction(ImageButton imageButton) {
         note_ib_holder = imageButton;
-        TakePicture();
+        String[] options = {"Take a picture from camera", "Select from gallery", "Cancel"};
+
+        new AlertDialog.Builder(this)
+                .setTitle("Choose an Action")
+                .setItems(options, (dialog, which) -> {
+                    switch(which) {
+                        case 0:
+                            takePicture();
+                            break;
+                        case 1:
+                            openGallery();
+                            break;
+                    }
+                }).show();
     }
 }
