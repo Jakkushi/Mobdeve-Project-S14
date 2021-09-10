@@ -108,27 +108,27 @@ public class ExistingIndivNoteActivity extends AppCompatActivity implements Indi
                 if(noteType.equals("Blank")){
                     Item newItem = new BlankItem("");
                     items.add(newItem);
-                    indivNotesAdapter.notifyDataSetChanged();
+                    indivNotesAdapter.notifyItemInserted(items.size() - 1);
                 }
                 else if(noteType.equals("ToDo")){
                     Item newItem = new ToDoItem(false, "");
                     items.add(newItem);
-                    indivNotesAdapter.notifyDataSetChanged();
+                    indivNotesAdapter.notifyItemInserted(items.size() - 1);
                 }
                 else if(noteType.equals("Interest")){
                     Item newItem = new InterestItem("default_image", 0, "", "", ExistingIndivNoteActivity.this);
                     items.add(newItem);
-                    indivNotesAdapter.notifyDataSetChanged();
+                    indivNotesAdapter.notifyItemInserted(items.size() - 1);
                 }
                 else if(noteType.equals("Detailed")){
                     Item newItem = new DetailedItem("default_image", "", "", "", ExistingIndivNoteActivity.this);
                     items.add(newItem);
-                    indivNotesAdapter.notifyDataSetChanged();
+                    indivNotesAdapter.notifyItemInserted(items.size() - 1);
                 }
                 else if(noteType.equals("Lesson")){
                     Item newItem = new LessonNotesItem("", "", "");
                     items.add(newItem);
-                    indivNotesAdapter.notifyDataSetChanged();
+                    indivNotesAdapter.notifyItemInserted(items.size() - 1);
                 }
             }
         });
