@@ -27,9 +27,9 @@ public class IndivNotesAdapter extends RecyclerView.Adapter<IndivNotesAdapter.In
     private ArrayList<String> tags = new ArrayList<>();
     private ArrayList<Item> items = new ArrayList<>();
     private String title;
-    private callCamera mListener;
+    private callAction mListener;
 
-    public IndivNotesAdapter(String title, ArrayList<String> tags, ArrayList<Item> items, callCamera mListener) {
+    public IndivNotesAdapter(String title, ArrayList<String> tags, ArrayList<Item> items, callAction mListener) {
 
         this.title = title;
         this.tags = tags;
@@ -141,7 +141,7 @@ public class IndivNotesAdapter extends RecyclerView.Adapter<IndivNotesAdapter.In
             this.interestPicture.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v){
-                    mListener.callCamera(interestPicture);
+                    mListener.callAction(interestPicture);
                 }
             });
         }
@@ -155,7 +155,7 @@ public class IndivNotesAdapter extends RecyclerView.Adapter<IndivNotesAdapter.In
             this.detailedPicture.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v){
-                    mListener.callCamera(detailedPicture);
+                    mListener.callAction(detailedPicture);
                 }
             });
         }
@@ -173,7 +173,7 @@ public class IndivNotesAdapter extends RecyclerView.Adapter<IndivNotesAdapter.In
         }
     }
 
-    public interface callCamera {
-        void callCamera(ImageButton imageButton);
+    public interface callAction {
+        void callAction(ImageButton imageButton);
     }
 }
