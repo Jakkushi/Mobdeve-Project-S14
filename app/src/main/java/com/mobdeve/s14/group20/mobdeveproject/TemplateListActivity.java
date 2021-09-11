@@ -149,7 +149,7 @@ public class TemplateListActivity extends AppCompatActivity {
         this.subtitle = String.valueOf(this.etSubtitle.getText());
         this.tagsTemp = String.valueOf(this.etTags.getText());
 
-        String str[] = tagsTemp.split(" ");
+        String str[] = {tagsTemp.toUpperCase()};
         ArrayList<String> temp = new ArrayList<>(Arrays.asList(str));
         this.tags = temp;
     }

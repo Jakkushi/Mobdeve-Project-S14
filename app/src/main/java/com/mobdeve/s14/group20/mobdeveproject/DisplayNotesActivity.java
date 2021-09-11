@@ -16,6 +16,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -96,10 +97,24 @@ public class DisplayNotesActivity extends AppCompatActivity {
         this.initFirebase();
         this.initRecyclerView();
 
+        this.context = this;
+
         this.svFilterNotes.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                searchNotes(query);
+                String[] options = {"Search by title", "Search by tag", "Cancel"};
+                new AlertDialog.Builder(context)
+                        .setTitle("Choose an Action")
+                        .setItems(options, (dialog, which) -> {
+                            switch(which) {
+                                case 0:
+                                    searchNotes(query, 0);
+                                    break;
+                                case 1:
+                                    searchNotes(query, 1);
+                                    break;
+                            }
+                        }).show();
                 return false;
             }
 
@@ -274,14 +289,18 @@ public class DisplayNotesActivity extends AppCompatActivity {
 
     }
 
-    private void searchNotes(String query) {
+    private void searchNotes(String query, int queryType) {
         dbNotes = new ArrayList<DatabaseNotesData>();
         Log.d("TEST QUERY", query);
 
-        Query dbTitleQuery = this.reference.orderByChild("title").startAt(query).endAt(query+"\uf8ff");
-        Query dbTagQuery = this.reference.orderByChild("tags").startAt(query).endAt(query+"\uf8ff");
+        Query dbQuery;
 
-        dbTitleQuery.addValueEventListener(new ValueEventListener() {
+        if(queryType == 0)
+            dbQuery = this.reference.orderByChild("title").startAt(query).endAt(query+"\uf8ff");
+        else
+            dbQuery = this.reference.orderByChild("tags/0").startAt("#" + query.toUpperCase()).endAt("#" + query.toUpperCase()+"\uf8ff");
+
+        dbQuery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 if(snapshot.getValue() != null){
@@ -305,7 +324,7 @@ public class DisplayNotesActivity extends AppCompatActivity {
                         String noteType = (String) tempMap.get("noteType");
                         System.out.println(tempMap.get("subtitle"));
 
-                        String dateModified = (String) tempMap.get("subtitle");
+                        String dateModified = (String) tempMap.get("dateModified");
                         System.out.println(tempMap.get("dateModified"));
 
                         tags = (ArrayList) tempMap.get("tags");
