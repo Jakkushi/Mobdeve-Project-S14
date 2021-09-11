@@ -199,9 +199,7 @@ public class ExistingSketchActivity extends AppCompatActivity {
                         if(subtitle.equals(""))
                             subtitle = "Subtitle";
 
-                        String sketchURL = "https://firebasestorage.googleapis.com/v0/b/" +
-                                "tous-les-journal.appspot.com/o/uploads%2FXRASKQ0QnIdXZgT6Ts0vG3VBDwf1%2F1631282078609." +
-                                "jpg?alt=media&token=5264d23b-9753-4652-a6c4-1711ba5deab4";
+                        String sketchURL = "https://firebasestorage.googleapis.com/v0/b/tous-les-journal.appspot.com/o/sketchbook_background.jpg?alt=media&token=5b754840-8160-4537-8f66-7c99ea906753";
 
                         noteData.put("title", title);
                         noteData.put("subtitle", subtitle);

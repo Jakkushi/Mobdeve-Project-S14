@@ -17,19 +17,28 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MobdeveProject">
-        <activity android:name=".ExistingSketchActivity"></activity>
-        <activity android:name=".RegisterActivity" />
-        <activity android:name=".DisplayNotesActivity" />
+        <activity android:name=".ExistingSketchActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+        <activity android:name=".RegisterActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <activity android:name=".DisplayNotesActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity
             android:name=".ExistingIndivNoteActivity"
-            android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".LogInActivity" />
-        <activity android:name=".SketchActivity" />
+            android:windowSoftInputMode="adjustPan"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <activity android:name=".LogInActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <activity android:name=".SketchActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity
             android:name=".IndivNoteActivity"
-            android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".TemplateListActivity" />
-        <activity android:name=".MainActivity">
+            android:windowSoftInputMode="adjustPan"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <activity android:name=".TemplateListActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <activity android:name=".MainActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

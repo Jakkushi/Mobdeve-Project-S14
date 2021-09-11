@@ -20,6 +20,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -28,6 +30,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
@@ -93,29 +96,19 @@ public class DisplayNotesActivity extends AppCompatActivity {
         this.initFirebase();
         this.initRecyclerView();
 
-//        context = getApplicationContext();
-//        clearButton = findViewById(R.id.sketch_clear_screen);
-//        saveButton = findViewById(R.id.sketch_save_button);
-//        canvas = findViewById(R.id.sketch_canvas_view);
-//        titleView = findViewById(R.id.sketch_tv_title);
-//
-//        clearButton.setOnClickListener(v -> canvas.clearScreen());
-//        saveButton.setOnClickListener(v -> {
-//            if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-//                CharSequence text;
-//                try {
-//                    canvas.saveScreen(titleView.getText());
-//                    text = "Sketch saved successfully!";
-//                } catch (FileNotFoundException e) {
-//                    e.printStackTrace();
-//                    text = "Unable to save sketch";
-//                }
-//                Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
-//                toast.show();
-//            } else {
-//                requestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-//            }
-//        });
+        this.svFilterNotes.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                searchNotes(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
     }
 
     private void initFAB(){
@@ -251,11 +244,10 @@ public class DisplayNotesActivity extends AppCompatActivity {
 
                 pbNotes.setVisibility(View.VISIBLE);
                 Intent intent = new Intent(DisplayNotesActivity.this, DisplayNotesActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-//                Collections.reverse(dbNotes);
+
                 intent.putExtra(Keys.DBNOTES.name(), dbNotes);
                 startActivity(intent);
-                finish();
+
                 pbNotes.setVisibility(View.GONE);
             }
 
@@ -282,15 +274,92 @@ public class DisplayNotesActivity extends AppCompatActivity {
 
     }
 
-    private Runnable restartDashboard = new Runnable() {
-        public void run() {
-            pbNotes.setVisibility(View.GONE);
-            Intent intent = new Intent(DisplayNotesActivity.this, DisplayNotesActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra(Keys.DBNOTES.name(), dbNotes);
-            startActivity(intent);
-            finish();
-        }
-    };
+    private void searchNotes(String query) {
+        dbNotes = new ArrayList<DatabaseNotesData>();
+        Log.d("TEST QUERY", query);
+
+        Query dbTitleQuery = this.reference.orderByChild("title").startAt(query).endAt(query+"\uf8ff");
+        Query dbTagQuery = this.reference.orderByChild("tags").startAt(query).endAt(query+"\uf8ff");
+
+        dbTitleQuery.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                if(snapshot.getValue() != null){
+                    HashMap map = ((HashMap)snapshot.getValue());
+
+                    for (Object key : map.keySet()) {
+                        ArrayList<ArrayList<String>> interestItems = new ArrayList<>();
+                        ArrayList<ArrayList<String>> lessonItems = new ArrayList<>();
+                        ArrayList<String> tags = new ArrayList<>();
+                        ArrayList<ArrayList<String>> todoList = new ArrayList<>();
+                        ArrayList<ArrayList<String>> blankItems = new ArrayList<>();
+                        String sketchLink;
+
+                        HashMap tempMap = ((HashMap) map.get(key));
+                        String title = (String) tempMap.get("title");
+                        System.out.println(tempMap.get("title"));
+
+                        String subtitle = (String) tempMap.get("subtitle");
+                        System.out.println(tempMap.get("subtitle"));
+
+                        String noteType = (String) tempMap.get("noteType");
+                        System.out.println(tempMap.get("subtitle"));
+
+                        String dateModified = (String) tempMap.get("subtitle");
+                        System.out.println(tempMap.get("dateModified"));
+
+                        tags = (ArrayList) tempMap.get("tags");
+                        System.out.println((ArrayList) tempMap.get("tags"));
+
+                        if(noteType.equals("Blank")){
+                            blankItems = (ArrayList) tempMap.get("blankItems");
+                            System.out.println((ArrayList) tempMap.get("blankItems"));
+                        }
+                        else if(noteType.equals("ToDo")){
+                            todoList = (ArrayList) tempMap.get("todo");
+                            System.out.println((ArrayList) tempMap.get("todo"));
+                        }
+                        else if(noteType.equals("Interest")){
+                            interestItems = (ArrayList) tempMap.get("interestItem");
+                            System.out.println((ArrayList) tempMap.get("interestItem"));
+                        }
+                        else if(noteType.equals("Detailed")){
+                            blankItems = (ArrayList) tempMap.get("interestItem");
+                            System.out.println((ArrayList) tempMap.get("interestItem"));
+                        }
+                        else if(noteType.equals("Lesson")){
+                            lessonItems = (ArrayList) tempMap.get("lessonNotesItem");
+                            System.out.println((ArrayList) tempMap.get("lessonNotesItem"));
+                        }
+                        else if(noteType.equals("Sketchbook")) {
+                            sketchLink = (String) tempMap.get("sketchLink");
+                            System.out.println(tempMap.get("sketchLink"));
+                        }
+
+                        dbNotes.add(new DatabaseNotesData( title, subtitle, noteType, dateModified, interestItems,
+                                tags, todoList, blankItems, lessonItems, (String) key));
+
+
+                    }
+                }
+
+                pbNotes.setVisibility(View.VISIBLE);
+                Intent intent = new Intent(DisplayNotesActivity.this, DisplayNotesActivity.class);
+
+                intent.putExtra(Keys.DBNOTES.name(), dbNotes);
+                startActivity(intent);
+
+                pbNotes.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
+
+
+
+    }
 
 }
