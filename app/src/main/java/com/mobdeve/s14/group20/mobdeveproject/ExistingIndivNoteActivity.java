@@ -202,164 +202,156 @@ public class ExistingIndivNoteActivity extends AppCompatActivity implements Indi
                 .show();
     }
 
+    private boolean isUpload = false;
+
     @Override
     protected void onPause() {
         super.onPause();
-        this.pb_indiv_note.setVisibility(View.VISIBLE);
-        this.saveNote();
-        this.pb_indiv_note.setVisibility(View.GONE);
+        if(isUpload)
+            isUpload = false;
+        else{
+            this.pb_indiv_note.setVisibility(View.VISIBLE);
+            this.saveNote();
+            this.pb_indiv_note.setVisibility(View.GONE);
+        }
     }
 
     private void saveNote() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String userId = user.getUid();
 
-        this.reference.child((userId)).child(Collection.notes.name())
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+        String noteId = String.valueOf(tvNoteId.getText());
+        System.out.println("Current note id: " + noteId);
 
-                        String noteId = String.valueOf(tvNoteId.getText());
-                        System.out.println("Current note id: " + noteId);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date();
+        String dateString = formatter.format(date);
 
-                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                        Date date = new Date();
-                        String dateString = formatter.format(date);
+        HashMap<String, Object> noteData = new HashMap<>();
 
-                        HashMap<String, Object> noteData = new HashMap<>();
+        title = String.valueOf(tvTitle.getText());
+        subtitle = String.valueOf(tvSubtitle.getText());
 
-                        title = String.valueOf(tvTitle.getText());
-                        subtitle = String.valueOf(tvSubtitle.getText());
+        if(title.equals(""))
+            title = "Title";
 
-                        if(title.equals(""))
-                            title = "Title";
+        if(subtitle.equals(""))
+            subtitle = "Subtitle";
 
-                        if(subtitle.equals(""))
-                            subtitle = "Subtitle";
+        noteData.put("title", title);
+        noteData.put("subtitle", subtitle);
+        noteData.put("noteType", noteType);
+        noteData.put("dateModified", dateString);
+        noteData.put("tags", tags);
 
-                        noteData.put("title", title);
-                        noteData.put("subtitle", subtitle);
-                        noteData.put("noteType", noteType);
-                        noteData.put("dateModified", dateString);
-                        noteData.put("tags", tags);
+        System.out.println("title: " + title);
+        System.out.println("subtitle: " + subtitle);
+        System.out.println("noteType: " + noteType);
+        System.out.println("dateModified: " + dateString);
+        System.out.println("tags: " + tags);
+        System.out.println("note id: " + noteId);
 
-                        System.out.println("title: " + title);
-                        System.out.println("subtitle: " + subtitle);
-                        System.out.println("noteType: " + noteType);
-                        System.out.println("dateModified: " + dateString);
-                        System.out.println("tags: " + tags);
-                        System.out.println("note id: " + noteId);
+        ArrayList<ArrayList<String>> tempItems = new ArrayList<>();
 
-                        ArrayList<ArrayList<String>> tempItems = new ArrayList<>();
+        ArrayList<IndivNotesAdapter.IndivNotesViewHolder> viewHolders = indivNotesAdapter.getViewHolders();
 
-                        if(noteType.equals("Blank")){
-                            EditText tempText;
-                            for(int i = 0; i < indivNotesManager.getChildCount(); i++){
-                                tempText = indivNotesManager.getChildAt(i).findViewById(R.id.etml_blank_text);
-//                                Log.d("CHILD: ", i + ": " + String.valueOf(tempText.getText()));
-                                tempItems.add(new ArrayList<String>(Arrays.asList(String.valueOf(tempText.getText()))));
-                            }
-//                            tempItems.add(new ArrayList<String>(Arrays.asList("Hello test note")));
-//                            tempItems.add(new ArrayList<String>(Arrays.asList("Hi new blank item")));
+        if(noteType.equals("Blank")){
+            EditText tempText;
+            for(int i = 0; i < viewHolders.size(); i++){
+                tempText = viewHolders.get(i).itemView.findViewById(R.id.etml_blank_text);
+                tempItems.add(new ArrayList<String>(Arrays.asList(String.valueOf(tempText.getText()))));
+            }
 
-                            Log.d("item strings: ", String.valueOf(tempItems));
 
-                            reference.child((userId)).child(Collection.notes.name()).child(noteId).child("blankItems").setValue(tempItems);
+            Log.d("item strings: ", String.valueOf(tempItems));
 
-                        }
-                        else if(noteType.equals("ToDo")){
-                            CheckBox tempTodo;
-                            TextView tempTodoText;
-                            for(int i = 0; i < indivNotesManager.getChildCount(); i++){
-                                tempTodo = indivNotesManager.getChildAt(i).findViewById(R.id.cb_todo_checkbox);
-                                tempTodoText = indivNotesManager.getChildAt(i).findViewById(R.id.et_todo_text);
-//                                Log.d("CHILD: ", i + ": " + String.valueOf(tempTodo.isChecked()));
-//                                Log.d("CHILD: ", i + ": " + String.valueOf(tempTodo.getText()));
-                                String str[] = {String.valueOf(tempTodo.isChecked()), String.valueOf(tempTodoText.getText())};
-                                tempItems.add(new ArrayList<String>(Arrays.asList(str)));
-                            }
+            reference.child((userId)).child(Collection.notes.name()).child(noteId).child("blankItems").setValue(tempItems);
 
-                            Log.d("item strings: ", String.valueOf(tempItems));
+        }
+        else if(noteType.equals("ToDo")){
+            CheckBox tempTodo;
+            TextView tempTodoText;
+            Log.d("TODO CHILD COUNT: ", String.valueOf(indivNotesManager.getChildCount()));
+            for(int i = 0; i < viewHolders.size(); i++){
+                tempTodo = viewHolders.get(i).itemView.findViewById(R.id.cb_todo_checkbox);
+                tempTodoText = viewHolders.get(i).itemView.findViewById(R.id.et_todo_text);
+                String str[] = {String.valueOf(tempTodo.isChecked()), String.valueOf(tempTodoText.getText())};
+                tempItems.add(new ArrayList<String>(Arrays.asList(str)));
+            }
 
-                            reference.child((userId)).child(Collection.notes.name()).child(noteId).child("todo").setValue(tempItems);
+            Log.d("item strings: ", String.valueOf(tempItems));
 
-                        }
-                        else if(noteType.equals("Interest")){
-                            RatingBar tempRatingBar;
-                            EditText tempText;
-                            TextView tempTitle, tempUrl;
-                            for(int i = 0; i < indivNotesManager.getChildCount(); i++){
-                                tempRatingBar = indivNotesManager.getChildAt(i).findViewById(R.id.rb_interest_rating);
-                                tempText = indivNotesManager.getChildAt(i).findViewById(R.id.etml_interest_text);
-                                tempTitle = indivNotesManager.getChildAt(i).findViewById(R.id.etml_interest_title);
-                                tempUrl = indivNotesManager.getChildAt(i).findViewById(R.id.tv_interest_url);
-//                                Log.d("CHILD: ", i + ": " + String.valueOf(tempRatingBar.getRating()));
-//                                Log.d("CHILD: ", i + ": " + String.valueOf(tempText.getText()));
-//                                Log.d("CHILD: ", i + ": " + String.valueOf(tempTitle.getText()));
-                                String str[] = {String.valueOf(tempUrl.getText()), String.valueOf(tempRatingBar.getRating()),
-                                        String.valueOf(tempTitle.getText()), String.valueOf(tempText.getText())};
-                                tempItems.add(new ArrayList<String>(Arrays.asList(str)));
-                            }
+            reference.child((userId)).child(Collection.notes.name()).child(noteId).child("todo").setValue(tempItems);
 
-                            Log.d("item strings: ", String.valueOf(tempItems));
+        }
+        else if(noteType.equals("Interest")){
+            RatingBar tempRatingBar;
+            EditText tempText;
+            TextView tempTitle, tempUrl;
+            for(int i = 0; i < viewHolders.size(); i++){
+                tempRatingBar = viewHolders.get(i).itemView.findViewById(R.id.rb_interest_rating);
+                tempText = viewHolders.get(i).itemView.findViewById(R.id.etml_interest_text);
+                tempTitle = viewHolders.get(i).itemView.findViewById(R.id.etml_interest_title);
+                tempUrl = viewHolders.get(i).itemView.findViewById(R.id.tv_interest_url);
+                String url = String.valueOf(tempUrl.getText());
+                if(url.equals(""))
+                    url = default_url;
+                String str[] = {url, String.valueOf(tempRatingBar.getRating()),
+                        String.valueOf(tempTitle.getText()), String.valueOf(tempText.getText())};
+                tempItems.add(new ArrayList<String>(Arrays.asList(str)));
+            }
 
-                            reference.child((userId)).child(Collection.notes.name()).child(noteId).child("interestItem").setValue(tempItems);
+            Log.d("interest item strings: ", String.valueOf(tempItems));
 
-                        }
-                        else if(noteType.equals("Detailed")){
-                            EditText tempTitle, tempSubtitle, tempText;
-                            TextView tempUrl;
-                            for(int i = 0; i < indivNotesManager.getChildCount(); i++){
-                                tempTitle = indivNotesManager.getChildAt(i).findViewById(R.id.etml_detailed_title);
-                                tempSubtitle = indivNotesManager.getChildAt(i).findViewById(R.id.etml_detailed_subtitle);
-                                tempText = indivNotesManager.getChildAt(i).findViewById(R.id.etml_detailed_text);
-                                tempUrl = indivNotesManager.getChildAt(i).findViewById(R.id.tv_detailed_url);
-//                                Log.d("CHILD: ", i + ": " + String.valueOf(tempTitle.getText()));
-//                                Log.d("CHILD: ", i + ": " + String.valueOf(tempSubtitle.getText()));
-//                                Log.d("CHILD: ", i + ": " + String.valueOf(tempText.getText()));
-                                String str[] = {String.valueOf(tempUrl.getText()), String.valueOf(tempTitle.getText()),
-                                        String.valueOf(tempSubtitle.getText()), String.valueOf(tempText.getText())};
-                                tempItems.add(new ArrayList<String>(Arrays.asList(str)));
-                            }
+            reference.child((userId)).child(Collection.notes.name()).child(noteId).child("interestItem").setValue(tempItems);
 
-                            Log.d("item strings: ", String.valueOf(tempItems));
+        }
+        else if(noteType.equals("Detailed")){
+            EditText tempTitle, tempSubtitle, tempText;
+            TextView tempUrl;
 
-                            reference.child((userId)).child(Collection.notes.name()).child(noteId).child("interestItem").setValue(tempItems);
+            Log.d("DETAILED CHILD COUNT: ", String.valueOf(viewHolders.size()));
+            for(int i = 0; i < viewHolders.size(); i++){
+                tempTitle = viewHolders.get(i).itemView.findViewById(R.id.etml_detailed_title);
+                tempSubtitle = viewHolders.get(i).itemView.findViewById(R.id.etml_detailed_subtitle);
+                tempText = viewHolders.get(i).itemView.findViewById(R.id.etml_detailed_text);
+                tempUrl = viewHolders.get(i).itemView.findViewById(R.id.tv_detailed_url);
+                String url = String.valueOf(tempUrl.getText());
+                if(url.equals(""))
+                    url = default_url;
+                String str[] = {url, String.valueOf(tempTitle.getText()),
+                        String.valueOf(tempSubtitle.getText()), String.valueOf(tempText.getText())};
+                tempItems.add(new ArrayList<String>(Arrays.asList(str)));
+            }
 
-                        }
-                        else if(noteType.equals("Lesson")){
-                            EditText tempTitle, tempSubtitle, tempText;
-                            for(int i = 0; i < indivNotesManager.getChildCount(); i++){
-                                tempTitle = indivNotesManager.getChildAt(i).findViewById(R.id.et_lesson_title);
-                                tempSubtitle = indivNotesManager.getChildAt(i).findViewById(R.id.et_lesson_subtitle);
-                                tempText = indivNotesManager.getChildAt(i).findViewById(R.id.et_lesson_text);
-//                                Log.d("CHILD: ", i + ": " + String.valueOf(tempTitle.getText()));
-//                                Log.d("CHILD: ", i + ": " + String.valueOf(tempSubtitle.getText()));
-//                                Log.d("CHILD: ", i + ": " + String.valueOf(tempText.getText()));
-                                String str[] = {String.valueOf(tempTitle.getText()),
-                                        String.valueOf(tempSubtitle.getText()), String.valueOf(tempText.getText())};
-                                tempItems.add(new ArrayList<String>(Arrays.asList(str)));
-                            }
+            Log.d("detailed item strings: ", String.valueOf(tempItems));
 
-                            Log.d("item strings: ", String.valueOf(tempItems));
+            reference.child((userId)).child(Collection.notes.name()).child(noteId).child("interestItem").setValue(tempItems);
 
-                            reference.child((userId)).child(Collection.notes.name()).child(noteId).child("lessonNotesItem").setValue(tempItems);
+        }
+        else if(noteType.equals("Lesson")){
+            EditText tempTitle, tempSubtitle, tempText;
+            for(int i = 0; i < viewHolders.size(); i++){
+                tempTitle = viewHolders.get(i).itemView.findViewById(R.id.et_lesson_title);
+                tempSubtitle = viewHolders.get(i).itemView.findViewById(R.id.et_lesson_subtitle);
+                tempText = viewHolders.get(i).itemView.findViewById(R.id.et_lesson_text);
+                String str[] = {String.valueOf(tempTitle.getText()),
+                        String.valueOf(tempSubtitle.getText()), String.valueOf(tempText.getText())};
+                tempItems.add(new ArrayList<String>(Arrays.asList(str)));
+            }
 
-                        }
+            Log.d("item strings: ", String.valueOf(tempItems));
 
-                        noteData.put("blankItems", tempItems);
+            reference.child((userId)).child(Collection.notes.name()).child(noteId).child("lessonNotesItem").setValue(tempItems);
 
-                        reference.child((userId)).child(Collection.notes.name()).child(noteId).child("title").setValue(title);
-                        reference.child((userId)).child(Collection.notes.name()).child(noteId).child("subtitle").setValue(subtitle);
-                        reference.child((userId)).child(Collection.notes.name()).child(noteId).child("dateModified").setValue(dateString);
+        }
 
-                    }
+        noteData.put("blankItems", tempItems);
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
+        reference.child((userId)).child(Collection.notes.name()).child(noteId).child("title").setValue(title);
+        reference.child((userId)).child(Collection.notes.name()).child(noteId).child("subtitle").setValue(subtitle);
+        reference.child((userId)).child(Collection.notes.name()).child(noteId).child("dateModified").setValue(dateString);
 
-                    }
-                });
     }
 
 
@@ -373,6 +365,7 @@ public class ExistingIndivNoteActivity extends AppCompatActivity implements Indi
     }
 
     private void openGallery() {
+        isUpload = true;
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             startActivityForResult(intent, REQUEST_CODE_IMAGE_SELECT);
     }

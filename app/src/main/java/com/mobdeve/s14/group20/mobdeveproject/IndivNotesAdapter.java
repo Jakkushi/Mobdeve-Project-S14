@@ -25,6 +25,7 @@ public class IndivNotesAdapter extends RecyclerView.Adapter<IndivNotesAdapter.In
     private String title;
     private callAction mListener;
     private Context context;
+    private ArrayList<IndivNotesViewHolder> viewHolders = new ArrayList<>();
 
     public IndivNotesAdapter(String title, ArrayList<String> tags, ArrayList<Item> items, callAction mListener) {
 
@@ -87,6 +88,8 @@ public class IndivNotesAdapter extends RecyclerView.Adapter<IndivNotesAdapter.In
         else if(items.get(position) instanceof LessonNotesItem){
             holder.bindLesson((LessonNotesItem) items.get(position));
         }
+
+        viewHolders.add(holder);
     }
 
     @Override
@@ -95,6 +98,10 @@ public class IndivNotesAdapter extends RecyclerView.Adapter<IndivNotesAdapter.In
         if(this.items == null)
             return 0;
         else return this.items.size();
+    }
+
+    public ArrayList<IndivNotesViewHolder> getViewHolders() {
+        return this.viewHolders;
     }
 
     public class IndivNotesViewHolder extends RecyclerView.ViewHolder {
@@ -141,7 +148,7 @@ public class IndivNotesAdapter extends RecyclerView.Adapter<IndivNotesAdapter.In
             String imgUrl = item.getImgId();
 
             Log.d("URL IN ADAPTER INT: ", imgUrl);
-            Glide.with(context).load(imgUrl).into(this.detailedPicture);
+            Glide.with(context).load(imgUrl).into(this.interestPicture);
             this.interestImageUrl.setText(imgUrl);
             this.interestPicture.setOnClickListener(new View.OnClickListener() {
                 @Override
