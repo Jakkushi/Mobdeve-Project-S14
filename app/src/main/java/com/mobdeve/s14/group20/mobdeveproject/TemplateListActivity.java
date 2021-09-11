@@ -154,6 +154,8 @@ public class TemplateListActivity extends AppCompatActivity {
         this.tags = temp;
     }
 
+    private static final String default_url = "https://firebasestorage.googleapis.com/v0/b/tous-les-journal.appspot.com/o/default_image.png?alt=media&token=7db691ef-1bef-46fb-98b6-9c4c445b3747";
+
     private void addTemplate(String noteType){
 
         System.out.println("IN ADD TEMPLATE");
@@ -185,7 +187,7 @@ public class TemplateListActivity extends AppCompatActivity {
             this.launchIndivNoteActivity(noteType, items);
         }
         else if(noteType.equals("Detailed")){
-            Item newItem = new DetailedItem("default_image", "", "", "", TemplateListActivity.this);
+            Item newItem = new DetailedItem(default_url, "", "", "", TemplateListActivity.this);
             items.add(newItem);
             this.launchIndivNoteActivity(noteType, items);
         }
@@ -199,7 +201,7 @@ public class TemplateListActivity extends AppCompatActivity {
             finish();
         }
         else if(noteType.equals("Interest")){
-            Item newItem = new InterestItem("default_image",0, "", "", TemplateListActivity.this);
+            Item newItem = new InterestItem(default_url,0, "", "", TemplateListActivity.this);
             items.add(newItem);
             this.launchIndivNoteActivity(noteType, items);
         }
