@@ -262,6 +262,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 Log.d("Snapshot Key: ", snapshot.getKey());
+                System.out.println("Add");
 
                 dbNotes.add(new DatabaseNotesData( (String) (( (HashMap) snapshot.getValue()).get("title")),
                         (String) ((HashMap) snapshot.getValue()).get("subtitle"), (String) ((HashMap) snapshot.getValue()).get("noteType"),
