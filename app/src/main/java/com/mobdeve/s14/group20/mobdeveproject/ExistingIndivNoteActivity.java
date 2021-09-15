@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -24,6 +25,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -44,6 +46,8 @@ import com.google.firebase.storage.UploadTask;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -63,7 +67,7 @@ public class ExistingIndivNoteActivity extends AppCompatActivity implements Indi
     private ImageButton noteIbHolder;
     private FloatingActionButton fabAddTemplate;
 
-    private String title, subtitle, noteType, noteId;
+    private String title, subtitle, noteType, noteId, currentPhotoPath;
     private ArrayList<String> tags = new ArrayList<>();
     private ArrayList<Item> items = new ArrayList<>();
 
@@ -356,12 +360,37 @@ public class ExistingIndivNoteActivity extends AppCompatActivity implements Indi
 
 
     private void takePicture() {
-        Intent cameraPictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        try {
-            startActivityForResult(cameraPictureIntent, REQUEST_CODE_CAMERA);
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(getApplicationContext(), "No camera detected!", Toast.LENGTH_LONG).show();
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                Toast.makeText(this, "An error has occurred while making the file.", Toast.LENGTH_SHORT).show();
+            }
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.mobdeve.s14.group20.android.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_CODE_CAMERA);
+            }
         }
+    }
+
+
+    private File createImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "PNG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,
+                ".png",
+                storageDir
+        );
+
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
     }
 
     private void openGallery() {
@@ -374,8 +403,9 @@ public class ExistingIndivNoteActivity extends AppCompatActivity implements Indi
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_CAMERA && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            noteIbHolder.setImageBitmap((Bitmap) extras.get("data"));
+            File f = new File(currentPhotoPath);
+            Uri imageUri = Uri.fromFile(f);
+            noteIbHolder.setImageURI(imageUri);
         } else if (requestCode == REQUEST_CODE_IMAGE_SELECT && resultCode == RESULT_OK) {
             if (data != null) {
                 selectedImageUri = data.getData();
