@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +18,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -79,7 +83,10 @@ public class RegisterActivity extends AppCompatActivity {
                 String password = etPassword.getText().toString().trim();
 
                 if(!checkEmpty(email, password)) {
-                    User user = new User(email, password);
+                    String newpassword = computeMD5Hash(password);
+                    Log.d("NEWPASS", newpassword);
+
+                    User user = new User(email, newpassword);
                     storeUser(user);
                 }
             }
@@ -134,6 +141,31 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    public String computeMD5Hash(String password){
+
+        try{
+            MessageDigest digest = MessageDigest.getInstance("MD5");
+            digest.update(password.getBytes());
+            byte[] messageDigest = digest.digest();
+
+            StringBuffer MD5Hash = new StringBuffer();
+            for(int i = 0; i < messageDigest.length; i++) {
+                String h = Integer.toHexString(0xFF & messageDigest[i]);
+                while (h.length() < 2) {
+                    h = "0" + h;
+                }
+                MD5Hash.append(h);
+            }
+
+            return MD5Hash.toString();
+        }
+        catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     private void successfulRegistration() {

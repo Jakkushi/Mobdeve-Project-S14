@@ -33,6 +33,8 @@ import com.google.firebase.database.ValueEventListener;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.FileNotFoundException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -169,7 +171,9 @@ public class MainActivity extends AppCompatActivity {
                 String password = etPassword.getText().toString().trim();
 
                 if(!checkEmpty(email, password)) {
-                    signIn(email, password);
+                    String newpassword = computeMD5Hash(password);
+
+                    signIn(email, newpassword);
                 }
             }
         });
@@ -192,6 +196,31 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return hasEmpty;
+    }
+
+    public String computeMD5Hash(String password){
+
+        try{
+            MessageDigest digest = MessageDigest.getInstance("MD5");
+            digest.update(password.getBytes());
+            byte[] messageDigest = digest.digest();
+
+            StringBuffer MD5Hash = new StringBuffer();
+            for(int i = 0; i < messageDigest.length; i++) {
+                String h = Integer.toHexString(0xFF & messageDigest[i]);
+                while (h.length() < 2) {
+                    h = "0" + h;
+                }
+                MD5Hash.append(h);
+            }
+
+            return MD5Hash.toString();
+        }
+        catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     private void getNotesData(){
