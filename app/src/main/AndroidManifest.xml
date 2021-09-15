@@ -21,7 +21,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MobdeveProject">
         <activity android:name=".ExistingSketchActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".RegisterActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity android:name=".DisplayNotesActivity"
@@ -33,7 +34,8 @@
         <activity android:name=".LogInActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity android:name=".SketchActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".IndivNoteActivity"
             android:windowSoftInputMode="adjustPan"
