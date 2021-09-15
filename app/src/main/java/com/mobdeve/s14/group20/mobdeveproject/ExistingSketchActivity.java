@@ -13,6 +13,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -59,6 +60,8 @@ public class ExistingSketchActivity extends AppCompatActivity {
     private FirebaseDatabase database;
     private DatabaseReference reference;
 
+    private Uri fileUri;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -79,7 +82,7 @@ public class ExistingSketchActivity extends AppCompatActivity {
             if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 CharSequence text;
                 try {
-                    canvas.saveScreen(etTitle.getText());
+                    this.fileUri = Uri.fromFile(canvas.saveScreen(etTitle.getText()));
                     text = "Sketch saved successfully!";
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();

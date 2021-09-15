@@ -62,7 +62,7 @@ public class CanvasView extends View {
         postInvalidate();
     }
 
-    public void saveScreen(CharSequence filename) throws FileNotFoundException {
+    public File saveScreen(CharSequence filename) throws FileNotFoundException {
         Integer increment = 0; //Generates a counter for duplicate names
         File mainPath = new File(
                 Environment.getExternalStoragePublicDirectory(
@@ -93,6 +93,7 @@ public class CanvasView extends View {
 
         //save the bitmap as a file
         b.compress(Bitmap.CompressFormat.PNG, 95, new FileOutputStream(outputFile));
+        return outputFile;
     }
 
     private void setupPaint() {
