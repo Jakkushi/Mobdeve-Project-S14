@@ -11,7 +11,7 @@ public class Note {
     private ArrayList<Item> items;
     private int numBlanks;
     private ArrayList<Item> blankItems;
-    private String noteId;
+    private String noteId, sketchUrl;
 
     public Note(String title, String subtitle, String noteType, String dateModified, ArrayList<String> tags, ArrayList<Item> items, String noteId) {
         this.title = title;
@@ -43,6 +43,17 @@ public class Note {
         this.noteId = noteId;
     }
 
+    public Note(String title, String subtitle, String noteType, String dateModified, ArrayList<String> tags, String sketchUrl, String noteId) {
+        this.title = title;
+        this.subtitle = subtitle;
+        this.noteType = noteType;
+        this.dateModified = dateModified;
+        this.tags = tags;
+        this.numBlanks = numBlanks;
+        this.sketchUrl = sketchUrl;
+        this.noteId = noteId;
+    }
+
     public String getTitle(){ return this.title; }
 
     public String getSubtitle(){ return this.subtitle; }
@@ -55,6 +66,8 @@ public class Note {
 
     public ArrayList<String> getTags(){ return this.tags; }
 
+    public String getSketchUrl(){ return this.sketchUrl; }
+
     public String getNoteId(){ return this.noteId; }
 
     public void setTitle(String title){ this.title = title; }
@@ -64,6 +77,8 @@ public class Note {
     public void setDateModified(String dateModified){ this.dateModified = dateModified; }
 
     public void addTag(String tag){ tags.add(tag); }
+
+    public void setSketchUrl(String url){ this.sketchUrl = url; }
 
     public void setNoteId(String id){ this.noteId = id; }
 

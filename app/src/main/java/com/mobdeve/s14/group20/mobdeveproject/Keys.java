@@ -7,5 +7,6 @@ public enum Keys {
     TAGS,
     ITEMS,
     DBNOTES,
-    ID
+    ID,
+    SKETCH_URL
 }

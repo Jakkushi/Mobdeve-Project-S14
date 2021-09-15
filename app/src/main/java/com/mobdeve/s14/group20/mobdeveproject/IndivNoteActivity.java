@@ -354,6 +354,7 @@ public class IndivNoteActivity extends AppCompatActivity implements IndivNotesAd
     }
 
     private void takePicture() {
+        isUpload = true;
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -402,6 +403,10 @@ public class IndivNoteActivity extends AppCompatActivity implements IndivNotesAd
         if (requestCode == REQUEST_CODE_CAMERA && resultCode == RESULT_OK) {
             File f = new File(currentPhotoPath);
             Uri imageUri = Uri.fromFile(f);
+            selectedImageUri = imageUri;
+            if(selectedImageUri != null) {
+                uploadImage();
+            }
             noteIbHolder.setImageURI(imageUri);
         } else if (requestCode == REQUEST_CODE_IMAGE_SELECT && resultCode == RESULT_OK) {
             if (data != null) {
@@ -426,10 +431,17 @@ public class IndivNoteActivity extends AppCompatActivity implements IndivNotesAd
         pdUpload.setMessage("Uploading photo");
         pdUpload.show();
 
+        StorageReference fileReference;
+
         if(selectedImageUri != null) {
-            StorageReference fileReference = FirebaseStorage.getInstance().getReference()
-                    .child("uploads").child(user.getUid().toString())
-                    .child(System.currentTimeMillis() + "." + getFileExtension(selectedImageUri));
+            if(getFileExtension(selectedImageUri) == null)
+                fileReference = FirebaseStorage.getInstance().getReference()
+                        .child("uploads").child(user.getUid().toString())
+                        .child(System.currentTimeMillis() + ".png");
+            else
+                fileReference = FirebaseStorage.getInstance().getReference()
+                        .child("uploads").child(user.getUid().toString())
+                        .child(System.currentTimeMillis() + "." + getFileExtension(selectedImageUri));
 
             fileReference.putFile(selectedImageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                 @Override

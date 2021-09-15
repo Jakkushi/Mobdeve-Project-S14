@@ -12,12 +12,12 @@ public class DatabaseNotesData implements Serializable {
     private ArrayList<ArrayList<String>> todoList;
     private ArrayList<ArrayList<String>> blankItems;
     private ArrayList<ArrayList<String>> lessonItems;
-    private String noteId;
+    private String noteId, sketchUrl;
 
     public DatabaseNotesData(String title, String subtitle, String noteType, String dateModified,
                              ArrayList<ArrayList<String>> items, ArrayList<String> tags,
                              ArrayList<ArrayList<String>> todoList, ArrayList<ArrayList<String>> blankItems,
-                             ArrayList<ArrayList<String>> lessonItems,
+                             ArrayList<ArrayList<String>> lessonItems, String sketchUrl,
                              String noteId) {
         this.title = title;
         this.subtitle = subtitle;
@@ -29,6 +29,7 @@ public class DatabaseNotesData implements Serializable {
         this.blankItems = blankItems;
         this.noteId = noteId;
         this.lessonItems = lessonItems;
+        this.sketchUrl = sketchUrl;
     }
 
     public String getTitle(){ return this.title; }
@@ -47,6 +48,8 @@ public class DatabaseNotesData implements Serializable {
 
     public ArrayList<ArrayList<String>> getBlankItems(){ return this.blankItems; }
 
+    public String getSketchUrl(){ return this.sketchUrl; }
+
     public String getNoteId(){ return this.noteId; }
 
     public void setTitle(String title){ this.title = title; }
@@ -62,6 +65,8 @@ public class DatabaseNotesData implements Serializable {
     public void addTodo(ArrayList<String> todoItem){ todoList.add(todoItem); }
 
     public void addBlankItem(ArrayList<String> item){ blankItems.add(item); }
+
+    public void setSketchUrl(String url){ this.sketchUrl = url; }
 
     public void setNoteId(String id){ this.noteId = id; }
 

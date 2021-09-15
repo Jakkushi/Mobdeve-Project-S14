@@ -194,6 +194,7 @@ public class DisplayNotesActivity extends AppCompatActivity {
                 ArrayList<String> tags = new ArrayList<>();
                 ArrayList<ArrayList<String>> todoList = new ArrayList<>();
                 ArrayList<ArrayList<String>> blankItems = new ArrayList<>();
+                String sketchURL = null;
 
                 try {
                     interestItems =  (ArrayList) (( (HashMap) snapshot.getValue()).get("interestItem"));
@@ -234,11 +235,20 @@ public class DisplayNotesActivity extends AppCompatActivity {
                     Log.w("error", "No Blank items in entry");
                 }
 
+                try{
+                    sketchURL = (String) (((HashMap) snapshot.getValue()).get("sketchLink"));
+
+                    Log.w("SKETCH DATATYPE", sketchURL);
+                }
+                catch(Exception d){
+                    Log.w("error", "No sketch items in entry");
+                }
+
                 Log.d("Snapshot Key: ", snapshot.getKey());
 
                 dbNotes.add(new DatabaseNotesData( (String) (( (HashMap) snapshot.getValue()).get("title")),
                         (String) ((HashMap) snapshot.getValue()).get("subtitle"), (String) ((HashMap) snapshot.getValue()).get("noteType"),
-                        (String) ((HashMap) snapshot.getValue()).get("dateModified"), interestItems, tags, todoList, blankItems, lessonItems, snapshot.getKey()));
+                        (String) ((HashMap) snapshot.getValue()).get("dateModified"), interestItems, tags, todoList, blankItems, lessonItems, sketchURL, snapshot.getKey()));
 
                 pbNotes.setVisibility(View.VISIBLE);
                 Intent intent = new Intent(DisplayNotesActivity.this, DisplayNotesActivity.class);
@@ -295,7 +305,7 @@ public class DisplayNotesActivity extends AppCompatActivity {
                         ArrayList<String> tags = new ArrayList<>();
                         ArrayList<ArrayList<String>> todoList = new ArrayList<>();
                         ArrayList<ArrayList<String>> blankItems = new ArrayList<>();
-                        String sketchLink;
+                        String sketchLink = null;
 
                         HashMap tempMap = ((HashMap) map.get(key));
                         String title = (String) tempMap.get("title");
@@ -339,7 +349,7 @@ public class DisplayNotesActivity extends AppCompatActivity {
                         }
 
                         dbNotes.add(new DatabaseNotesData( title, subtitle, noteType, dateModified, interestItems,
-                                tags, todoList, blankItems, lessonItems, (String) key));
+                                tags, todoList, blankItems, lessonItems, sketchLink, (String) key));
 
 
                     }

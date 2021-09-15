@@ -172,6 +172,17 @@ public class NotesDataHelper {
                         tempDbNote.getNoteId()
                 ));
             }
+            else if(tempDbNote.getNoteType().equals("Sketchbook")){
+                data.add(new Note(
+                        tempDbNote.getTitle(),
+                        tempDbNote.getSubtitle(),
+                        tempDbNote.getNoteType(),
+                        tempDbNote.getDateModified(),
+                        tempDbNote.getTags(),
+                        tempDbNote.getSketchUrl(),
+                        tempDbNote.getNoteId()
+                ));
+            }
             else{
                 data.add(new Note(
                         tempDbNote.getTitle(),

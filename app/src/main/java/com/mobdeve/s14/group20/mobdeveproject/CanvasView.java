@@ -11,6 +11,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 
@@ -21,7 +22,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class CanvasView extends View {
+public class CanvasView extends androidx.appcompat.widget.AppCompatImageView {
 
     private final int paintColor = Color.BLACK;
     private Paint paint;
@@ -62,6 +63,7 @@ public class CanvasView extends View {
 
     public void clearScreen() {
         path.reset();
+        this.setBackground(getResources().getDrawable(R.drawable.background_white));
         postInvalidate();
     }
 

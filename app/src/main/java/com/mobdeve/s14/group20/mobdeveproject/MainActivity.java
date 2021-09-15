@@ -235,7 +235,7 @@ public class MainActivity extends AppCompatActivity {
                 ArrayList<String> tags = new ArrayList<>();
                 ArrayList<ArrayList<String>> todoList = new ArrayList<>();
                 ArrayList<ArrayList<String>> blankItems = new ArrayList<>();
-                String sketchURL;
+                String sketchURL = null;
 
                 try {
                     interestItems =  (ArrayList) (( (HashMap) snapshot.getValue()).get("interestItem"));
@@ -281,9 +281,9 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 try{
-//                    sketchURL = (String) (((HashMap) snapshot.getValue()).get("sketchLink"));
+                    sketchURL = (String) (((HashMap) snapshot.getValue()).get("sketchLink"));
 
-                    Log.w("SKETCH DATATYPE", (((HashMap) snapshot.getValue()).get("sketchLink")).getClass().toString());
+                    Log.w("SKETCH DATATYPE", sketchURL);
                 }
                 catch(Exception d){
                     Log.w("error", "No sketch items in entry");
@@ -294,7 +294,7 @@ public class MainActivity extends AppCompatActivity {
 
                 dbNotes.add(new DatabaseNotesData( (String) (( (HashMap) snapshot.getValue()).get("title")),
                         (String) ((HashMap) snapshot.getValue()).get("subtitle"), (String) ((HashMap) snapshot.getValue()).get("noteType"),
-                        (String) ((HashMap) snapshot.getValue()).get("dateModified"), interestItems, tags, todoList, blankItems, lessonItems, snapshot.getKey()));
+                        (String) ((HashMap) snapshot.getValue()).get("dateModified"), interestItems, tags, todoList, blankItems, lessonItems, sketchURL, snapshot.getKey()));
 
                 Intent intent = new Intent(MainActivity.this, DisplayNotesActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);

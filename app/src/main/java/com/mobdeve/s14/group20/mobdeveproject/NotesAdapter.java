@@ -114,6 +114,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesViewHolder> {
                                         ArrayList<String> tags = new ArrayList<>();
                                         ArrayList<ArrayList<String>> todoList = new ArrayList<>();
                                         ArrayList<ArrayList<String>> blankItems = new ArrayList<>();
+                                        String sketchURL = null;
 
                                         try {
                                             interestItems =  (ArrayList) (( (HashMap) snapshot.getValue()).get("interestItem"));
@@ -154,11 +155,20 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesViewHolder> {
                                             Log.w("error", "No Lesson items in entry");
                                         }
 
+                                        try{
+                                            sketchURL = (String) (((HashMap) snapshot.getValue()).get("sketchLink"));
+
+                                            Log.w("SKETCH DATATYPE", sketchURL);
+                                        }
+                                        catch(Exception d){
+                                            Log.w("error", "No sketch items in entry");
+                                        }
+
                                         Log.d("Snapshot Key: ", snapshot.getKey());
 
                                         dbNotes.add(new DatabaseNotesData( (String) (( (HashMap) snapshot.getValue()).get("title")),
                                                 (String) ((HashMap) snapshot.getValue()).get("subtitle"), (String) ((HashMap) snapshot.getValue()).get("noteType"),
-                                                (String) ((HashMap) snapshot.getValue()).get("dateModified"), interestItems, tags, todoList, blankItems, lessonItems, snapshot.getKey()));
+                                                (String) ((HashMap) snapshot.getValue()).get("dateModified"), interestItems, tags, todoList, blankItems, lessonItems, sketchURL, snapshot.getKey()));
 
                                         Intent intent = new Intent(cxt, DisplayNotesActivity.class);
                                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -239,6 +249,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesViewHolder> {
                     intent.putExtra(Keys.NOTETYPE.name(), notes.get(position).getNoteType());
                     intent.putExtra(Keys.TAGS.name(), notes.get(position).getTags());
                     intent.putExtra(Keys.ID.name(), notes.get(position).getNoteId());
+                    intent.putExtra(Keys.SKETCH_URL.name(), notes.get(position).getSketchUrl());
                     v.getContext().startActivity(intent);
                 }
             });

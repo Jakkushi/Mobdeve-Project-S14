@@ -3,6 +3,7 @@ package com.mobdeve.s14.group20.mobdeveproject;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -10,19 +11,31 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -30,6 +43,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -53,16 +69,18 @@ public class ExistingSketchActivity extends AppCompatActivity {
     private CanvasView canvas;
     private ProgressBar pbProgress;
 
-    private String title, subtitle, noteType, noteId;
+    private String title, subtitle, noteType, noteId, sketchUrl, newNoteId, userId;
     private ArrayList<String> tags;
 
     private EditText etTitle, etSubtitle;
-    private TextView tvNoteId;
+    private TextView tvNoteId, tvCanvasUrl;
 
     private FirebaseDatabase database;
     private DatabaseReference reference;
+    private FirebaseUser user;
 
-    private Uri fileUri;
+    private Uri fileUri, selectedImageUri;
+    HashMap<String, Object> noteData = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,17 +99,8 @@ public class ExistingSketchActivity extends AppCompatActivity {
 
         clearButton.setOnClickListener(v -> canvas.clearScreen());
         saveButton.setOnClickListener(v -> {
-            CharSequence text;
-            try {
-                this.fileUri = Uri.fromFile(canvas.saveScreen(etTitle.getText()));
-                text = "Sketch saved successfully!";
-            } catch (IOException e) {
-                e.printStackTrace();
-                text = "Unable to save sketch";
-            }
-            Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
-            toast.show();
-            Log.d("TAG", String.valueOf(fileUri));
+            this.saveCanvas();
+            this.saveNote();
         });
     }
 
@@ -107,6 +116,7 @@ public class ExistingSketchActivity extends AppCompatActivity {
         this.tags = getIntent().getStringArrayListExtra(Keys.TAGS.name());
         this.noteType = getIntent().getStringExtra(Keys.NOTETYPE.name());
         this.noteId = getIntent().getStringExtra(Keys.ID.name());
+        this.sketchUrl = getIntent().getStringExtra(Keys.SKETCH_URL.name());
     }
 
     private void initEssentials(){
@@ -115,10 +125,24 @@ public class ExistingSketchActivity extends AppCompatActivity {
         this.etSubtitle = findViewById(R.id.etml_sketch_subtitle);
         this.pbProgress = findViewById(R.id.pb_sketch_progress);
         this.tvNoteId = findViewById(R.id.sketch_tv_noteid);
+        this.tvCanvasUrl = findViewById(R.id.sketch_tv_url);
+        this.canvas = findViewById(R.id.sketch_canvas_view);
 
         this.etTitle.setText(this.title);
         this.etSubtitle.setText(this.subtitle);
         this.tvNoteId.setText(this.noteId);
+        this.tvCanvasUrl.setText(this.sketchUrl);
+
+        Log.d("SKETCH URL EXISTING", this.sketchUrl);
+
+        Glide.with(this).asBitmap().load(this.sketchUrl).into(new SimpleTarget<Bitmap>() {
+            @Override
+            public void onResourceReady(@NonNull @NotNull Bitmap resource, @Nullable @org.jetbrains.annotations.Nullable Transition<? super Bitmap> transition) {
+                canvas.setBackground(new BitmapDrawable(resource));
+            }
+        });
+
+        canvas.postInvalidate();
 
         this.rvTags = findViewById(R.id.rv_sketch_tags);
         this.tagsManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
@@ -132,7 +156,7 @@ public class ExistingSketchActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         new AlertDialog.Builder(this)
-                .setMessage("Are you sure you want to exit?\nThis will save the contents of the note.")
+                .setMessage("Unsaved changes will be lost.\nAre you sure you want to exit?")
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -143,36 +167,31 @@ public class ExistingSketchActivity extends AppCompatActivity {
                 .show();
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        this.pbProgress.setVisibility(View.VISIBLE);
-        this.saveNote();
-        this.pbProgress.setVisibility(View.GONE);
+    private void saveCanvas() {
+        this.user = FirebaseAuth.getInstance().getCurrentUser();
+        try {
+            this.fileUri = Uri.fromFile(canvas.saveScreen(etTitle.getText()));
+            this.selectedImageUri = this.fileUri;
+            uploadImage();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
-
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-//        this.saveNote();
-//    }
 
     private void saveNote() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        String userId = user.getUid();
+        userId = user.getUid();
 
         this.reference.child((userId)).child(Collection.notes.name())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                        String noteId = tvNoteId.getText().toString();
+                        noteId = tvNoteId.getText().toString();
                         System.out.println("Current note id: " + noteId);
 
                         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                         Date date = new Date();
                         String dateString = formatter.format(date);
-
-                        HashMap<String, Object> noteData = new HashMap<>();
 
                         title = String.valueOf(etTitle.getText());
                         subtitle = String.valueOf(etSubtitle.getText());
@@ -192,9 +211,9 @@ public class ExistingSketchActivity extends AppCompatActivity {
                         noteData.put("tags", tags);
                         noteData.put("sketchLink", sketchURL);
 
-                        reference.child((userId)).child(Collection.notes.name()).child(noteId).child("title").setValue(title);
-                        reference.child((userId)).child(Collection.notes.name()).child(noteId).child("subtitle").setValue(subtitle);
-                        reference.child((userId)).child(Collection.notes.name()).child(noteId).child("dateModified").setValue(dateString);
+//                        reference.child((userId)).child(Collection.notes.name()).child(noteId).child("title").setValue(title);
+//                        reference.child((userId)).child(Collection.notes.name()).child(noteId).child("subtitle").setValue(subtitle);
+//                        reference.child((userId)).child(Collection.notes.name()).child(noteId).child("dateModified").setValue(dateString);
                     }
 
                     @Override
@@ -202,5 +221,55 @@ public class ExistingSketchActivity extends AppCompatActivity {
 
                     }
                 });
+    }
+
+    private void uploadImage() {
+        final ProgressDialog pdUpload = new ProgressDialog(this);
+        pdUpload.setMessage("Uploading photo");
+        pdUpload.show();
+
+        StorageReference fileReference;
+
+        if(selectedImageUri != null) {
+            if(getFileExtension(selectedImageUri) == null)
+                fileReference = FirebaseStorage.getInstance().getReference()
+                        .child("uploads").child(user.getUid().toString())
+                        .child(System.currentTimeMillis() + ".png");
+            else
+                fileReference = FirebaseStorage.getInstance().getReference()
+                        .child("uploads").child(user.getUid().toString())
+                        .child(System.currentTimeMillis() + "." + getFileExtension(selectedImageUri));
+
+            fileReference.putFile(selectedImageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onComplete(@NonNull @NotNull Task<UploadTask.TaskSnapshot> task) {
+                    fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            String imgUrl = uri.toString();
+
+                            Log.d("Download url: ", imgUrl);
+
+                            noteData.put("sketchLink", imgUrl);
+
+                            reference.child((userId)).child(Collection.notes.name()).child(noteId).setValue(noteData);
+                            pdUpload.dismiss();
+                            finish();
+
+                            Toast.makeText(ExistingSketchActivity.this, "Image upload successful", Toast.LENGTH_SHORT).show();
+
+                        }
+                    });
+                }
+            });
+            Log.d("Download path: ", fileReference.getPath().toString());
+        }
+    }
+
+    private String getFileExtension(Uri imgUri) {
+        ContentResolver contentResolver = getContentResolver();
+        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+
+        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(imgUri));
     }
 }
