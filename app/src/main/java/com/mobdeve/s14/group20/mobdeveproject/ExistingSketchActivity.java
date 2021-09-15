@@ -15,6 +15,7 @@ import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,6 +34,7 @@ import com.google.firebase.database.ValueEventListener;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -79,20 +81,17 @@ public class ExistingSketchActivity extends AppCompatActivity {
 
         clearButton.setOnClickListener(v -> canvas.clearScreen());
         saveButton.setOnClickListener(v -> {
-            if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                CharSequence text;
-                try {
-                    this.fileUri = Uri.fromFile(canvas.saveScreen(etTitle.getText()));
-                    text = "Sketch saved successfully!";
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                    text = "Unable to save sketch";
-                }
-                Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
-                toast.show();
-            } else {
-                requestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            CharSequence text;
+            try {
+                this.fileUri = Uri.fromFile(canvas.saveScreen(etTitle.getText()));
+                text = "Sketch saved successfully!";
+            } catch (IOException e) {
+                e.printStackTrace();
+                text = "Unable to save sketch";
             }
+            Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
+            toast.show();
+            Log.d("TAG", String.valueOf(fileUri));
         });
     }
 
@@ -129,24 +128,6 @@ public class ExistingSketchActivity extends AppCompatActivity {
         this.rvTags.setAdapter(this.tagsAdapter);
     }
 
-    private ActivityResultLauncher<String> requestPermissionLauncher =
-            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
-                if (isGranted) {
-                    CharSequence text;
-                    try {
-                        canvas.saveScreen(etTitle.getText());
-                        text = "Sketch saved successfully!";
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                        text = "Unable to save sketch";
-                    }
-                    Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
-                    toast.show();
-                } else {
-                    Toast toast = Toast.makeText(getApplicationContext(), "Unable to save image without permissions.", Toast.LENGTH_LONG);
-                    toast.show();
-                }
-            });
 
     @Override
     public void onBackPressed() {

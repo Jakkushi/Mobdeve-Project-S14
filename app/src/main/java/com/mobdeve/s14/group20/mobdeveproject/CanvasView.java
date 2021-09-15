@@ -17,6 +17,9 @@ import androidx.annotation.Nullable;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class CanvasView extends View {
 
@@ -62,38 +65,21 @@ public class CanvasView extends View {
         postInvalidate();
     }
 
-    public File saveScreen(CharSequence filename) throws FileNotFoundException {
-        Integer increment = 0; //Generates a counter for duplicate names
-        File mainPath = new File(
-                Environment.getExternalStoragePublicDirectory(
-                        Environment.DIRECTORY_PICTURES) + "/Tous Les Jours/"); // Main folder
-
-        //Check if the main folder already exists
-        if (!mainPath.exists()) {
-            mainPath.mkdirs();
-        }
-
-        File sketchPath = new File(mainPath + "/Sketches"); // Create subfolder
-
-        //Check if the subfolder already exists
-        if (!sketchPath.exists()) {
-            sketchPath.mkdirs();
-        }
+    public File saveScreen(CharSequence filename) throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "PNG_" + timeStamp + "_";
+        File storageDir = getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,
+                ".png",
+                storageDir
+        );
 
         Bitmap b = viewToBitmap(this); //convert the view to a bitmap to save
 
-        //generate the filename of the bitmap to save
-        File outputFile = new File(sketchPath, filename+"_"+increment.toString()+".png");
-        Log.i("FILENAME", filename.toString());
-        while (outputFile.exists()) {
-            increment++;
-            outputFile = new File(sketchPath, filename+"_"+increment.toString()+".png");
-            //Log.i("FILENAME", filename.toString());
-        }
-
         //save the bitmap as a file
-        b.compress(Bitmap.CompressFormat.PNG, 95, new FileOutputStream(outputFile));
-        return outputFile;
+        b.compress(Bitmap.CompressFormat.PNG, 95, new FileOutputStream(image));
+        return image;
     }
 
     private void setupPaint() {
