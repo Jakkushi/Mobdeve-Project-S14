@@ -46,7 +46,7 @@ public class DisplayNotesActivity extends AppCompatActivity {
 
     private Context context;
 
-    private Button clearButton;
+    private Button btnReset;
     private Button saveButton;
     private ProgressBar pbMain;
     private CanvasView canvas;
@@ -93,6 +93,105 @@ public class DisplayNotesActivity extends AppCompatActivity {
         this.svFilterNotes.clearFocus();
         this.pbNotes = findViewById(R.id.pb_notes);
 
+        this.btnReset = findViewById(R.id.main_btn_reset);
+        this.btnReset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dbNotes = new ArrayList<DatabaseNotesData>();
+
+                reference.orderByChild(Collection.dateModified.name()).addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
+
+                        ArrayList<ArrayList<String>> interestItems = new ArrayList<>();
+                        ArrayList<ArrayList<String>> lessonItems = new ArrayList<>();
+                        ArrayList<String> tags = new ArrayList<>();
+                        ArrayList<ArrayList<String>> todoList = new ArrayList<>();
+                        ArrayList<ArrayList<String>> blankItems = new ArrayList<>();
+                        String sketchURL = null;
+
+                        try {
+                            interestItems = (ArrayList) (((HashMap) snapshot.getValue()).get("interestItem"));
+                        } catch (Exception e) {
+                            interestItems = null;
+                            Log.w("error", "No Interest items in entry");
+                        }
+
+                        try {
+                            tags = (ArrayList) (((HashMap) snapshot.getValue()).get("tags"));
+                        } catch (Exception d) {
+                            tags = null;
+                            Log.w("error", "No Tags in entry");
+                        }
+
+                        try {
+                            todoList = (ArrayList) (((HashMap) snapshot.getValue()).get("todo"));
+                        } catch (Exception f) {
+                            todoList = null;
+                            Log.w("error", "No Todos in entry");
+                        }
+
+                        try {
+                            blankItems = (ArrayList) (((HashMap) snapshot.getValue()).get("blankItems"));
+                        } catch (Exception d) {
+                            tags = null;
+                            Log.w("error", "No Blank items in entry");
+                        }
+
+                        try {
+                            lessonItems = (ArrayList) (((HashMap) snapshot.getValue()).get("lessonNotesItem"));
+                        } catch (Exception d) {
+                            tags = null;
+                            Log.w("error", "No Blank items in entry");
+                        }
+
+                        try {
+                            sketchURL = (String) (((HashMap) snapshot.getValue()).get("sketchLink"));
+
+                            Log.w("SKETCH DATATYPE", sketchURL);
+                        } catch (Exception d) {
+                            Log.w("error", "No sketch items in entry");
+                        }
+
+                        Log.d("Snapshot Key: ", snapshot.getKey());
+
+                        dbNotes.add(new DatabaseNotesData((String) (((HashMap) snapshot.getValue()).get("title")),
+                                (String) ((HashMap) snapshot.getValue()).get("subtitle"), (String) ((HashMap) snapshot.getValue()).get("noteType"),
+                                (String) ((HashMap) snapshot.getValue()).get("dateModified"), interestItems, tags, todoList, blankItems, lessonItems, sketchURL, snapshot.getKey()));
+
+                        pbNotes.setVisibility(View.VISIBLE);
+                        Intent intent = new Intent(DisplayNotesActivity.this, DisplayNotesActivity.class);
+
+                        intent.putExtra(Keys.DBNOTES.name(), dbNotes);
+                        startActivity(intent);
+
+                        pbNotes.setVisibility(View.GONE);
+                        finish();
+                    }
+
+                    @Override
+                    public void onChildChanged(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(@NonNull @NotNull DataSnapshot snapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                    }
+                });
+            }
+        });
+
         hideUI();
         this.initFAB();
         this.initFirebase();
@@ -136,6 +235,7 @@ public class DisplayNotesActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(DisplayNotesActivity.this, TemplateListActivity.class);
                 v.getContext().startActivity(intent);
+                finish();
             }
         });
     }
@@ -257,6 +357,7 @@ public class DisplayNotesActivity extends AppCompatActivity {
                 startActivity(intent);
 
                 pbNotes.setVisibility(View.GONE);
+                finish();
             }
 
             @Override
@@ -362,6 +463,7 @@ public class DisplayNotesActivity extends AppCompatActivity {
                 startActivity(intent);
 
                 pbNotes.setVisibility(View.GONE);
+                finish();
             }
 
             @Override
@@ -369,9 +471,7 @@ public class DisplayNotesActivity extends AppCompatActivity {
 
             }
         });
-
-
-
     }
+
 
 }
