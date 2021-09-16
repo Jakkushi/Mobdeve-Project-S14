@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.menu.ShowableListMenu;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,6 +23,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
@@ -55,6 +57,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.concurrent.Executors;
 
 public class ExistingSketchActivity extends AppCompatActivity {
 
@@ -82,6 +85,24 @@ public class ExistingSketchActivity extends AppCompatActivity {
     private Uri fileUri, selectedImageUri;
     HashMap<String, Object> noteData = new HashMap<>();
 
+    private Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            try{
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    pbProgress.setVisibility(View.GONE);
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                }
+            });
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -96,6 +117,12 @@ public class ExistingSketchActivity extends AppCompatActivity {
         this.initFirebase();
         this.loadData();
         this.initEssentials();
+
+        pbProgress.setVisibility(View.VISIBLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        Toast.makeText(ExistingSketchActivity.this, "Loading sketch...", Toast.LENGTH_SHORT).show();
+        Executors.newSingleThreadExecutor().execute(runnable);
 
         clearButton.setOnClickListener(v -> canvas.clearScreen());
         saveButton.setOnClickListener(v -> {

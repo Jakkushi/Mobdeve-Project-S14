@@ -13,6 +13,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -54,6 +55,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.concurrent.Executors;
 
 public class ExistingIndivNoteActivity extends AppCompatActivity implements IndivNotesAdapter.callAction{
 
@@ -66,6 +68,7 @@ public class ExistingIndivNoteActivity extends AppCompatActivity implements Indi
     private ProgressBar pb_indiv_note;
     private ImageButton noteIbHolder;
     private FloatingActionButton fabAddTemplate;
+    private ProgressBar pbProgress;
 
     private String title, subtitle, noteType, noteId, currentPhotoPath;
     private ArrayList<String> tags = new ArrayList<>();
@@ -94,6 +97,24 @@ public class ExistingIndivNoteActivity extends AppCompatActivity implements Indi
         );
     }
 
+    private Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            try{
+                Thread.sleep(1500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    pbProgress.setVisibility(View.GONE);
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                }
+            });
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,6 +124,12 @@ public class ExistingIndivNoteActivity extends AppCompatActivity implements Indi
         this.bindEssentials();
         this.initRecyclerView();
         this.initFirebase();
+
+        pbProgress.setVisibility(View.VISIBLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        Toast.makeText(ExistingIndivNoteActivity.this, "Connecting to database...", Toast.LENGTH_SHORT).show();
+        Executors.newSingleThreadExecutor().execute(runnable);
     }
 
     private void initFirebase() {
@@ -117,6 +144,7 @@ public class ExistingIndivNoteActivity extends AppCompatActivity implements Indi
         this.tvNoteId = findViewById(R.id.tv_note_id);
         this.pb_indiv_note = findViewById(R.id.pb_indiv_note);
         this.fabAddTemplate = findViewById(R.id.indiv_fab_add);
+        this.pbProgress = findViewById(R.id.pb_indiv_note);
         this.bindFabOnClick();
 
         this.tvTitle.setText(this.title);
